@@ -1,0 +1,115 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{L_DONOR_CONFIGURATION_TITLE}</h1>
+<p>{L_DONOR_CONFIGURATION_EXPLAIN}</p>
+
+<form id="adddonors" action="{U_ACTION}" method="post">
+<!-- table width="99%" cellpadding="4" cellspacing="1" border="0" align="center" class="forumline" -->
+		<fieldset>
+			<legend>{L_DONOR_GENERAL_SETTINGS}</legend>
+			<dl>
+				<dt>{L_USER_ACCOUNT}:</dt>
+				<dd><input type="text" name="user_account" value="{USER_ACCOUNT}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_MONEY}:</dt>
+				<dd><input type="text" name="money" value="{DONATE_MONEY}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_DATE}: <br />{L_DONATE_DATE_EXPLAIN}</dt>
+				<dd><input type="text" name="date" value="{SCRIPT_PATH}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_TRANSACTION_ID}:</dt>
+				<dd><input type="text" name="txn_id" value="{TRANSACTION_ID}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONOR_PAY_ACCOUNT}: <br />{L_DONOR_PAY_ACCOUNT_EXPLAIN}</dt>
+				<dd><input type="text" name="donor_pay_acct" value="{DONOR_PAY_ACCOUNT}" /></dd>
+			</dl>
+		</fieldset>
+		<fieldset class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+
+<!-- /table -->
+</form>
+    
+<fieldset>
+	<legend>{L_DONOR_MEMBERS}</legend>
+	<p>{L_DONOR_MEMBERS_EXPLAIN}</p>
+	<table width="100%" cellspacing="1">
+	<tr>
+	    <td class="row3" align="center">#</td>
+	    <td class="row3" align="center">{L_DELETE}</td>
+	    <td class="row3" align="center">{L_USERNAME}</td>
+		<td class="row3" align="center">{L_MONEY}</td>
+		<td class="row3" align="center">{L_VALUTA}</td>
+		<td class="row3" align="center">{L_DATE_START}</td>
+		<td class="row3" align="center">{L_DATE_END}</td>
+		<td class="row3" align="center">{L_TRANSACTION_ID}</td>
+		<td class="row3" align="center">{L_OTHER_INFO}</td>
+	</tr>
+	<!-- BEGIN donated -->
+	<tr>
+	    <td class="row3" align="center">{donated.DONATOR_USER_ID}</td>
+	    <td class="row3" align="center">
+          <form id="removedonors" action="{U_ACTION}" method="post">
+            <input type="hidden" class="inputbox autowidth" name="user_id" id="user_id" value="{donated.DONATOR_USER_ID}" />
+            <input type="submit" name="delete_renewal" value="{L_DELETE}" class="button1" />
+          </form>
+        </td>
+	    <td class="row3" align="center" style="white-space:nowrap;">{donated.DONATOR_NAME}</td>
+		<td class="row3" align="center">{donated.DONATOR_MONEY}</td>
+		<td class="row3" align="center">{donated.DONATOR_VALUTA}</td>
+		<td class="row3" align="center" style="white-space:nowrap;">{donated.DONATOR_DATA}</td>
+		<td class="row3" align="center">{donated.DONATOR_DATA_END}</td>
+		<td class="row3" align="center">{donated.DONATOR_TRANSACTION}</td>
+		<td class="row3" align="center">{donated.DONATOR_COMMENT}</td>
+	</tr>
+	<!-- BEGINELSE -->
+	<tr>
+	    <td class="row1" align="center" colspan="7">{L_NO_DONATION_RECORD}</td>
+	</tr>
+	<!-- END donated -->
+	</table>
+</fieldset>
+
+<fieldset>
+	<legend>{L_CHECK_DONORS}</legend>
+	<p>{L_CHECK_DONORS_EXPLAIN}</p>
+	<table width="100%" cellspacing="1">
+	<tr>
+	    <td class="row3" align="center">{L_USERNAME}</td>
+		<td class="row3" align="center">{L_MONEY}</td>
+		<td class="row3" align="center">{L_VALUTA}</td>
+		<td class="row3" align="center">{L_DATE}</td>
+		<td class="row3" align="center">{L_TRANSACTION_ID}</td>
+		<td class="row3" align="center">{L_OTHER_INFO}</td>
+		<td class="row3" align="center">{L_ACTION}</td>
+	</tr>
+	<!-- BEGIN check -->
+	
+	<form id="completedonors" action="{U_ACTION}" method="post">
+	<input type="hidden" class="inputbox autowidth" name="user_id" id="user_id" value="{check.USER_ID}" />
+	<input type="hidden" class="inputbox autowidth" name="date" id="date" value="{check.DATE}" />
+	<tr>
+	    <td class="row3" align="center">{check.USERNAME}</td>
+		<td class="row3" align="center">{check.MONEY}</td>
+		<td class="row3" align="center">{check.VALUTA}</td>
+		<td class="row3" align="center" style="white-space:nowrap;">{check.DATA}</td>
+		<td class="row3" align="center"><input type="text" name="transaction" value="{check.TRANSACTION}" class="inputbox autowidth" size="20"/></td>
+		<td class="row3" align="center"><input type="text" name="comment" value="{check.COMMENT}" class="inputbox autowidth" size="25"/></td>
+		<td class="row3" align="center" style="white-space:nowrap;"><input type="submit" name="ok" value="{L_SUBMIT}" class="button1" /> &nbsp; <input type="submit" name="delete" value="{L_RESET}" class="button1" /></td>
+	</tr>
+	</form>
+	<!-- BEGINELSE -->
+	<tr>
+	    <td class="row1" align="center" colspan="7">{L_NO_DONATION_RECORD}</td>
+	</tr>
+	<!-- END check -->
+	</table>
+</fieldset>
+    
+<!-- INCLUDE overall_footer.html -->

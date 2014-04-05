@@ -1,0 +1,103 @@
+	</div>
+
+<div id="page-footer">
+
+	<div class="navbar">
+		<div class="inner"><span class="corners-top"><span></span></span>
+
+        <ul class="linklist navlinks">
+            <li class="icon-home"><!-- IF PORTAL --><a href="{U_PORTAL}" accesskey="h">{L_PORTAL}</a> <strong>&#8249;</strong>
+            <!-- IF PORTAL_INDEX_PAGE --> <a href="{U_INDEX}" accesskey="h">{L_INDEX}</a><!-- ENDIF --><!-- ELSE -->
+            <a href="{U_INDEX}" accesskey="h">{L_INDEX}</a><!-- ENDIF --> <!-- BEGIN navlinks --> <strong>&#8249;</strong> <a href="{navlinks.U_VIEW_FORUM}">{navlinks.FORUM_NAME}</a><!-- END navlinks --><!-- BEGIN dl_nav --> <strong>&#8249;</strong> <a href="{dl_nav.U_DOWNLOAD}">{dl_nav.L_DOWNLOAD}</a><!-- END dl_nav --></li>
+ 		</ul>
+		<ul class="linklist">
+        <!-- IF not S_IS_BOT -->
+            <!-- IF S_WATCH_FORUM_LINK --><li <!-- IF S_WATCHING_FORUM -->class="icon-unsubscribe"<!-- ELSE -->class="icon-subscribe"<!-- ENDIF -->><a href="{S_WATCH_FORUM_LINK}" title="{S_WATCH_FORUM_TITLE}">{S_WATCH_FORUM_TITLE}</a></li><!-- ENDIF -->
+            <!-- IF U_WATCH_TOPIC --><li <!-- IF S_WATCHING_TOPIC -->class="icon-unsubscribe"<!-- ELSE -->class="icon-subscribe"<!-- ENDIF -->><a href="{U_WATCH_TOPIC}" title="{L_WATCH_TOPIC}">{L_WATCH_TOPIC}</a></li><!-- ENDIF -->
+            <!-- IF U_WATCH_EVENT --><li <!-- IF S_WATCHING_EVENT -->class="icon-unsubscribe"<!-- ELSE -->class="icon-subscribe"<!-- ENDIF -->><a href="{U_WATCH_EVENT}" title="{L_WATCH_EVENT}">{L_WATCH_EVENT}</a></li><!-- ENDIF -->
+            <!-- IF U_WATCH_CALENDAR --><li <!-- IF S_WATCHING_CALENDAR -->class="icon-unsubscribe"<!-- ELSE -->class="icon-subscribe"<!-- ENDIF -->><a href="{U_WATCH_CALENDAR}" title="{L_WATCH_CALENDAR}">{L_WATCH_CALENDAR}</a></li><!-- ENDIF -->
+            <!-- IF U_BUMP_TOPIC --><li class="icon-bump"><a href="{U_BUMP_TOPIC}" title="{L_BUMP_TOPIC}">{L_BUMP_TOPIC}</a></li><!-- ENDIF -->
+            <!-- IF U_BOOKMARK_TOPIC --><li class="icon-bookmark"><a href="{U_BOOKMARK_TOPIC}" title="{L_BOOKMARK_TOPIC}">{L_BOOKMARK_TOPIC}</a></li><br /><!-- ENDIF -->
+        <!-- ENDIF -->
+            <li class="rightside"><!-- IF PORTAL --><a href="{U_PORTAL_MODS}" title="{L_PORTAL_MODS}">{L_PORTAL_MODS}</a> &bull; <a href="{U_IMPRESSUM}" title="{L_IMPRESSUM}">{L_IMPRESSUM}</a> &bull; <!-- ENDIF --><!-- IF U_TEAM --><a href="{U_TEAM}" title="{L_THE_TEAM}">{L_THE_TEAM}</a> &bull; <!-- ENDIF --><!-- IF not S_IS_BOT --><a href="{U_DELETE_COOKIES}" title="{L_DELETE_COOKIES}">{L_DELETE_COOKIES}</a> &bull; <!-- ENDIF --><a href="#" onclick="$.fn.ShowEasyWidgets(); return false" title="{L_PORTAL_RESET_BLOCKS}">{L_PORTAL_RESET_BLOCKS}</a> &bull; {S_TIMEZONE} 
+            <!-- IF SCRIPT_NAME eq 'viewtopic' -->
+            <a href="{U_VIEW_TOPIC}#top" title="{L_BACK_TO_TOP}"><img src="{T_THEME_PATH}/images/top.gif" width="11" height="11" alt="{L_BACK_TO_TOP}" /></a></span>
+            <!-- ELSEIF SCRIPT_NAME eq 'viewforum' -->
+            <a href="{U_VIEW_FORUM}#top" title="{L_BACK_TO_TOP}"><img src="{T_THEME_PATH}/images/top.gif" width="11" height="11" alt="{L_BACK_TO_TOP}" /></a></span>
+            <!-- ELSE -->
+            <a href="#top" title="{L_BACK_TO_TOP}"><img src="{T_THEME_PATH}/images/top.gif" width="11" height="11" alt="{L_BACK_TO_TOP}" /></a></span>
+            <!-- ENDIF -->
+            </li>
+		</ul>
+
+		<!-- IF GYM_LINKS -->
+		<ul class="linklist<!-- IF GYM_LINKS --> navlinks<!-- ENDIF -->">
+			<!-- IF GYM_HTML_NEWS_LINK --><li class="leftside">{GYM_HTML_NEWS_LINK}</li><!-- ENDIF -->
+			<!-- IF GYM_HTML_MAP_LINK --><li class="leftside">{GYM_HTML_MAP_LINK}</li><!-- ENDIF -->
+			<!-- IF GYM_GOOGLE_LINK --><li class="leftside">{GYM_GOOGLE_LINK}</li><!-- ENDIF -->
+			<!-- IF GYM_RSS_LINK --><li class="leftside">{GYM_RSS_LINK}</li><!-- ENDIF -->
+			<!-- IF GYM_RSS_CHAN_LINK --><li class="leftside">{GYM_RSS_CHAN_LINK}</li><!-- ENDIF -->
+		</ul>
+		<!-- ENDIF -->
+
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+
+	<div class="copyright">{CREDIT_LINE}
+		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->
+		<!-- IF DEBUG_OUTPUT --><br />{DEBUG_OUTPUT}<!-- ENDIF -->
+		<!-- IF U_ACP --><br /><strong><a href="{U_ACP}" title="{L_ACP}">{L_ACP}</a></strong><!-- ENDIF -->
+	</div>
+</div>
+
+</div>
+
+<div>
+	<a id="bottom" name="bottom" accesskey="z"></a>
+	<!-- IF not S_IS_BOT -->{RUN_CRON_TASK}<!-- ENDIF -->
+</div>
+
+
+				</div>
+			<div class="nobottomgap"></div>
+		</div>
+	<div class="bottom-left"></div><div class="bottom-center"></div><div class="bottom-right">
+</div>
+    
+<link rel="stylesheet" href="{ROOT_PATH}cookie_control/jquery.cookiecontrol-5.1.min.css" type="text/css" charset="utf-8">
+<script type="text/javascript" src="{ROOT_PATH}cookie_control/jquery.cookiecontrol-5.1.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+jQuery(document).ready(function() {
+	cookieControl({
+		introText:"{L_COOKIE_CONTROL_INTROTEXT}",
+		fullText:"{L_COOKIE_CONTROL_FULLTEXT}",
+		cookieOnText:"{L_COOKIE_CONTROL_COOKIES_ON}",
+		cookieOffText:"{L_COOKIE_CONTROL_COOKIES_OFF}",
+		cookieName:"accept_cookielaw",
+		position:'left',
+		shape:'triangle',
+		theme:'light',
+		startOpen:true, // true , false
+		autoHide:60000, // Time in miliseconds
+		protectedCookies: ['accept_cookielaw','style_cookie','PHPSESSID'], //list the cookies you do not want deleted ['analytics', 'twitter']
+		consentModel:'explicit', // information_only , implicit , explicit
+		subdomains:'true', // true , false
+		onAccept:function(cc){cc.setCookie('ShowCookieIcon', 'no');$('#ccc-icon').hide();reloadDoc()},
+		onReady:function(){},
+		onCookiesAllowed:function(){},
+		onCookiesNotAllowed:function(){},
+		countries:'Netherlands,Belgium,United Kingdom' // Or supply a list ['United Kingdom,Greece']
+      });
+		
+	  function reloadDoc()
+	  {
+		window.location.reload(true);
+	  }		
+});
+/* ]]> */
+</script>
+
+<div style="display: none;" id="resizemod"></div>
+</body>
+</html>

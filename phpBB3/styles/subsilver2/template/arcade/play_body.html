@@ -1,0 +1,170 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE arcade/script_body.html -->
+<form id="arcade_restart_game" action="" method="post">
+	{S_HIDDEN_FIELDS}
+	{S_FORM_TOKEN}
+</form>
+<div id="{GAMETOP}" style="float: left; width: 75%; text-align: center;">
+	<table class="tablebg" width="98%" cellspacing="1" cellpadding="0">
+	<tr>
+		<td class="row1">
+			<div class="game_title">
+				<a href="#{GAMETOP}" onclick="arcade_reload_page();return false;" title="{L_RESTART_GAME}">{GAME_NAME}</a>
+				<!-- IF GAME_FAV_IMG -->&nbsp;&nbsp;{GAME_FAV_IMG}<!-- ENDIF -->
+				<!-- IF S_ARCADE_FB -->
+					&nbsp;&nbsp;
+					<a href="http://www.facebook.com/share.php?u={GAME_URLENCODE}" onclick="window.open(this.href); return false;"><img style="vertical-align:middle;" src="{FACEBOOK_IKON}" title="{L_ARCADE_GAME_SHARE}" alt="{L_ARCADE_GAME_SHARE}" /></a>
+				<!-- ENDIF -->
+				<!-- IF S_RESOLUTION_SELECT -->
+					<span class="game_title_option">
+						<a href="#{GAMETOP}" onclick="arcade_swf_object_resize('reduce'); return false;"><img src="{SMALL_IMAGE}" title="{L_ARCADE_RESOLUTION_REDUCE}" alt="{L_ARCADE_RESOLUTION_REDUCE}" /></a>&nbsp;
+						<a href="#{GAMETOP}" onclick="arcade_swf_object_resize('auto'); return false;"><img src="{AUTO_IMAGE}" title="{L_ARCADE_RESOLUTION_AUTO}" alt="{L_ARCADE_RESOLUTION_REDUCE}" /></a>&nbsp;
+						<a href="#{GAMETOP}" onclick="arcade_swf_object_resize('increase'); return false;"><img src="{BIG_IMAGE}" title="{L_ARCADE_RESOLUTION_INCREASE}" alt="{L_ARCADE_RESOLUTION_REDUCE}" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="#{GAMETOP}" onclick="arcade_play_info_block(); return false;"><img id="arcade_right_block_co" src="{OPEN_CLOSE_IMAGE}" title="{L_ARCADE_GAME_PLAY_INFO_BLOCK_CLOSE}" alt="{L_ARCADE_RESOLUTION_REDUCE}" /></a>
+					</span>
+				<!-- ENDIF -->
+			</div>
+		</td>
+	</tr>
+	</table>
+
+	<br />
+
+	<div id="flash_game_window">
+		<div id="phpbb_arcade_flash_game">
+			<h1>{L_ARCADE_FLASH_VERSION}</h1>
+			<p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		// <![CDATA[
+			arcade_swf_object();
+		// ]]>
+	</script>
+</div>
+
+<div id="arcade_play_info_block" style="float: left; width: 25%;">
+<!-- IF S_USE_HIGHSCORES -->
+	<table class="tablebg" width="100%" cellspacing="1">
+		<tr>
+			<td class="cat"><h4>{L_ARCADE_GAME_CHAMPION}</h4></td>
+		</tr>
+		<!-- IF .scorerow -->
+		<tr class="row1">
+			<td align="center" valign="middle" style="padding: 1em;">
+					<!-- IF FIRST_AVATAR --><div style="float: right;">{FIRST_AVATAR}</div><!-- ENDIF -->
+					<b>{GAME_NAME} {L_ARCADE_GAME_CHAMPION}</b><br />
+					{BEST_USER_NAME}<br /><br />
+					<b>{L_ARCADE_HIGHSCORE}</b><br />
+					{BEST_SCORE}
+			</td>
+		</tr>
+		<tr class="row1">
+			<td align="center" valign="middle">
+					<b>{L_ARCADE_CHAMPION_PLAYED}</b><br />
+					{BEST_PLAYED}<br /><br />
+					<b>{L_ARCADE_CHAMPION_SPENT}</b><br />
+					{BEST_TIME}<br /><br />
+					{BEST_DATE_EXPLAIN}
+			</td>
+		</tr>
+		<!-- ELSE -->
+		<tr>
+			<td class="row1" align="center">{L_ARCADE_NO_HIGHSCORE}</td>
+		</tr>
+		<!-- ENDIF -->
+	</table>
+	<br />
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_DESC -->
+	<br />
+	<table class="tablebg" width="100%" cellspacing="1">
+		<tr>
+			<td class="cat"><h4>{L_ARCADE_GAME_DESC}</h4></td>
+		</tr>
+		<tr>
+			<td class="row1" align="center">{GAME_DESC}</td>
+		</tr>
+	</table>
+<!-- ENDIF -->
+	<br />
+	<table class="tablebg" width="100%" cellspacing="1">
+		<tr>
+			<td class="cat"><h4>{L_ARCADE_GAME_OPTIONS}</h4></td>
+		</tr>
+		<tr>
+			<td class="row1" align="center">
+				<!-- IF S_USER_LOGGED_IN and not S_IS_BOT -->
+					<!-- IF S_SHOW_POINTS -->{L_ARCADE_BALANCE}: {USER_POINTS}<br />{L_ARCADE_COST}: {GAME_COST}<br /><!-- IF S_USE_JACKPOT -->{L_ARCADE_JACKPOT}<!-- ELSE -->{L_ARCADE_REWARD}<!-- ENDIF -->: {GAME_REWARD}<br /><!-- ENDIF -->
+				<!-- ENDIF -->
+				{GAME_RATING_IMG}
+				<!-- IF U_GAME_EDIT or U_SCORE_EDIT --><br /><!-- ENDIF -->
+				<!-- IF U_GAME_EDIT --><strong><a onclick="window.open(this.href); return false;" href="{U_GAME_EDIT}" title="{L_ARCADE_EDIT_GAME_QUICK}">{L_ARCADE_EDIT_GAME_QUICK}</a></strong><br /><!-- IF not U_SCORE_EDIT --><br /><!-- ENDIF --><!-- ENDIF -->
+				<!-- IF U_SCORE_EDIT --><strong><a onclick="window.open(this.href); return false;" href="{U_SCORE_EDIT}" title="{L_ARCADE_EDIT_SCORES_QUICK}">{L_ARCADE_EDIT_SCORES_QUICK}</a></strong><br /><br /><!-- ENDIF -->
+
+				<!-- IF S_RESOLUTION_SELECT --><a href="#" onclick="arcade_full_screen(); return false;">{L_ARCADE_FULLSCREEN}</a><br /><!-- ENDIF -->
+				<!-- IF S_FEELING_LUCKY --><a href="{U_FEELING_LUCKY}">{L_ARCADE_FEELING_LUCKY}</a><br /><!-- ENDIF -->
+				<!-- IF S_GAME_DOWNLOAD --><a href="{U_GAME_DOWNLOAD}">{L_ARCADE_DOWNLOAD_GAME}</a><br /><!-- ENDIF -->
+				<!-- IF S_CAN_REPORT --><a href="{U_GAME_REPORT}">{L_ARCADE_REPORT_GAME}</a><br /><!-- ENDIF -->
+				{GAME_FILESIZE}
+				<!-- IF S_DISPLAY_GAME_TYPE --><br />{L_ARCADE_TYPE}: {GAME_TYPE}<!-- ENDIF -->
+			</td>
+		</tr>
+	</table>
+
+<!-- IF S_USE_HIGHSCORES and .scorerow -->
+	<br />
+	<!-- IF BEST_COMMENT -->
+	<table class="tablebg" width="100%" style="table-layout: fixed;" cellspacing="1">
+		<tr>
+			<td class="cat"><h4>{L_ARCADE_GAME_CHAMPION_COMMENT}</h4></td>
+		</tr>
+		<tr>
+			<td class="row1" align="center"><div style="overflow: auto; min-height: 3em; height:auto !important; height:3em;">{BEST_COMMENT}</div></td>
+		</tr>
+	</table>
+	<br />
+	<!-- ENDIF -->
+	<table class="tablebg" width="100%" cellspacing="1">
+		<tr>
+			<td class="cat" colspan="3"><h4>{L_ARCADE_TOP_SCORES}</h4></td>
+		</tr>
+		<!-- BEGIN scorerow -->
+		<tr class="<!-- IF scorerow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">
+			<td style="text-align: center; width: 15%;<!-- IF scorerow.USER_ID == S_USER_ID --> font-weight:bold;<!-- ENDIF -->">{scorerow.POS}</td>
+			<td style="text-align: center; width: 70%;<!-- IF scorerow.USER_ID == S_USER_ID --> font-weight:bold;<!-- ENDIF -->">{scorerow.USERNAME}</td>
+			<td style="text-align: center; width: 15%;<!-- IF scorerow.USER_ID == S_USER_ID --> font-weight:bold;<!-- ENDIF -->">{scorerow.SCORE}</td>
+		</tr>
+		<!-- END scorerow -->
+	</table>
+<!-- ENDIF -->
+
+<!-- IF S_ARCADE_FB -->
+<br />
+	<table class="tablebg" width="100%" cellspacing="1">
+		<tr>
+			<td class="cat"><h4>{L_ARCADE_GAME_SHARE}</h4></td>
+		</tr>
+		<tr class="row1"<!-- IF ARCADE_FB_BGC --> style="background-color:#{ARCADE_FB_BGC};"<!-- ENDIF -->>
+			<td style="text-align:center;">
+				<script type="text/javascript">
+				// <![CDATA[
+					document.write('<iframe src="{ARCADE_FB_SRC}" {ARCADE_FB_ADD}></iframe>');
+				// ]]>
+				</script>
+			</td>
+		</tr>
+	</table>
+<!-- ENDIF -->
+</div>
+
+<div style="clear:both;">&nbsp;</div>
+
+<br />
+<!-- INCLUDE breadcrumbs.html -->
+<br />
+<!-- IF S_CAN_VIEW_WHOISPLAYING -->
+<!-- INCLUDE arcade/online_body.html -->
+<!-- ENDIF -->
+<!-- INCLUDE arcade/footer_body.html -->

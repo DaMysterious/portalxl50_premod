@@ -1,0 +1,38 @@
+<table class="tablebg" cellspacing="1" width="100%" style="margin-top: 5px;">
+  <tr>
+    <th align="center" colspan="{S_COLS}"><h4>{L_RANDOM_PIC}</h4></th>
+  </tr>
+  <!-- BEGIN no_pics -->
+  <tr>
+    <td class="bg1" align="center" colspan="{S_COLS}" height="50"><span class="gen">{L_NO_PICS}</span></td>
+  </tr>
+  <!-- END no_pics -->
+  <!-- BEGIN rand_pics -->
+  <tr>
+    <!-- BEGIN rand_col -->
+  <td class="bg2 rounded" valign="top" style="width: {S_COL_WIDTH}; padding: 10px;">
+    
+      <table width="100%" cellpadding="2" cellspacing="5" border="0" class="forumline">
+          <tr>
+              <td align="center" style="height: {S_THUMBNAIL_SIZE}px;" class="bg1 rounded">
+                  <span class="genmed"><a href="{rand_pics.rand_col.U_PIC}">{rand_pics.rand_col.THUMBNAIL}</a></span>
+              </td>
+          </tr>
+          <tr>
+              <td class="bg2 rounded" valign="top">
+                  <div class="gensmall" style="overflow: hidden; padding:5px;">
+                     <a href="{rand_pics.rand_col.U_VIEW_CAT}">{rand_pics.rand_col.POSTER_FULL}</a><br />
+                     <a href="{rand_pics.rand_col.U_IMAGE}">{rand_pics.rand_col.IMAGE_NAME}</a><br />
+                  </div>
+              </td>
+          </tr>
+      </table>
+    
+    </td>
+    <!-- END rand_col -->
+  </tr>
+  <!-- END rand_pics -->
+  <tr>
+	<td colspan="{S_COLS}" class="cat" align="center"><span class="gensmall"><br />[ <a href="{U_GALLERY_MOD}" title="{L_GALLERY}" target="_self">{L_GALLERY}</a> ]</span></td>
+  </tr>
+</table>

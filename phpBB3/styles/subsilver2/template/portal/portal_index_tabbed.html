@@ -1,0 +1,161 @@
+<script type="text/javascript">
+// <![CDATA[
+$(document).ready(function (){
+	$("#index_tabbed").tabs({
+		event		: 'mouseover',
+		selected	: 0
+	});
+});
+// ]]>
+</script>
+<style type='text/css'>
+.index_tabbed { padding: 2px; zoom: 1; margin-top: 5px; }
+.index_tabbed ul { margin: 0; }
+
+.index_tabbed-content {
+	min-height: 3px;
+	overflow: hidden;
+	line-height: 14px;
+}
+
+.index_tabbed-content th {
+	font-weight: normal;
+	font-size: 10px;
+	font-style: italic;
+	padding-bottom: 2px;
+}
+
+.index_tabbed-topictitle {
+	font-weight: bold;
+}
+
+.index_tabbed h5 {
+	font-weight: normal;
+	font-size: 10px;
+}
+
+.index_tabbed-content td, .index_tabbed-content span {
+	font-weight: normal;
+	font-size: 10px;
+}
+
+.index_tabbed li a {
+	font-size: 10px;
+}
+</style>
+
+<div class="index_tabbed" id="index_tabbed">
+ <!-- tabs -->
+    <ul>
+      <li><a href="#index_tabbed-1">{L_WHO_IS_ONLINE}</a></li>
+		<!-- IF S_DISPLAY_BIRTHDAY_LIST -->
+      <li><a href="#index_tabbed-2">{L_BIRTHDAYS}</a></li>
+		<!-- ENDIF -->
+		<!-- IF NEWEST_USER -->
+      <li><a href="#index_tabbed-3">{L_STATISTICS}</a></li>
+		<!-- ENDIF -->
+        <!-- IF S_VIDEO_EXIST -->
+      <li><a href="#index_tabbed-4">{L_DMV_VIDEO}</a></li>
+		<!-- ENDIF -->
+      <!-- IF S_USER_LOGGED_IN and not S_IS_BOT and S_DISPLAY_DONATION_LIST -->
+      <li><a href="#index_tabbed-5">{L_MONEY}</a></li>
+      <!-- ENDIF -->
+		<!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+      <li><a href="#index_tabbed-6">{L_LOGIN}</a></li>
+		<!-- ENDIF -->
+    </ul>    
+ <!-- tabs -->
+ <!-- tab containers -->
+    <div class="index_tabbed-content" id="index_tabbed-1">
+      <!-- IF S_DISPLAY_ONLINE_LIST -->
+      <table class="tablebg" width="100%" cellspacing="1">
+      <tr>
+          <td class="cat" colspan="2"><!-- IF U_VIEWONLINE --><h4><a href="{U_VIEWONLINE}">{L_WHO_IS_ONLINE}</a></h4><!-- ELSE --><h4>{L_WHO_IS_ONLINE}</h4><!-- ENDIF --></td>
+      </tr>
+      <tr>
+      <!-- IF LEGEND -->
+          <td class="row1" rowspan="2" align="center" valign="middle"><!-- IF S_USER_LOGGED_IN and USER_AVATAR -->{USER_AVATAR}<!-- ELSE --><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_WHO_IS_ONLINE}" /><!-- ENDIF --></td>
+      <!-- ELSE -->
+          <td class="row1" align="center" valign="middle"><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_WHO_IS_ONLINE}" /></td>
+      <!-- ENDIF -->
+          <td class="row1" width="100%"><span class="genmed">{TOTAL_USERS_ONLINE}<br />{RECORD_USERS}<br /><br />{LOGGED_IN_USER_LIST}<br /><br />{ONLINE_BOTLIST}<br /><br />{L_ONLINE_EXPLAIN}</span></td>
+      </tr>
+      <!-- IF LEGEND -->
+          <tr>
+              <td class="row1"><b class="gensmall">{L_LEGEND} :: {LEGEND}</b></td>
+          </tr>
+      <!-- ENDIF -->
+      </table>
+      <!-- ENDIF -->
+    </div>
+    <div class="index_tabbed-content" id="index_tabbed-2">
+      <!-- IF S_DISPLAY_BIRTHDAY_LIST -->
+      <table class="tablebg" width="100%" cellspacing="1">
+      <tr>
+          <td class="cat" colspan="2"><h4>{L_BIRTHDAYS}</h4></td>
+      </tr>
+      <tr>
+          <td class="row1" align="center" valign="middle"><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_BIRTHDAYS}" /></td>
+          <td class="row1" width="100%"><p class="genmed"><!-- IF BIRTHDAY_LIST -->{L_CONGRATULATIONS}: <b>{BIRTHDAY_LIST}</b><!-- ELSE -->{L_NO_BIRTHDAYS}<!-- ENDIF --></p></td>
+      </tr>
+      </table>
+      <!-- ENDIF -->
+    </div>
+    <div class="index_tabbed-content" id="index_tabbed-3">
+    <table class="tablebg" width="100%" cellspacing="1">
+    <tr>
+        <td class="cat" colspan="2"><h4>{L_STATISTICS}</h4></td>
+    </tr>
+    <tr>
+        <td class="row1"><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_STATISTICS}" /></td>
+        <td class="row1" width="100%" valign="middle"><p class="genmed">{TOTAL_POSTS} | {TOTAL_TOPICS} | {TOTAL_USERS} | {NEWEST_USER}</p></td>
+    </tr>
+    </table>
+    </div>
+    <div class="index_tabbed-content" id="index_tabbed-4">
+      <!-- Start DM Video -->
+      <!-- IF S_VIDEO_EXIST -->
+      <table class="tablebg" width="100%" cellspacing="1">
+      <tr>
+          <td class="cat" colspan="2"><h4>{L_DMV_MOST_SEEN_VIDEOS}</h4></td>
+      </tr>
+      <tr>
+          <td class="row1"><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_DMV_MOST_SEEN_VIDEOS}" /></td>
+          <td class="row1" width="100%" valign="middle"><p class="genmed">{NUMBER_VIDEOS}<br/><!-- BEGIN videoline --><!-- IF not videoline.S_FIRST_ROW --> &bull; <!-- ENDIF --> {videoline.TITEL} ({videoline.VIDEO_COUNTER}) <!-- END videoline --></p></td>
+      </tr>
+      </table>
+      <!-- ENDIF -->
+      <!-- End DM Video -->
+    </div>
+    <div class="index_tabbed-content" id="index_tabbed-5">
+      <!-- IF S_USER_LOGGED_IN and not S_IS_BOT and S_DISPLAY_DONATION_LIST -->
+      <table class="tablebg" width="100%" cellspacing="1">
+      <tr>
+          <td class="cat" colspan="2"><h4>{L_LAST_DONORS}</h4></td>
+      </tr>
+      <tr>
+          <td class="row1"><a href="{U_DONORS}" title="{L_MORE_DONORS}"><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_MORE_DONORS}" /></a></td>
+          <td class="row1" width="100%" valign="middle"><p class="genmed">{LAST_DONORS}</p></td>
+      </tr>
+      </table>
+      <!-- ENDIF -->
+    </div>
+    <div class="index_tabbed-content" id="index_tabbed-6">
+      <!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+      <form method="post" action="{S_LOGIN_ACTION}">
+      
+      <table class="tablebg" width="100%" cellspacing="1">
+      <tr>
+          <td class="cat"><h4><a href="{U_LOGIN_LOGOUT}">{L_LOGIN_LOGOUT}</a></h4></td>
+      </tr>
+      <tr>
+          <td class="row1" align="center"><span class="genmed">{L_USERNAME}:</span> <input class="post" type="text" name="username" size="10" />&nbsp; <span class="genmed">{L_PASSWORD}:</span> <input class="post" type="password" name="password" size="10" />&nbsp; <!-- IF S_AUTOLOGIN_ENABLED --> <span class="gensmall">{L_LOG_ME_IN}</span> <input type="checkbox" class="radio" name="autologin" /><!-- ENDIF -->&nbsp; <input type="submit" class="btnmain" name="login" value="{L_LOGIN}" /></td>
+      </tr>
+      </table>
+      {S_LOGIN_REDIRECT}
+      {S_FORM_TOKEN}
+      </form>
+      <!-- ENDIF -->
+    </div>
+ <!-- tab containers -->
+</div>

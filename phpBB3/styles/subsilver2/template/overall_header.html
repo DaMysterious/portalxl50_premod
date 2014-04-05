@@ -1,0 +1,466 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}" xml:lang="{S_USER_LANG}">
+<head>
+<!-- INCLUDE portal/_portal_config.html -->    
+
+{SEO_BASE_HREF}
+<!-- IF SEO_CANONICAL_URL --><link rel="canonical" href="{SEO_CANONICAL_URL}" /><!-- ENDIF -->
+<meta http-equiv="content-type" content="text/html; charset={S_CONTENT_ENCODING}" />
+<title>{PAGE_TITLE}<!-- IF S_IN_MCP --> &bull; {L_MCP}<!-- ELSEIF S_IN_UCP --> &bull; {L_UCP}<!-- ENDIF --></title>
+
+<!--BEGIN mobiquo Mod push service-->
+<script type="text/javascript">
+var tapatalkdir="{MOBIQUO_NAME}";
+var tapatalk_ipad_msg = '{TAPATALK_IPAD_MSG}';
+var tapatalk_ipad_url  = '{TAPATALK_IPAD_URL}';
+var tapatalk_iphone_msg = '{TAPATALK_IPHONE_MSG}';
+var tapatalk_iphone_url  = '{TAPATALK_IPHONE_URL}';
+var tapatalk_android_msg = '{TAPATALK_ANDROID_MSG}';
+var tapatalk_android_url  = '{TAPATALK_ANDROID_URL}';
+var tapatalk_kindle_msg = '{TAPATALK_KINDLE_MSG}';
+var tapatalk_kindle_url  = '{TAPATALK_KINDLE_URL}';
+var tapatalk_chrome_enable = '{TAPATALK_CHROME_ENABLE}';
+</script>
+<script type="text/javascript" src="{TAPATALKDETECT_JS}"></script>
+<!--END mobiquo Mod push service-->
+
+<meta http-equiv="content-language" content="{S_USER_LANG}" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="imagetoolbar" content="no" />
+
+<!-- IF S_ARCADE_FB -->
+<meta property="og:site_name" content="{SITENAME}" />
+<meta property="og:title"	  content="{ARCADE_FB_GN}" />
+<meta property="og:image"	  content="{ARCADE_FB_GI}" />
+<!-- ENDIF -->
+
+{META_TAG}
+{META}
+
+<!-- BEGIN gym_rsslinks -->
+<link rel="alternate" type="application/rss+xml" title="{gym_rsslinks.TITLE}" href="{gym_rsslinks.URL}" />
+<!-- END gym_rsslinks -->
+
+<!-- IF S_ENABLE_FEEDS -->
+	<!-- IF S_ENABLE_FEEDS_OVERALL --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {SITENAME}" href="{U_FEED}" /><!-- ENDIF -->
+	<!-- IF S_ENABLE_FEEDS_NEWS --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_FEED_NEWS}" href="{U_FEED}?mode=news" /><!-- ENDIF -->
+	<!-- IF S_ENABLE_FEEDS_FORUMS --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_ALL_FORUMS}" href="{U_FEED}?mode=forums" /><!-- ENDIF -->
+	<!-- IF S_ENABLE_FEEDS_TOPICS --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_FEED_TOPICS_NEW}" href="{U_FEED}?mode=topics" /><!-- ENDIF -->
+	<!-- IF S_ENABLE_FEEDS_TOPICS_ACTIVE --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_FEED_TOPICS_ACTIVE}" href="{U_FEED}?mode=topics_active" /><!-- ENDIF -->
+	<!-- IF S_ENABLE_FEEDS_FORUM and S_FORUM_ID --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_FORUM} - {FORUM_NAME}" href="{U_FEED}?f={S_FORUM_ID}" /><!-- ENDIF -->
+	<!-- IF S_ENABLE_FEEDS_TOPIC and S_TOPIC_ID --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_TOPIC} - {TOPIC_TITLE}" href="{U_FEED}?f={S_FORUM_ID}&amp;t={S_TOPIC_ID}" /><!-- ENDIF -->
+<!-- ENDIF -->
+
+<link rel="alternate" type="application/rss+xml" title="{SITENAME} {L_RSS_FEED_FORUM}" href="{U_SYNDICATE_FORUM}" />
+<link rel="alternate" type="application/rss+xml" title="{SITENAME} {L_RSS_FEED_ATTACHMENTS}" href="{U_SYNDICATE_FILES}" />
+<link rel="alternate" type="application/rss+xml" title="{SITENAME} {L_RSS_FEED_DOWNLODS}" href="{U_SYNDICATE_DOWNLOADS}" />
+<link rel="alternate" type="application/rss+xml" title="{SITENAME} {L_RSS_FEED_KB}" href="{U_SYNDICATE_KB}" />
+<link rel="alternate" type="application/rss+xml" title="{SITENAME} {L_RSS_FEED_GALLERY}" href="{U_SYNDICATE_GALLERY}" />
+<link rel="alternate" type="application/rss+xml" title="{SITENAME} {L_RSS_FEED_ARCADE}" href="{U_SYNDICATE_ARCADE}" />
+<link rel="alternate" type="application/rss+xml" title="{SITENAME} {L_RSS_FEED_VIDEO}" href="{U_SYNDICATE_VIDEO}" />
+  
+<link rel="stylesheet" href="{T_STYLESHEET_LINK}" type="text/css" />
+<!-- IF S_IN_ARCADE -->
+	<link href="{T_THEME_PATH}/arcade.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<!-- ENDIF -->
+<link rel="stylesheet" href="{T_THEME_PATH}/highslide/highslide.css" type="text/css" />
+<link rel="stylesheet" href="{T_THEME_PATH}/memberlist_avatar.css" type="text/css" />
+<link rel="stylesheet" href="{T_THEME_PATH}/prime_trash_bin.css" type="text/css" />
+<link rel="stylesheet" href="{T_THEME_PATH}/portal_adds.css" type="text/css" />
+
+<!-- INCLUDE prime_show_deleted_post.html -->
+
+<script type="text/javascript">
+// <![CDATA[
+<!-- IF S_USER_PM_POPUP and S_NEW_PM -->
+	popup('{UA_POPUP_PM}', 400, 225, '_phpbbprivmsg');
+<!-- ENDIF -->
+
+function popup(url, width, height, name)
+{
+	if (!name)
+	{
+		name = '_popup';
+	}
+
+	window.open(url.replace(/&amp;/g, '&'), name, 'height=' + height + ',resizable=yes,scrollbars=yes,width=' + width);
+	return false;
+}
+
+// www.phpBB-SEO.com SEO TOOLKIT BEGIN
+function jumpto() {
+	var page = prompt('{LA_JUMP_PAGE}:', '{ON_PAGE}');
+	var perpage = '{PER_PAGE}';
+	var base_url = '{A_BASE_URL}';
+	var seo_delim_start = '{SEO_START_DELIM}';
+	var seo_static_pagination = '{SEO_SATIC_PAGE}';
+	var seo_ext_pagination = '{SEO_EXT_PAGE}';
+	if (page !== null && !isNaN(page) && page == Math.floor(page) && page > 0) {
+		var seo_page = (page - 1) * perpage;
+		var anchor = '';
+		var anchor_parts = base_url.split('#');
+		if ( anchor_parts[1] ) {
+			base_url = anchor_parts[0];
+			anchor = '#' + anchor_parts[1];
+		}
+		if ( seo_page > 0 ) {
+			var phpEXtest = false;
+			if ( base_url.indexOf('?') >= 0 || ( phpEXtest = base_url.match(/\.php$/i))) {
+				document.location.href = base_url.replace(/&amp;/g, '&') + (phpEXtest ? '?' : '&') + 'start=' + seo_page + anchor;
+			} else {
+				var ext = base_url.match(/\.[a-z0-9]+$/i);
+				if (ext) {
+					// location.ext => location-xx.ext
+					document.location.href = base_url.replace(/\.[a-z0-9]+$/i, '') + seo_delim_start + seo_page + ext + anchor;
+				} else {
+					// location and location/ to location/pagexx.html
+					var slash = base_url.match(/\/$/) ? '' : '/';
+					document.location.href = base_url + slash + seo_static_pagination + seo_page + seo_ext_pagination + anchor;
+				}
+			}
+		} else {
+			document.location.href = base_url + anchor;
+		}
+	}
+}
+var seo_external = {SEO_EXTERNAL};
+var seo_external_sub = {SEO_EXTERNAL_SUB};
+var seo_ext_classes = {SEO_EXT_CLASSES};
+var seo_hashfix = {SEO_HASHFIX};
+/**
+*  phpbb_seo_href()
+*  Fixes href="#something" links with virtual directories
+*  Optionally open external or marked with a css class links in a new window
+*  in a XHTML 1.x compliant way.
+*/
+function phpbb_seo_href() {
+	var current_domain = document.domain.toLowerCase();
+	if (!current_domain || !document.getElementsByTagName) return;
+	if (seo_external_sub && current_domain.indexOf('.') >= 0) {
+		current_domain = current_domain.replace(new RegExp(/^[a-z0-9_-]+\.([a-z0-9_-]+\.([a-z]{2,6}|[a-z]{2,3}\.[a-z]{2,3}))$/i), '$1');
+	}
+	if (seo_ext_classes) {
+		var extclass = new RegExp("(^|\s)(" + seo_ext_classes + ")(\s|$)");
+	}
+	if (seo_hashfix) {
+		var basehref = document.getElementsByTagName('base')[0];
+		if (basehref) {
+			basehref = basehref.href;
+			var hashtest = new RegExp("^(" + basehref + "|)#[a-z0-9_-]+$");
+			var current_href = document.location.href.replace(/#[a-z0-9_-]+$/i, "");
+		} else {
+			seo_hashfix = false;
+		}
+	}
+	var hrefels = document.getElementsByTagName("a");
+	var hrefelslen = hrefels.length;
+	for (var i = 0; i < hrefelslen; i++) {
+		var el = hrefels[i];
+		var hrefinner = el.innerHTML.toLowerCase();
+		if (el.onclick || (el.href == '') || (el.href.indexOf('javascript') >=0 ) || (el.href.indexOf('mailto') >=0 ) || (hrefinner.indexOf('<a') >= 0) ) {
+			continue;
+		}
+		if (seo_hashfix && el.hash && hashtest.test(el.href)) {
+			el.href = current_href + el.hash;
+		}
+		if (seo_external) {
+			if ((el.href.indexOf(current_domain) >= 0) && !(seo_ext_classes && extclass.test(el.className))) {
+				continue;
+			}
+			el.onclick = function () { window.open(this.href); return false; };
+		}
+	}
+}
+window.onload = function() {
+	if (seo_external || seo_hashfix) {
+		phpbb_seo_href();
+	}
+	// here you can add other window.onload events
+}
+// www.phpBB-SEO.com SEO TOOLKIT END
+
+/**
+* Find a member
+*/
+function find_username(url)
+{
+	popup(url, 760, 570, '_usersearch');
+	return false;
+}
+
+/**
+* Mark/unmark checklist
+* id = ID of parent container, name = name prefix, state = state [true/false]
+*/
+function marklist(id, name, state)
+{
+	var parent = document.getElementById(id);
+	if (!parent)
+	{
+		eval('parent = document.' + id);
+	}
+
+	if (!parent)
+	{
+		return;
+	}
+
+	var rb = parent.getElementsByTagName('input');
+	
+	for (var r = 0; r < rb.length; r++)
+	{
+		if (rb[r].name.substr(0, name.length) == name)
+		{
+			rb[r].checked = state;
+		}
+	}
+}
+
+<!-- IF ._file -->
+
+	/**
+	* Play quicktime file by determining it's width/height
+	* from the displayed rectangle area
+	*
+	* Only defined if there is a file block present.
+	*/
+	function play_qt_file(obj)
+	{
+		var rectangle = obj.GetRectangle();
+
+		if (rectangle)
+		{
+			rectangle = rectangle.split(',')
+			var x1 = parseInt(rectangle[0]);
+			var x2 = parseInt(rectangle[2]);
+			var y1 = parseInt(rectangle[1]);
+			var y2 = parseInt(rectangle[3]);
+
+			var width = (x1 < 0) ? (x1 * -1) + x2 : x2 - x1;
+			var height = (y1 < 0) ? (y1 * -1) + y2 : y2 - y1;
+		}
+		else
+		{
+			var width = 200;
+			var height = 0;
+		}
+
+		obj.width = width;
+		obj.height = height + 16;
+
+		obj.SetControllerVisible(true);
+
+		obj.Play();
+	}
+<!-- ENDIF -->
+
+// ]]>
+</script>
+
+<!-- IF S_IN_ARCADE -->
+	<link href="{T_THEME_PATH}/arcade.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<!-- ENDIF -->
+
+<!--[if lt IE 7]>
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/portal/src/pngfix.js"></script>
+<![endif]-->
+
+<!-- IF S_CALENDAR_RSVPS -->
+<script src="{T_SUPER_TEMPLATE_PATH}/portal/src/sorttable.js"></script>
+<!-- ENDIF -->
+
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/portal/src/jquery.min.js"></script>
+<script type="text/javascript">
+// <![CDATA[ 
+$(function(){
+	$('.search-project').hover(
+		function() {
+			$(this).find(".search-snippet").fadeTo(400, 0.8);
+		},
+		function() {
+			$(this).find(".search-snippet").stop().css("display", "none");
+		}
+	);
+});
+// ]]> 
+</script>
+<link rel="stylesheet" href="{T_SUPER_TEMPLATE_PATH}/portal/src/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/portal/src/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="{T_SUPER_TEMPLATE_PATH}/portal/src/jquery.easywidgets.min.css" type="text/css" />
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/portal/src/jquery.easywidgets.min.js"></script>
+
+<script type="text/javascript">
+// <![CDATA[
+function doCollapseExpand(id,img){
+	var b = document.getElementById(id);
+		if (b.style.display=='none'){
+		b.style.display='';
+	document.images[img].src='{T_THEME_PATH}/images/arrow_user_up.gif'; 
+} else {
+		b.style.display='none';
+	document.images[img].src='{T_THEME_PATH}/images/arrow_user_down.gif';
+} return false; }
+// ]] >
+</script>
+
+<!-- IF S_TOOL_TIPS_ENABLED --> 
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/portal/src/tooltips.js"></script>
+<!-- ENDIF -->        
+
+<link rel="stylesheet" href="{T_THEME_PATH}/prime_links/prime_links.css" type="text/css" />
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+<script type="text/javascript">
+// <![CDATA[
+var rmw_max_width 	= '{PORTAL_PICTURE_RESIZE}';
+var rmw_border_1 	= '1px solid #666666';
+var rmw_border_2 	= '1px solid #ff0000';
+var rmw_image_title = '{L_IMG_CLICK_HERE}';
+// ]] >
+</script>
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/portal/src/resize_image.js"></script>
+
+<!-- Breizh Shoutbox Start -->
+<!-- IF S_DISPLAY_SHOUTBOX -->
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/editor.js"></script>
+<script type="text/javascript" src="{U_SHOUT_STATIC}"></script>
+<script type="text/javascript" src="{U_SHOUT}"></script>
+<!-- IF U_CHARS -->
+<script type="text/javascript" src="{U_CHARS}"></script>
+<!-- ENDIF -->
+<!-- ENDIF -->
+<!-- Breizh Shoutbox End -->
+
+<!-- INCLUDE gallery/plugins_header.html -->
+    
+<!-- IF UA_GREY_STAR_SRC -->
+<!-- INCLUDE kb/rating_js.html -->
+<!-- ENDIF -->
+
+<!-- IF $PORTALXL_SIDEBAR == '1' -->
+<!-- INCLUDE portal/portal_sidebar.html -->
+<!-- ENDIF -->
+
+<!-- IF $PORTALXL_GUEST_REGISTRATION_BAR == '1' -->
+  <!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+     <!-- INCLUDE portal/portal_guest_registration_bar.html -->
+  <!-- ENDIF -->
+<!-- ENDIF -->
+ 
+</head>
+
+<!-- Start DM Music Charts -->
+<script type="text/javascript">
+// <![CDATA[
+function popup2(mylink, windowname)
+{
+if (! window.focus)return true;
+var href;
+if (typeof(mylink) == 'string')
+   href=mylink;
+else
+   href=mylink.href;
+window.open(href, windowname, 'width=660,height=550');
+return false;
+}
+// ]] >
+</script>
+<!-- End DM Music Charts -->
+    
+<body class="{S_CONTENT_DIRECTION}">
+
+<!-- IF not S_IS_BOT and (ACTIVE_PANEL and not S_DISPLAY_SHOUTBOX) or (S_DISPLAY_SHOUTBOX and PANEL_ALL) -->
+<script type="text/javascript">
+// <![CDATA[
+function changeShout(el1, el2, src1){
+document.getElementById(el1).style.display = 'block';
+document.getElementById(el2).style.display = 'none';
+if(src1!= false){document.getElementById('box').src = src1;}}
+// ]]>
+</script>
+<div style="position: fixed;bottom: 50px;left: 0px;background-color: transparent;z-index:10000;float: left;">
+	<table>
+		<tr style="margin-top: 0px;float: left;">
+			<td style="display: block;margin-left: -5px;float: left;" id="dtbox1">
+				<a href="javascript:;" onclick="document.getElementById('box').style.display='block';changeShout('dtbox2', 'dtbox1', <!-- IF S_DISPLAY_SHOUTBOX -->'{U_SHOUTBOX}'<!-- ELSE -->false<!-- ENDIF -->);" title="{L_SHOUT_POP}">
+				<img src="{T_IMAGES_PATH}shoutbox/open.png" alt="{L_SHOUT_POP}" title="{L_SHOUT_POP}" />
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td style="margin-left: -5px;background: transparent;float: left;">
+				<iframe src="<!-- IF not S_DISPLAY_SHOUTBOX -->{U_SHOUTBOX}<!-- ENDIF -->" id="box" style="width: 800px;height: 500px;display: none;background: transparent;background-attachment: none;background-clip: none;border: 0 none;float: left;" frameborder="0px" scrolling="no"></iframe>
+			</td>
+		</tr>
+		<br />
+		<tr>
+			<td style="display: none;margin-left: -5px;margin-top: 0px;float: left;" id="dtbox2">
+				<a href="javascript:;" onclick="document.getElementById('box').style.display='none';changeShout('dtbox1', 'dtbox2', <!-- IF S_DISPLAY_SHOUTBOX -->''<!-- ELSE -->false<!-- ENDIF -->);" title="{L_CLOSE_WINDOW}">
+			<img src="{T_IMAGES_PATH}shoutbox/close.png" alt="{L_CLOSE_WINDOW}" title="{L_CLOSE_WINDOW}" />
+			</a>
+			</td>
+		</tr>
+	</table>
+</div>
+<!-- ENDIF -->
+
+<a name="top"></a>
+<a name="wrap"></a>
+
+<div id="wrapheader">
+
+	<div id="logodesc">
+		<table width="100%" cellspacing="0">
+		<tr>
+			<td><!-- IF S_PORTAL_LOGO_ENABLED --><a href="{U_PORTAL}" title="{L_PORTAL}" id="logo"><!-- IF PORTAL -->{SITE_LOGO_IMGAGE}<!-- ELSE -->{SITE_LOGO_IMG}<!-- ENDIF --></a><!-- ENDIF --></td>
+			<td width="<!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->75%<!-- ELSE -->100%<!-- ENDIF -->" align="center"><!-- IF S_PORTAL_SITENAME_ENABLED --><h1>{SITENAME}</h1><span class="gen">{SITE_DESCRIPTION}</span><!-- ENDIF --></td>
+			<!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->
+			<td width="25%" align="right">
+              <form action="{U_SEARCH}" method="post" id="search" name="search">
+                <input name="keywords" type="text" maxlength="128" title="{L_SEARCH_KEYWORDS}" class="inputbox search" value="<!-- IF SEARCH_WORDS-->{SEARCH_WORDS}<!-- ELSE -->{L_SEARCH_MINI}<!-- ENDIF -->" onclick="if(this.value=='{LA_SEARCH_MINI}')this.value='';" onblur="if(this.value=='')this.value='{LA_SEARCH_MINI}';" /> 
+                <input value="{L_SEARCH}" type="submit" /> {S_SEARCH_HIDDEN_FIELDS}<br />
+                <input type="checkbox" style="vertical-align: middle;" name="gsearch" id="gSearch" ondblclick="uncheckRadio();" /> {L_SEARCH_GOOGLE} | <a href="{U_SEARCH}" title="{L_SEARCH_ADV_EXPLAIN}">{L_SEARCH_ADV}</a>
+              </form>
+			</td>
+			<!-- ENDIF -->
+		</tr>
+		</tr>
+		</table>
+	</div>
+
+	<div id="menubar">
+		<table width="100%" cellspacing="0">
+		<tr>
+			<td class="genmed"><!-- INCLUDE navigation_menu.html --></td>
+		</tr>
+		</table>
+	</div>
+
+	<div id="datebar">
+        <table width="100%" cellspacing="0">
+        <!-- IF S_NEW_DL_MESSAGE -->
+            <tr>
+                <td class="gensmall">{NEW_DOWNLOAD_MESSAGE}</td>
+            </tr>
+        <!-- ENDIF --> 
+        <!-- IF U_USER_FLAG_NEW -->
+            <tr>
+                <td class="gensmall"><a href="{U_USER_FLAG_NEW}" style="color: red; font-weight: bold;">[ {L_USER_FLAG_NEW} ]</a></td>
+            </tr>
+        <!-- ENDIF -->
+        <!-- INCLUDE announcement_centre.html -->
+		<!-- INCLUDE arcade/info_body.html -->
+        </table>
+    </div>
+
+</div>
+
+<div id="wrapcentre">
+
+	<!-- IF S_AJAX_USERINFO_ENABLED --> 
+	<!-- INCLUDE portal/portal_ajax_userinfo.html -->
+	<!-- ENDIF -->        
+
+	<!-- INCLUDE breadcrumbs.html -->
+
+	<br style="clear: both;" />

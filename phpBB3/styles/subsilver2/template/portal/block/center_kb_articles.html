@@ -1,0 +1,46 @@
+<table class="tablebg" cellspacing="1" width="100%">
+	<th width="25">&nbsp;</th>
+	<th width="25">&nbsp;</th>
+	<th width="250">{L_ARTICLES}</th>
+	<th width="150">{L_AUTHOR}</th>
+	<th width="50">&nbsp;{L_COMMENTS}</th>
+	<th width="50">&nbsp;{L_VIEWS}</th>
+	<th width="200">&nbsp;{L_KB_SORT_ATIME}</th>
+<!-- BEGIN articlerow -->
+<tr>
+	<td class="row1" align="center">{articlerow.ARTICLE_FOLDER_IMG}</td>
+	<td class="row1" align="center"><!-- IF articlerow.ARTICLE_TYPE_IMG --><img src="{articlerow.ARTICLE_TYPE_IMG}" width="{articlerow.ARTICLE_TYPE_IMG_WIDTH}" height="{articlerow.ARTICLE_TYPE_IMG_HEIGHT}" alt="" /><!-- ENDIF --></td>
+	<td class="row1">
+		<a href="{articlerow.U_VIEW_ARTICLE}"><strong>{articlerow.ARTICLE_TITLE}</strong></a>
+		<!-- IF articlerow.ARTICLE_UNAPPROVED --><a href="{articlerow.U_MCP_QUEUE}">{UNAPPROVED_IMG}</a><!-- ENDIF -->
+		<!-- IF articlerow.ARTICLE_DESC --><br />{articlerow.ARTICLE_DESC}<!-- ENDIF -->
+	</td>
+	<td class="row2">{articlerow.ARTICLE_AUTHOR_FULL}</td>
+	<td class="row1" align="center">{articlerow.COMMENTS}</td>
+	<td class="row2" align="center">{articlerow.VIEWS}</td>
+	<td class="row1" align="center">
+		<div style="white-space: nowrap;">{topicrow.LAST_POST_TIME}</div>
+		<div><!-- IF articlerow.ATTACH_ICON_IMG -->{articlerow.ATTACH_ICON_IMG} <!-- ENDIF -->{articlerow.FIRST_POST_TIME}</div>
+	</td>
+</tr>	
+<!-- BEGINELSE -->
+<tr>
+	<td class="row1" colspan="7" height="30" align="center" valign="middle"><span class="gen">{L_NO_ARTICLES}</span></td>
+</tr>
+<!-- END articlerow -->	
+</table>
+
+<table width="100%" cellspacing="1">
+<tr>
+<!-- IF TOTAL_ARTICLES -->
+    <td class="gensmall" width="100%" align="{S_CONTENT_FLOW_END}" nowrap="nowrap">{L_TOTAL_ARTICLES}&nbsp;[ {TOTAL_ARTICLES} ]&nbsp;</td>
+<!-- ENDIF -->
+</tr>
+</table>
+<br />
+
+<table cellspacing="1" width="100%">
+  <tr>
+      <td align="center" class="row1">[ <a href="{U_KB}">{L_KB}</a> ]</td>
+  </tr>
+</table>

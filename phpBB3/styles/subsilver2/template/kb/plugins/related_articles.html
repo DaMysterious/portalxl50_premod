@@ -1,0 +1,36 @@
+<!-- IF S_RELATED_ARTICLES -->
+<table class="tablebg" cellspacing="1" width="100%">
+	<tr>
+		<th>{L_RELATED_ARTICLES}</th>
+	</tr>
+	<tr>
+		<td class="row1">
+		<!-- IF .related_articles -->
+			<p class="genmed">
+				<!-- BEGIN related_articles -->
+					<a href="{related_articles.U_VIEW_ARTICLE}">{related_articles.TITLE}</a><br />
+				<!-- END related_articles -->
+			</p>
+		<!-- ELSE -->
+		<p class="genmed">{L_NO_RELATED_ARTICLES}</p>
+		<!-- ENDIF -->
+		</td>
+	</tr>
+</table>
+<!-- IF KB_TOTAL_RA -->
+	<table width="100%" cellspacing="1">
+	<tr>
+		<td class="nav" valign="middle">{KB_PAGE_NUMBER}&nbsp;[ {KB_TOTAL_RA} {KB_S_TOTAL_RA} ]&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="gensmall" width="100%" align="{S_CONTENT_FLOW_END}">
+        <!-- IF KB_PAGINATION -->
+        <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}"><b>{L_GOTO_PAGE}</b></a>
+        <br /><b>{KB_PAGINATION}</b>
+        <!-- ENDIF -->
+        </td>
+	</tr>
+	</table>
+<!-- ENDIF -->
+<br />
+<!-- ENDIF -->

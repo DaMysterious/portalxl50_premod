@@ -1,0 +1,1329 @@
+<!-- INCLUDE overall_header.html -->
+
+<script type="text/javascript">
+// <![CDATA[
+	/** Change background color for prosilver styles **/
+	function update_color(newcolor)
+	{
+		document.getElementById('color_image').src = (newcolor) ? "{COLOR_PATH}" + encodeURI(newcolor) : "{COLOR_PATH}transparent.gif";
+	}
+	/** Change background color for subsilver2 styles **/
+	function update_color_sub(newcolor_sub)
+	{
+		document.getElementById('color_image_sub').src = (newcolor_sub) ? "{COLOR_PATH}" + encodeURI(newcolor_sub) : "{COLOR_PATH}transparent.gif";
+	}
+	function play_sounds(file)
+	{
+		var is_ie = ((clientPC.indexOf('msie') != -1) && (clientPC.indexOf('opera') == -1));
+		if (is_ie)
+		{
+			document.getElementById('div_sound').innerHTML = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" height="0" width="0" type="application/x-shockwave-flash"><param name="movie" value="./../images/shoutbox/'+file+'"></object>';
+		}
+		else
+		{
+			document.getElementById('div_sound').innerHTML = '<embed src="./../images/shoutbox/'+file+'" width="0" height="0" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>';
+		}
+	}
+// ]]>
+</script>
+<div id="div_sound" style="position: absolute; left: -1000px; top: -1000px;"></div>
+<a name="maincontent"></a>
+
+<h1>{IMAGE_TITLE} {TITLE}</h1>
+
+<p>{TITLE_EXPLAIN}</p>
+
+<!-- IF S_VERSION -->
+	<!-- IF S_UP_TO_DATE -->
+	<div class="successbox">
+		<p>{UP_TO_DATE_MSG}</p>
+	</div>
+	<!-- ELSE IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+	<!-- ENDIF -->
+	
+	<fieldset>
+		<legend></legend>
+	<dl>
+		<dt><label>{L_CURRENT_VERSION}</label></dt>
+		<dd><strong>{SHOUT_VERSION}</strong></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_LATEST_VERSION}</label></dt>
+		<dd><strong>{LATEST_VERSION}</strong></dd>
+	</dl>
+	</fieldset>
+	
+	<div>{UPDATE_INSTRUCTIONS}</div>
+	<br />
+<!-- ENDIF -->
+
+<!-- IF S_CONFIGS -->
+	<form id="configs" method="post" action="{U_ACTION}">								
+		<fieldset>
+			<legend>{IMAGE_REGLAGES} {L_GENERAL_SETTINGS}</legend>
+			<dl>
+				<dt><label for="shout_enable">{L_SHOUT_ENABLE}:</label><br />{L_SHOUT_ENABLE_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_enable" value="1"<!-- IF SHOUT_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_enable" value="0"<!-- IF not SHOUT_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_see_buttons">{L_SHOUT_SEE_BUTTONS}:</label><br />{L_SHOUT_SEE_BUTTONS_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_see_buttons" value="1"<!-- IF SHOUT_SEE_BUTTONS --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_see_buttons" value="0"<!-- IF not SHOUT_SEE_BUTTONS --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_see_buttons_left">{L_SHOUT_SEE_BUTTONS_LEFT}:</label><br />{L_SHOUT_SEE_BUTTONS_LEFT_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_see_buttons_left" value="1"<!-- IF SHOUT_SEE_BUTTONS_LEFT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_see_buttons_left" value="0"<!-- IF not SHOUT_SEE_BUTTONS_LEFT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_avatar">{L_SHOUT_AVATAR}:</label><br />{L_SHOUT_AVATAR_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_avatar" value="1"<!-- IF SHOUT_AVATAR --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_avatar" value="0"<!-- IF not SHOUT_AVATAR --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_avatar_height">{L_SHOUT_AVATAR_HEIGHT}:</label><br />{L_SHOUT_AVATAR_HEIGHT_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_avatar_height" name="shout_avatar_height" value="{SHOUT_AVATAR_HEIGHT}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_avatar_robot">{L_SHOUT_AVATAR_ROBOT}:</label><br />{L_SHOUT_AVATAR_ROBOT_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_avatar_robot" value="1"<!-- IF SHOUT_AVATAR_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_avatar_robot" value="0"<!-- IF not SHOUT_AVATAR_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_avatar_img_robot">{L_SHOUT_AVATAR_IMG_BOT}:</label><br />{L_SHOUT_AVATAR_IMG_BOT_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_avatar_img_robot" name="shout_avatar_img_robot" value="{SHOUT_AVATAR_IMG_BOT}" maxlength="35" size="20" />&nbsp;&nbsp;<img src="./../images/shoutbox/{SHOUT_AVATAR_IMG_BOT}" alt="{SHOUT_AVATAR_IMG_BOT}" title="{L_SHOUT_AVATAR_IMG_BOT}" width="25" height="25" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_avatar_user">{L_SHOUT_AVATAR_USER}:</label><br />{L_SHOUT_AVATAR_USER_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_avatar_user" value="1"<!-- IF SHOUT_AVATAR_USER --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_avatar_user" value="0"<!-- IF not SHOUT_AVATAR_USER --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_avatar_img">{L_SHOUT_AVATAR_IMG}:</label><br />{L_SHOUT_AVATAR_IMG_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_avatar_img" name="shout_avatar_img" value="{SHOUT_AVATAR_IMG}" maxlength="35" size="20" />&nbsp;&nbsp;<img src="./../images/shoutbox/{SHOUT_AVATAR_IMG}" alt="{SHOUT_AVATAR_IMG}" title="{L_SHOUT_AVATAR_IMG}" width="25" height="25" /></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_sound_on">{L_SHOUT_SOUND_ON}:</label><br />{L_SHOUT_SOUND_ON_EXPLAIN}<br />{L_SHOUT_USERS_CAN_CHANGE}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_sound_on" value="1"<!-- IF SHOUT_SOUND_ON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_sound_on" value="0"<!-- IF not SHOUT_SOUND_ON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_sound_new">{L_SHOUT_SOUND_NEW}:</label><br />{L_SHOUT_SOUND_NEW_EXPLAIN}</dt>
+				<dd><select id="shout_sound_new" name="shout_sound_new" onchange="play_sounds('new/' + document.getElementById('shout_sound_new').value)">{NEW_SOUND}</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_sound_error">{L_SHOUT_SOUND_ERROR}:</label><br />{L_SHOUT_SOUND_ERROR_EXPLAIN}</dt>
+				<dd><select id="shout_sound_error" name="shout_sound_error" onchange="alert('error/' + document.getElementById('shout_sound_error').value)">{ERROR_SOUND}</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_sound_del">{L_SHOUT_SOUND_DEL}:</label><br />{L_SHOUT_SOUND_DEL_EXPLAIN}</dt>
+				<dd><select id="shout_sound_del" name="shout_sound_del">{DEL_SOUND}</select></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_rules">{L_SHOUT_RULES_ACTIVE}:</label><br />{L_SHOUT_RULES_ACTIVE_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_rules" value="1"<!-- IF SHOUT_RULES --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_rules" value="0"<!-- IF not SHOUT_RULES --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_panel">{L_SHOUT_PANEL}:</label><br />{L_SHOUT_PANEL_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" id="shout_panel1" name="shout_panel" value="1"<!-- IF SHOUT_PANEL --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" id="shout_panel0" name="shout_panel" value="0"<!-- IF not SHOUT_PANEL --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_panel_all">{L_SHOUT_PANEL_ALL}:</label><br />{L_SHOUT_PANEL_ALL_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_panel_all" value="1"<!-- IF SHOUT_PANEL_ALL --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_panel_all" value="0"<!-- IF not SHOUT_PANEL_ALL --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_nr_acp">{L_SHOUT_NR_ACP}:</label><br />{L_SHOUT_NR_ACP_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_nr_acp" name="shout_nr_acp" value="{SHOUT_NR_ACP}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_max_post_chars">{L_SHOUT_MAX_POST_CHARS}:</label><br />{L_SHOUT_MAX_POST_CHARS_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_max_post_chars" name="shout_max_post_chars" value="{SHOUT_MAX_POST_CHARS}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MAX_CHARS}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_smilies_width">{L_SMILIES_WIDTH}:</label><br />{L_SMILIES_WIDTH_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_smilies_width" name="shout_smilies_width" value="{SHOUT_SMILIES_W}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_smilies_height">{L_SMILIES_HEIGHT}:</label><br />{L_SMILIES_HEIGHT_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_smilies_height" name="shout_smilies_height" value="{SHOUT_SMILIES_H}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			{SEPARATION}{SEPARATION}{SEPARATION}
+			<dl>
+				<dt><label for="shout_index">{L_SHOUT_INDEX_ON}:</label><br />{L_SHOUT_INDEX_ON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_index" value="1"<!-- IF SHOUT_INDEX_ON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_index" value="0"<!-- IF not SHOUT_INDEX_ON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_position_index">{L_SHOUT_POSITION_INDEX}:</label><br />{L_SHOUT_POSITION_INDEX_EXPLAIN}</dt>
+				<dd><br /><select id="shout_position_index" name="shout_position_index">
+				<option title="{L_SHOUT_POSITION_TOP}" value="0"<!-- IF INDEX_SHOUT_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_TOP}</option>
+				<option title="{L_SHOUT_POSITION_AFTER}" value="1"<!-- IF INDEX_SHOUT_AFTER --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_AFTER}</option>
+				<option title="{L_SHOUT_POSITION_END}" value="2"<!-- IF INDEX_SHOUT_END --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_END}</option>
+				</select></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_forum">{L_SHOUT_FORUM_ON}:</label><br />{L_SHOUT_FORUM_ON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio"" name="shout_forum" value="1"<!-- IF SHOUT_FORUM_ON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_forum" value="0"<!-- IF not SHOUT_FORUM_ON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_position_forum">{L_SHOUT_POSITION_FORUM}:</label><br />{L_SHOUT_POSITION_FORUM_EXPLAIN}</dt>
+				<dd><br /><select id="shout_position_forum" name="shout_position_forum">
+				<option title="{L_SHOUT_POSITION_TOP}" value="0"<!-- IF POS_SHOUT_FORUM_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_TOP}</option>
+				<option title="{L_SHOUT_POSITION_END}" value="1"<!-- IF POS_SHOUT_FORUM_END --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_END}</option>
+				</select></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_topic">{L_SHOUT_TOPIC_ON}:</label><br />{L_SHOUT_TOPIC_ON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_topic" value="1"<!-- IF SHOUT_TOPIC_ON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_topic" value="0"<!-- IF not SHOUT_TOPIC_ON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_position_topic">{L_SHOUT_POSITION_TOPIC}:</label><br />{L_SHOUT_POSITION_TOPIC_EXPLAIN}</dt>
+				<dd><br /><select id="shout_position_topic" name="shout_position_topic">
+				<option title="{L_SHOUT_POSITION_TOP}" value="0"<!-- IF POS_SHOUT_TOPIC_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_TOP}</option>
+				<option title="{L_SHOUT_POSITION_END}" value="1"<!-- IF POS_SHOUT_TOPIC_END --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_END}</option>
+				</select></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_another">{L_SHOUT_ANOTHER_ON}:</label><br />{L_SHOUT_ANOTHER_ON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_another" value="1"<!-- IF SHOUT_ANOTHER_ON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_another" value="0"<!-- IF not SHOUT_ANOTHER_ON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_position_another">{L_SHOUT_POSITION_ANOTHER}:</label><br />{L_SHOUT_POSITION_ANOTHER_EXPLAIN}</dt>
+				<dd><br /><select id="shout_position_another" name="shout_position_another">
+				<option title="{L_SHOUT_POSITION_TOP}" value="0"<!-- IF POS_SHOUT_ANOTHER_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_TOP}</option>
+				<option title="{L_SHOUT_POSITION_END}" value="1"<!-- IF POS_SHOUT_ANOTHER_END --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_END}</option>
+				</select></dd>
+			</dl>
+			<!-- IF SHOUT_PORTAL -->
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_portal">{L_SHOUT_PORTAL_ON}:</label><br />{L_SHOUT_PORTAL_ON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_portal" value="1"<!-- IF SHOUT_PORTAL_ON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_portal" value="0"<!-- IF not SHOUT_PORTAL_ON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_position_portal">{L_SHOUT_POSITION_PORTAL}:</label><br />{L_SHOUT_POSITION_PORTAL_EXPLAIN}</dt>
+				<dd><br /><select id="shout_position_portal" name="shout_position_portal">
+				<option title="{L_SHOUT_POSITION_TOP}" value="0"<!-- IF POS_SHOUT_PORTAL_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_TOP}</option>
+				<option title="{L_SHOUT_POSITION_END}" value="1"<!-- IF POS_SHOUT_PORTAL_END --> selected="selected"<!-- ENDIF -->>{L_SHOUT_POSITION_END}</option>
+				</select></dd>
+			</dl>
+			<!-- ENDIF -->
+		</fieldset>
+
+		<fieldset style="text-align: center;">
+			<legend>{IMAGE_SUBMIT} {L_SUBMIT}</legend>
+			<input class="button1" type="submit" id="submit" name="update" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+<!-- ENDIF -->
+
+<!-- IF S_RULES -->
+	<form id="shout_rules_form" method="post" action="{U_ACTION}">
+		<fieldset>
+			<legend>{IMAGE_RULES} {L_ACP_SHOUT_RULES}</legend>
+			<!-- BEGIN rules -->
+			<dl>
+				<dt><label for="shout_rules_{rules.RULES_ISO}">{rules.RULES_NR}). {rules.RULES_ON}:</label><br /><br /><span>{rules.RULES_ON_EXPLAIN}</span></dt>
+				<dd><textarea id="shout_rules_{rules.RULES_ISO}" name="shout_rules_{rules.RULES_ISO}" cols="60" rows="9" style="font-size: 11px;">{rules.RULES_TEXT}</textarea></dd>
+				<dt><label for="shout_rules_{rules.RULES_ISO}">{L_SHOUT_RULES_VIEW}</label></dt>
+				<br />
+				<dd>{rules.RULES_TEXT_DISPLAY}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_rules_{rules.RULES_ISO}_priv"></label><br /><br /><span>{rules.RULES_ON_PRIV_EXPLAIN}</span></dt>
+				<dd><textarea id="shout_rules_{rules.RULES_ISO}_priv" name="shout_rules_{rules.RULES_ISO}_priv" cols="60" rows="9" style="font-size: 11px;">{rules.RULES_TEXT_PRIV}</textarea></dd>
+				<dt><label for="shout_rules_{rules.RULES_ISO}_priv">{L_SHOUT_RULES_VIEW_PRIV}</label></dt>
+				<br />
+				<dd>{rules.RULES_TEXT_DISPLAY_PRIV}</dd>
+			</dl>
+			<hr /><hr />
+			<!-- END rules -->
+		</fieldset>
+		{S_HIDDEN_FIELDS}
+		
+		<fieldset style="text-align: center;">
+			<legend>{IMAGE_SUBMIT} {L_SUBMIT}</legend>
+			<input class="button1" type="submit" id="submit" name="update" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+<!-- ENDIF -->
+
+<!-- IF S_OVERVIEW -->
+	<div class="pagination">
+		{TOTAL_MESSAGES} <!-- IF S_ON_PAGE --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+	</div>
+	
+	<form id="action_delete_form" method="post" action="{U_ACTION}">
+	<table cellspacing="1">
+		<caption>{IMAGE_MESSAGES} {L_SHOUT_STATS}</caption>
+		<thead>
+			<tr>
+				<th style="text-align:center;width: 3%;">#</th>
+				<th style="text-align:center;width: 12%;">{L_SHOUT_DATE}</th>
+				<th style="text-align:center;width: 11%;">{L_SHOUT_USER}</th>
+				<th style="text-align:center;width: 3%;">ID</th>
+				<th>{L_MESSAGE}</th>
+				<th style="text-align:center;width: 5%;">{L_MARK}</th>
+			</tr>
+		</thead>
+		<a id="1" href="#1"></a>
+		<tbody>
+		<!-- IF S_DISPLAY_MESSAGES -->
+			<!-- BEGIN messages -->
+			<tr class="row<!-- IF messages.ROW_NUMBER is even -->1<!-- ELSE -->2<!-- ENDIF -->">
+				<td style="text-align:center">{messages.ROW_NUMBER}</td>
+				<td>{messages.TIME}</td>
+				<td>{messages.POSTER}</td>
+				<td style="text-align:center">{messages.ID}</td>
+				<td>{messages.MESSAGE}</td>
+				<td style="text-align: center;"><input type="checkbox" class="radio" name="mark[]" value="{messages.ID}" /></td>
+			</tr>
+			<!-- END messages -->
+		<!-- ELSE -->
+			<tr class="row2">
+				<td style="text-align:center">0</td>
+				<td colspan="4" style="text-align:center; font-size: 14px;"><strong><em>{L_NO_MESSAGE}</em></strong></td>
+				<td style="text-align:center"></td>
+			</tr>
+		<!-- ENDIF -->
+		</tbody>
+	</table>
+	
+	<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+		<input class="button2" type="submit" name="delmarked" value="{L_DELETE_MARKED}" />
+		<p class="small"><a href="#1" onclick="marklist('action_delete_form', 'mark', true);">{L_MARK_ALL}</a> &bull; <a href="#1" onclick="marklist('action_delete_form', 'mark', false);">{L_UNMARK_ALL}</a></p>
+	</fieldset>
+	</form>
+	<br /><br /><br />
+	<div class="pagination">
+		{TOTAL_MESSAGES} <!-- IF S_ON_PAGE --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+	</div>
+	
+	<fieldset>
+		<legend>{IMAGE_PURGE} {L_SHOUT_OPTIONS}</legend>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dt><label for="purge">{L_PURGE_SHOUT}</label></dt>
+				<dd><br /><input type="hidden" name="action" value="purge" /><input class="button2" type="submit" name="action_purge" value="{L_PURGE_SHOUT}" title="{L_PURGE_SHOUT}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dt><label for="purge">{L_PURGE_SHOUT_ROBOT}</label></dt>
+				<dd><span>{L_PURGE_SHOUT_ROBOT_EXPLAIN}</span><br /><br />
+					<input type="hidden" name="action" value="purge_1" /><input class="button2" type="submit" name="action_purge1" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_CONNECT}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_CONNECT}" />
+				</dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_2" /><input class="button2" type="submit" name="action_purge2" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_SUBJET}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_SUBJET}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_3" /><input class="button2" type="submit" name="action_purge3" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_REPONSE}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_REPONSE}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_4" /><input class="button2" type="submit" name="action_purge4" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_BIRTHDAY}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_BIRTHDAY}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_5" /><input class="button2" type="submit" name="action_purge5" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_DAY}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_DAY}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_6" /><input class="button2" type="submit" name="action_purge6" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_NEWS}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_NEWS}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_7" /><input class="button2" type="submit" name="action_purge7" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_MODS}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_MODS}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+	</fieldset>
+
+	<fieldset>
+		<legend>{IMAGE_STATS} {L_SHOUT_STATISTICS}</legend>
+		
+		<form id="statistics" method="post" action="{U_ACTION}">
+			<dl>
+				<dt><label>{L_SHOUT_MESSAGES_TOTAL}</label><br /><span>{L_SHOUT_MESSAGES_TOTAL_EXPLAIN}</span></dt>
+				<dd><br />{MESSAGES_TOTAL_NR}</dd>
+			</dl>
+			<dl>
+				<dt><labe>{L_SHOUT_DEL_MAIN}</label></dt>
+				<dd>{MESSAGES_DEL_TOTAL}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_ACP}</span></dt>
+				<dd>{MESSAGES_DEL_ACP}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_AUTO}</span></dt>
+				<dd>{MESSAGES_DEL_AUTO}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_PURGE}</span></dt>
+				<dd>{MESSAGES_DEL_PURGE}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_USER}</span></dt>
+				<dd>{MESSAGES_DEL_USER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SHOUT_LOGS}</label><br /><span>{L_SHOUT_LOGS_EXPLAIN}</span></dt>
+				<dd><br />{LOGS_TOTAL_NR}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SHOUT_DATE_LAST_RUN}</label></dt>
+				<dd><br />{LAST_SHOUT_RUN}</dd>
+			</dl>
+		</form>
+	</fieldset>
+
+	<form id="delete_logs" method="post" action="{U_ACTION}">
+		<table cellspacing="1">
+			<caption>{IMAGE_ALERT} {L_SHOUT_LOGS}</caption>
+			<thead>
+				<tr>
+					<th style="text-align:center;width: 3%;">#</th>
+					<th style="text-align:center;width: 12%;">{L_SHOUT_DATE}</th>
+					<th style="text-align:center;width: 11%;">{L_SHOUT_USER}</th>
+					<th style="text-align:center;width: 4%;">ID</th>
+					<th>{L_SHOUT_LOG_ENTRIE}</th>
+					<th style="text-align:center;width: 5%;">{L_MARK}</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+			<!-- IF S_DISPLAY_LOGS -->
+				<!-- BEGIN logs -->
+				<tr class="row<!-- IF logs.ROW_NUMBER is even -->1<!-- ELSE -->2<!-- ENDIF -->">
+					<td style="text-align:center">{logs.ROW_NUMBER}</td>
+					<td>{logs.TIME}</td>
+					<td>{logs.REPORTEE}</td>
+					<td style="text-align:center">{logs.ID}</td>
+					<td>{logs.OPERATION}</td>
+					<td style="text-align: center;"><input type="checkbox" class="radio" name="mark[]" value="{logs.ID}" /></td>
+				</tr>
+				<!-- END logs -->
+			<!-- ELSE -->
+				<tr class="row2">
+					<td style="text-align:center">0</td>
+					<td colspan="4" style="text-align:center; font-size: 14px;"><strong><em>{L_NO_SHOUT_LOG}</em></strong></td>
+					<td style="text-align:center"></td>
+				</tr>
+			<!-- ENDIF -->
+			</tbody>
+		</table>
+		<a id="2" href="#2"></a>
+		<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+			<input class="button2" type="submit" name="delmarkedlog" value="{L_DELETE_MARKED}" />
+			<p class="small"><a href="#2" onclick="marklist('delete_logs', 'mark', true);">{L_MARK_ALL}</a> &bull; <a href="#2" onclick="marklist('delete_logs', 'mark', false);">{L_UNMARK_ALL}</a></p>
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+	<br />
+<!-- ENDIF -->
+
+<!-- IF S_CONFIG_GEN -->
+	<form id="configs" method="post" action="{U_ACTION}">								
+		<fieldset>
+			<legend>{IMAGE_REGLAGES} {L_GENERAL_SETTINGS}</legend>
+			<dl>
+				<dt><label for="shout_title">{L_SHOUT_CONFIG_TITLE}:</label><br />{L_SHOUT_CONFIG_TITLE_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_title" name="shout_title" value="{SHOUT_TITLE}" maxlength="50" size="35" /></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_width_post">{L_SHOUT_WIDTH_POST}:</label><br />{L_SHOUT_WIDTH_POST_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_width_post" name="shout_width_post" value="{SHOUT_WIDTH_POST}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_ie_nr">{L_SHOUT_IE_NR}:</label><br />{L_SHOUT_IE_NR_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_ie_nr" name="shout_ie_nr" value="{SHOUT_IE_NR}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_non_ie_nr">{L_SHOUT_NON_IE_NR}:</label><br />{L_SHOUT_NON_IE_NR_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_non_ie_nr" name="shout_non_ie_nr" value="{SHOUT_NON_IE_NR}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_height">{L_SHOUT_HEIGHT}:</label><br />{L_SHOUT_HEIGHT_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_height" name="shout_height" value="{SHOUT_HEIGHT}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_color_background">{L_SHOUT_BACKGROUND_COLOR}:</label><br />{L_SHOUT_BACKGROUND_COLOR_EXPLAIN}</dt>
+				<dd><select id="shout_color_background" onchange="update_color(this.options[selectedIndex].id);" name="shout_color_background">{OPTION}</select> {L_SHOUT_APERCU}<img src="{COLOR_IMAGE}" id="color_image" alt="{SHOUT_BACKGROUND}" width="50" height="25" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_color_background_sub">{L_SHOUT_BACKGROUND_COLOR}:</label><br />{L_SHOUT_BACKGROUND_SUB_COLOR_EXPLAIN}</dt>
+				<dd><select id="shout_color_background_sub" onchange="update_color_sub(this.options[selectedIndex].id);" name="shout_color_background_sub">{OPTION_SUB}</select> {L_SHOUT_APERCU}<img src="{COLOR_IMAGE_SUB}" id="color_image_sub" alt="{SHOUT_BACKGROUND_SUB}" width="50" height="25" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_button_background">{L_SHOUT_BUTTON_BACKGROUND}:</label><br />{L_SHOUT_BUTTON_BACKGROUND_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_button_background" value="1"<!-- IF SHOUT_BUTTON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_button_background" value="0"<!-- IF not SHOUT_BUTTON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_bar_option">{L_SHOUT_BAR}:</label><br />{L_SHOUT_BAR_EXPLAIN}</dt>
+				<dd><br /><select id="shout_bar_option" name="shout_bar_option">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_BAR_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_BAR_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_smil">{L_SHOUT_SMIL_POS}:</label><br />{L_SHOUT_SMIL_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_smil" name="shout_pos_smil">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_SMIL --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_SMIL --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pagin_option">{L_SHOUT_PAGIN}:</label><br />{L_SHOUT_PAGIN_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pagin_option" name="shout_pagin_option">
+				<option title="{L_SHOUT_PAGIN_IN}" value="1"<!-- IF SHOUT_PAGIN_OPTION --> selected="selected"<!-- ENDIF -->>{L_SHOUT_PAGIN_IN}</option>
+				<option title="{L_SHOUT_PAGIN_BOTTOM}" value="0"<!-- IF not SHOUT_PAGIN_OPTION --> selected="selected"<!-- ENDIF -->>{L_SHOUT_PAGIN_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_rules">{L_SHOUT_RULES_POS}:</label><br />{L_SHOUT_RULES_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_rules" name="shout_pos_rules">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_RULES --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_RULES --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_color">{L_SHOUT_COLOR_POS}:</label><br />{L_SHOUT_COLOR_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_color" name="shout_pos_color">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_COLOR --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_COLOR --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_chars">{L_SHOUT_CHARS_POS}:</label><br />{L_SHOUT_CHARS_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_chars" name="shout_pos_chars">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_CHARS --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_CHARS --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_max_posts">{L_SHOUT_MAX_POSTS}:</label><br />{L_SHOUT_MAX_POSTS_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_max_posts" name="shout_max_posts" value="{SHOUT_MAX_POSTS}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_max_posts_on">{L_SHOUT_MAX_POSTS_ON}:</label><br />{L_SHOUT_MAX_POSTS_ON_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_max_posts_on" name="shout_max_posts_on" value="{SHOUT_MAX_POSTS_ON}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_prune">{L_SHOUT_PRUNE_TIME}:</label><br />{L_SHOUT_PRUNE_TIME_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_prune" name="shout_prune" value="{SHOUT_PRUNE}" maxlength="3" size="5" />&nbsp;{L_SHOUT_HOURS}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_on_cron">{L_SHOUT_ON_CRON}:</label><br />{L_SHOUT_ON_CRON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_on_cron" value="1"<!-- IF SHOUT_ON_CRON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_on_cron" value="0"<!-- IF not SHOUT_ON_CRON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_log_cron">{L_SHOUT_LOG_CRON}:</label><br />{L_SHOUT_LOG_CRON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_log_cron" value="1"<!-- IF SHOUT_LOG_CRON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_log_cron" value="0"<!-- IF not SHOUT_LOG_CRON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+		</fieldset>
+
+		<fieldset style="text-align: center;">
+			<legend>{IMAGE_SUBMIT} {L_SUBMIT}</legend>
+			<input class="button1" type="submit" id="submit" name="update" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+<!-- ENDIF -->
+
+<!-- IF S_PRIVATE -->
+	<div class="pagination">
+		{TOTAL_MESSAGES} <!-- IF S_ON_PAGE --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+	</div>
+	
+	<form id="action_delete_form" method="post" action="{U_ACTION}">
+		<table cellspacing="1">
+			<caption>{IMAGE_MESSAGES} {L_SHOUT_STATS}</caption>
+			<thead>
+				<tr>
+					<th style="text-align:center;width: 3%;">#</th>
+					<th style="text-align:center;width: 12%;">{L_SHOUT_DATE}</th>
+					<th style="text-align:center;width: 11%;">{L_SHOUT_USER}</th>
+					<th style="text-align:center;width: 3%;">ID</th>
+					<th>{L_MESSAGE}</th>
+					<th style="text-align:center;width: 5%;">{L_MARK}</th>
+				</tr>
+			</thead>
+			<a id="1" href="#1"></a>
+			<tbody>
+			<!-- IF S_DISPLAY_MESSAGES -->
+				<!-- BEGIN messages -->
+				<tr class="row<!-- IF messages.ROW_NUMBER is even -->1<!-- ELSE -->2<!-- ENDIF -->">
+					<td style="text-align:center">{messages.ROW_NUMBER}</td>
+					<td>{messages.TIME}</td>
+					<td>{messages.POSTER}</td>
+					<td style="text-align:center">{messages.ID}</td>
+					<td>{messages.MESSAGE}</td>
+					<td style="text-align: center;"><input type="checkbox" class="radio" name="mark[]" value="{messages.ID}" /></td>
+				</tr>
+				<!-- END messages -->
+			<!-- ELSE -->
+				<tr class="row2">
+					<td style="text-align:center">0</td>
+					<td colspan="4" style="text-align:center; font-size: 14px;"><strong><em>{L_NO_MESSAGE}</em></strong></td>
+					<td style="text-align:center"></td>
+				</tr>
+			<!-- ENDIF -->
+			</tbody>
+		</table>
+		
+		<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+			<input class="button2" type="submit" name="delmarked" value="{L_DELETE_MARKED}" title="{L_DELETE_MARKED}" />
+			<p class="small"><a href="#1" onclick="marklist('action_delete_form', 'mark', true);">{L_MARK_ALL}</a> &bull; <a href="#1" onclick="marklist('action_delete_form', 'mark', false);">{L_UNMARK_ALL}</a></p>
+		</fieldset>
+	{S_FORM_TOKEN}
+	</form>
+	<br /><br /><br />
+	<div class="pagination">
+		{TOTAL_MESSAGES} <!-- IF S_ON_PAGE --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+	</div>
+	
+	<fieldset>
+		<legend>{IMAGE_PURGE} {L_SHOUT_OPTIONS}</legend>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dt><label for="purge">{L_PURGE_SHOUT}</label></dt>
+				<dd><br /><input type="hidden" name="action" value="purge" /><input class="button2" type="submit" name="action_purge" value="{L_PURGE_SHOUT}" title="{L_PURGE_SHOUT}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dt><label for="purge">{L_PURGE_SHOUT_ROBOT}</label></dt>
+				<dd><span>{L_PURGE_SHOUT_ROBOT_EXPLAIN}</span><br /><br />
+					<input type="hidden" name="action" value="purge_1" /><input class="button2" type="submit" name="action_purge1" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_CONNECT}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_CONNECT}" />
+				</dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_2" /><input class="button2" type="submit" name="action_purge2" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_SUBJET}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_SUBJET}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_3" /><input class="button2" type="submit" name="action_purge3" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_REPONSE}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_REPONSE}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_4" /><input class="button2" type="submit" name="action_purge4" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_BIRTHDAY}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_BIRTHDAY}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_5" /><input class="button2" type="submit" name="action_purge5" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_DAY}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_DAY}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_6" /><input class="button2" type="submit" name="action_purge6" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_NEWS}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_NEWS}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_8" /><input class="button2" type="submit" name="action_purge8" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_PRIV}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_PRIV}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+		<form id="action_purge_form" method="post" action="{U_ACTION}">
+			<dl>
+				<dd><input type="hidden" name="action" value="purge_7" /><input class="button2" type="submit" name="action_purge7" value="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_MODS}" title="{L_SHOUT_PURGE_ON}{L_SHOUT_ON_MODS}" /></dd>
+			</dl>
+		{S_FORM_TOKEN}
+		</form>
+	</fieldset>
+
+	<fieldset>
+		<legend>{IMAGE_STATS} {L_SHOUT_STATISTICS}</legend>
+		
+		<form id="statistics" method="post" action="{U_ACTION}">
+			<dl>
+				<dt><label>{L_SHOUT_MESSAGES_TOTAL}</label><br /><span>{L_SHOUT_MESSAGES_TOTAL_EXPLAIN}</span></dt>
+				<dd><br />{MESSAGES_TOTAL_NR}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SHOUT_DEL_MAIN}</label></dt>
+				<dd>{MESSAGES_DEL_TOTAL}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_ACP}</span></dt>
+				<dd>{MESSAGES_DEL_ACP}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_AUTO}</span></dt>
+				<dd>{MESSAGES_DEL_AUTO}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_PURGE}</span></dt>
+				<dd>{MESSAGES_DEL_PURGE}</dd>
+			</dl>
+			<dl>
+				<dt><span>{L_SHOUT_DEL_USER}</span></dt>
+				<dd>{MESSAGES_DEL_USER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SHOUT_LOGS}</label><br /><span>{L_SHOUT_LOGS_EXPLAIN}</span></dt>
+				<dd><br />{LOGS_TOTAL_NR}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SHOUT_DATE_LAST_RUN}</label></dt>
+				<dd><br />{LAST_SHOUT_RUN}</dd>
+			</dl>
+		</form>
+	</fieldset>
+
+	<form id="delete_logs" method="post" action="{U_ACTION}">
+		<table cellspacing="1">
+			<caption>{IMAGE_ALERT} {L_SHOUT_LOGS}</caption>
+			<thead>
+				<tr>
+					<th style="text-align:center;width: 3%;">#</th>
+					<th style="text-align:center;width: 12%;">{L_SHOUT_DATE}</th>
+					<th style="text-align:center;width: 11%;">{L_SHOUT_USER}</th>
+					<th style="text-align:center;width: 4%;">ID</th>
+					<th>{L_SHOUT_LOG_ENTRIE}</th>
+					<th style="text-align:center;width: 5%;">{L_MARK}</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+			<!-- IF S_DISPLAY_LOGS -->
+				<!-- BEGIN logs -->
+				<tr class="row<!-- IF logs.ROW_NUMBER is even -->1<!-- ELSE -->2<!-- ENDIF -->">
+					<td style="text-align:center">{logs.ROW_NUMBER}</td>
+					<td>{logs.TIME}</td>
+					<td>{logs.REPORTEE}</td>
+					<td style="text-align:center">{logs.ID}</td>
+					<td>{logs.OPERATION}</td>
+					<td style="text-align: center;"><input type="checkbox" class="radio" name="mark[]" value="{logs.ID}" /></td>
+				</tr>
+				<!-- END logs -->
+			<!-- ELSE -->
+				<tr class="row2">
+					<td style="text-align:center">0</td>
+					<td colspan="4" style="text-align:center; font-size: 14px;"><strong><em>{L_NO_SHOUT_LOG}</em></strong></td>
+					<td style="text-align:center"></td>
+				</tr>
+			<!-- ENDIF -->
+			</tbody>
+		</table>
+		<a id="2" href="#2"></a>
+		<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+			<input class="button2" type="submit" name="delmarkedlog" value="{L_DELETE_MARKED}" />
+			<p class="small"><a href="#2" onclick="marklist('delete_logs', 'mark', true);">{L_MARK_ALL}</a> &bull; <a href="#2" onclick="marklist('delete_logs', 'mark', false);">{L_UNMARK_ALL}</a></p>
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+	<br />
+<!-- ENDIF -->
+
+<!-- IF S_PRIV_CONFIG -->
+	<form id="priv" method="post" action="{U_ACTION}">								
+		<fieldset>
+			<legend>{IMAGE_REGLAGES} {L_GENERAL_SETTINGS}</legend>
+			<dl>
+				<dt><label for="shout_title_priv">{L_SHOUT_CONFIG_TITLE}:</label><br />{L_SHOUT_CONFIG_TITLE_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_title_priv" name="shout_title_priv" value="{SHOUT_TITLE_PRIV}" maxlength="50" size="35" /></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_width_post_priv">{L_SHOUT_WIDTH_POST}:</label><br />{L_SHOUT_WIDTH_POST_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_width_post_priv" name="shout_width_post_priv" value="{SHOUT_WIDTH_POST}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_ie_nr_priv">{L_SHOUT_IE_NR}:</label><br />{L_SHOUT_IE_NR_POP_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_ie_nr_priv" name="shout_ie_nr_priv" value="{SHOUT_IE_NR_PRIV}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_non_ie_nr_priv">{L_SHOUT_NON_IE_NR}:</label><br />{L_SHOUT_NON_IE_NR_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_non_ie_nr_priv" name="shout_non_ie_nr_priv" value="{SHOUT_NON_IE_NR_PRIV}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_non_ie_height_priv">{L_SHOUT_HEIGHT}:</label><br />{L_SHOUT_HEIGHT_POP_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_non_ie_height_priv" name="shout_non_ie_height_priv" value="{SHOUT_NON_IE_HEIGHT_PRIV}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_color_background_priv">{L_SHOUT_BACKGROUND_COLOR}:</label><br />{L_SHOUT_BACKGROUND_COLOR_EXPLAIN}</dt>
+				<dd><select id="shout_color_background_priv" onchange="update_color(this.options[selectedIndex].id);" name="shout_color_background_priv">{OPTION}</select> {L_SHOUT_APERCU}<img src="{COLOR_IMAGE}" id="color_image" alt="{SHOUT_BACKGROUND}" width="60" height="27" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_color_background_sub_priv">{L_SHOUT_BACKGROUND_COLOR}:</label><br />{L_SHOUT_BACKGROUND_SUB_COLOR_EXPLAIN}</dt>
+				<dd><select id="shout_color_background_sub_priv" onchange="update_color_sub(this.options[selectedIndex].id);" name="shout_color_background_sub_priv">{OPTION_SUB}</select> {L_SHOUT_APERCU}<img src="{COLOR_IMAGE_SUB}" id="color_image_sub" alt="{SHOUT_BACKGROUND_SUB}" width="50" height="25" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_button_background_priv">{L_SHOUT_BUTTON_BACKGROUND}:</label><br />{L_SHOUT_BUTTON_BACKGROUND_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_button_background_priv" value="1"<!-- IF SHOUT_BUTTON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_button_background_priv" value="0"<!-- IF not SHOUT_BUTTON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_bar_option_priv">{L_SHOUT_BAR}:</label><br />{L_SHOUT_BAR_EXPLAIN}</dt>
+				<dd><br /><select id="shout_bar_option_priv" name="shout_bar_option_priv">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_BAR_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_BAR_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_smil_priv">{L_SHOUT_SMIL_POS}:</label><br />{L_SHOUT_SMIL_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_smil_priv" name="shout_pos_smil_priv">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_SMIL --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_SMIL --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pagin_option_priv">{L_SHOUT_PAGIN}:</label><br />{L_SHOUT_PAGIN_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pagin_option_priv" name="shout_pagin_option_priv">
+				<option title="{L_SHOUT_PAGIN_IN}" value="1"<!-- IF SHOUT_PAGIN_OPTION --> selected="selected"<!-- ENDIF -->>{L_SHOUT_PAGIN_IN}</option>
+				<option title="{L_SHOUT_PAGIN_BOTTOM}" value="0"<!-- IF not SHOUT_PAGIN_OPTION --> selected="selected"<!-- ENDIF -->>{L_SHOUT_PAGIN_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_rules_priv">{L_SHOUT_RULES_POS}:</label><br />{L_SHOUT_RULES_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_rules_priv" name="shout_pos_rules_priv">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_RULES --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_RULES --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_color_priv">{L_SHOUT_COLOR_POS}:</label><br />{L_SHOUT_COLOR_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_color_priv" name="shout_pos_color_priv">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_COLOR --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_COLOR --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_chars_priv">{L_SHOUT_CHARS_POS}:</label><br />{L_SHOUT_CHARS_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_chars_priv" name="shout_pos_chars_priv">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_CHARS --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_CHARS --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_max_posts_priv">{L_SHOUT_MAX_POSTS}:</label><br />{L_SHOUT_MAX_POSTS_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_max_posts_priv" name="shout_max_posts_priv" value="{SHOUT_MAX_POSTS}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_max_posts_on_priv">{L_SHOUT_MAX_POSTS_ON}:</label><br />{L_SHOUT_MAX_POSTS_ON_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_max_posts_on_priv" name="shout_max_posts_on_priv" value="{SHOUT_MAX_POSTS_ON}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_prune_priv">{L_SHOUT_PRUNE_TIME}:</label><br />{L_SHOUT_PRUNE_TIME_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_prune_priv" name="shout_prune_priv" value="{SHOUT_PRUNE_PRIV}" maxlength="3" size="5" />&nbsp;{L_SHOUT_HOURS}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_on_cron_priv">{L_SHOUT_ON_CRON}:</label><br />{L_SHOUT_ON_CRON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_on_cron_priv" value="1"<!-- IF SHOUT_ON_CRON_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_on_cron_priv" value="0"<!-- IF not SHOUT_ON_CRON_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_log_cron_priv">{L_SHOUT_LOG_CRON}:</label><br />{L_SHOUT_LOG_CRON_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_log_cron_priv" value="1"<!-- IF SHOUT_LOG_CRON_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_log_cron_priv" value="0"<!-- IF not SHOUT_LOG_CRON_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+		</fieldset>
+
+		<fieldset style="text-align: center;">
+			<legend>{IMAGE_SUBMIT} {L_SUBMIT}</legend>
+			<input class="button1" type="submit" id="submit" name="update" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+<!-- ENDIF -->
+
+<!-- IF S_POPUP -->
+	<form id="popup" method="post" action="{U_ACTION}">								
+		<fieldset>
+			<legend>{IMAGE_REGLAGES} {L_GENERAL_SETTINGS}</legend>
+			<dl>
+				<dt><label for="shout_width_post_pop">{L_SHOUT_WIDTH_POST}:</label><br />{L_SHOUT_WIDTH_POST_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_width_post_pop" name="shout_width_post_pop" value="{SHOUT_WIDTH_POST}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_ie_nr_pop">{L_SHOUT_IE_NR}:</label><br />{L_SHOUT_IE_NR_POP_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_ie_nr_pop" name="shout_ie_nr_pop" value="{SHOUT_IE_NR_POP}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_non_ie_height_pop">{L_SHOUT_HEIGHT}:</label><br />{L_SHOUT_HEIGHT_POP_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_non_ie_height_pop" name="shout_non_ie_height_pop" value="{SHOUT_NON_IE_HEIGHT_POP}" maxlength="3" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_non_ie_nr_pop">{L_SHOUT_NON_IE_NR}:</label><br />{L_SHOUT_NON_IE_NR_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_non_ie_nr_pop" name="shout_non_ie_nr_pop" value="{SHOUT_NON_IE_NR_POP}" maxlength="3" size="5" />&nbsp;{L_SHOUT_MESSAGES}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_popup_height">{L_SHOUT_POP_HEIGHT}:</label><br />{L_SHOUT_POP_HEIGHT_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_popup_height" name="shout_popup_height" value="{SHOUT_HEIGHT_POP}" maxlength="4" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_popup_width">{L_SHOUT_POP_WIDTH}:</label><br />{L_SHOUT_POP_WIDTH_EXPLAIN}</dt>
+				<dd><input class="text small" type="text" id="shout_popup_width" name="shout_popup_width" value="{SHOUT_WIDTH_POP}" maxlength="4" size="5" />&nbsp;{L_SHOUT_PIXELS}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_color_background_pop">{L_SHOUT_BACKGROUND_COLOR}:</label><br />{L_SHOUT_BACKGROUND_COLOR_EXPLAIN}</dt>
+				<dd><select id="shout_color_background_pop" onchange="update_color(this.options[selectedIndex].id);" name="shout_color_background_pop">{OPTION}</select> {L_SHOUT_APERCU}<img src="{COLOR_IMAGE}" id="color_image" alt="{SHOUT_BACKGROUND}" width="60" height="27" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_color_background_sub_pop">{L_SHOUT_BACKGROUND_COLOR}:</label><br />{L_SHOUT_BACKGROUND_SUB_COLOR_EXPLAIN}</dt>
+				<dd><select id="shout_color_background_sub_pop" onchange="update_color_sub(this.options[selectedIndex].id);" name="shout_color_background_sub_pop">{OPTION_SUB}</select> {L_SHOUT_APERCU}<img src="{COLOR_IMAGE_SUB}" id="color_image_sub" alt="{SHOUT_BACKGROUND_SUB}" width="50" height="25" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_button_background_pop">{L_SHOUT_BUTTON_BACKGROUND}:</label><br />{L_SHOUT_BUTTON_BACKGROUND_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_button_background_pop" value="1"<!-- IF SHOUT_BUTTON --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_button_background_pop" value="0"<!-- IF not SHOUT_BUTTON --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_bar_option_pop">{L_SHOUT_BAR}:</label><br />{L_SHOUT_BAR_EXPLAIN}</dt>
+				<dd><br /><select id="shout_bar_option_pop" name="shout_bar_option_pop">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_BAR_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_BAR_TOP --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_smil_pop">{L_SHOUT_SMIL_POS}:</label><br />{L_SHOUT_SMIL_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_smil_pop" name="shout_pos_smil_pop">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_SMIL --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_SMIL --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pagin_option_pop">{L_SHOUT_PAGIN}:</label><br />{L_SHOUT_PAGIN_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pagin_option_pop" name="shout_pagin_option_pop">
+				<option title="{L_SHOUT_PAGIN_IN}" value="1"<!-- IF SHOUT_PAGIN_OPTION --> selected="selected"<!-- ENDIF -->>{L_SHOUT_PAGIN_IN}</option>
+				<option title="{L_SHOUT_PAGIN_BOTTOM}" value="0"<!-- IF not SHOUT_PAGIN_OPTION --> selected="selected"<!-- ENDIF -->>{L_SHOUT_PAGIN_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_rules_pop">{L_SHOUT_RULES_POS}:</label><br />{L_SHOUT_RULES_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_rules_pop" name="shout_pos_rules_pop">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_RULES --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_RULES --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_color_pop">{L_SHOUT_COLOR_POS}:</label><br />{L_SHOUT_COLOR_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_color_pop" name="shout_pos_color_pop">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_COLOR --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_COLOR --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_pos_chars_pop">{L_SHOUT_CHARS_POS}:</label><br />{L_SHOUT_CHARS_POS_EXPLAIN}</dt>
+				<dd><br /><select id="shout_pos_chars_pop" name="shout_pos_chars_pop">
+				<option title="{L_SHOUT_BAR_TOP}" value="1"<!-- IF SHOUT_POS_CHARS --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_TOP}</option>
+				<option title="{L_SHOUT_BAR_BOTTOM}" value="0"<!-- IF not SHOUT_POS_CHARS --> selected="selected"<!-- ENDIF -->>{L_SHOUT_BAR_BOTTOM}</option>
+				</select></dd>
+			</dl>
+		</fieldset>
+
+		<fieldset style="text-align: center;">
+			<legend>{IMAGE_SUBMIT} {L_SUBMIT}</legend>
+			<input class="button1" type="submit" id="submit" name="update" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+<!-- ENDIF -->
+
+<!-- IF S_SMILIES -->
+	<form id="shout_smilies" method="post" action="{U_ACTION}">
+		<fieldset>
+			<legend>{L_SMILIES_OVERVIEW}</legend>
+			<div>
+				<!-- BEGIN smilies_shout -->
+				{smilies_shout.S_SMILEY_URL}
+				<!-- END smilies_shout -->
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{L_SMILIES_POPUP}</legend>
+			<div>
+				<!-- BEGIN smilies_popup -->
+				{smilies_popup.S_SMILEY_URL}
+				<!-- END smilies_no_shout -->
+			</div>
+		</fieldset>
+
+		<table cellspacing="1">
+			<thead>
+				<tr>
+					<th style="text-align: center;">{L_ORDER}</th>
+					<th style="text-align: center;">{L_CODE}</th>
+					<th style="text-align: center;">{L_IMAGE}</th>
+					<th>{L_SMILIES_EMOTION}</th>
+					<th style="text-align: center;">{L_DISPLAY_ON_SHOUTBOX}</th>
+					<th style="text-align:center;width: 5%;">{L_MARK}</th>
+				</tr>
+			</thead>
+			<tbody>
+			<!-- BEGIN smilies -->
+				<tr class="row<!-- IF smilies.ROW_NUMBER is even -->1<!-- ELSE -->2<!-- ENDIF -->" id="smiley_{smilies.ID}">
+					<td style="text-align: center;">{smilies.ROW_NUMBER}</td>
+					<td style="text-align: center;">{smilies.CODE}</td>
+					<td style="text-align: center;">{smilies.S_SMILEY_URL}<input type="hidden" name="image[{smilies.IMG}]" value="1" /></td>
+					<td>{smilies.EMOTION}</td>
+					<td style="text-align: center;"><span><a href="{smilies.U_DISPLAYED}">{smilies.SMILEY_DISPLAYED}</a></span></td>
+					<td style="text-align: center;"><input type="checkbox" class="radio" name="mark[]" value="{smilies.ID}" /></td>
+				</tr>
+			<!-- END smilies -->
+			</tbody>
+		</table>
+		<a id="1" href="#1"></a>
+		<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+			<input class="button2" type="submit" name="activer" value="{L_SHOUT_SMILIES_ON}" title="{L_SHOUT_SMILIES_ON}" />
+			<input class="button2" type="submit" name="desactiver" value="{L_SHOUT_SMILIES_POP}" title="{L_SHOUT_SMILIES_POP}" />
+			<p class="small"><a href="#1" onclick="marklist('shout_smilies', 'mark', true);">{L_MARK_ALL}</a> &bull; <a href="#1" onclick="marklist('shout_smilies', 'mark', false);">{L_UNMARK_ALL}</a></p>
+		</fieldset>
+	{S_FORM_TOKEN}
+	</form>
+	<br />
+<!-- ENDIF -->
+
+<!-- IF S_ROBOT -->
+	<form id="shout_robot" method="post" action="{U_ACTION}">
+		<fieldset>
+		<legend>{IMAGE_REGLAGES} {L_GENERAL_SETTINGS}</legend>
+			<dl>
+				<dt><label for="shout_enable_robot">{L_SHOUT_ROBOT_ACTIVATE}:</label><br />{L_SHOUT_ROBOT_ACTIVATE_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_enable_robot" value="1"<!-- IF SHOUT_ENABLE_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_enable_robot" value="0"<!-- IF not SHOUT_ENABLE_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_color_robot">{L_SHOUT_ROBOT_COLOR}:</label><br /></dt>
+				<dd><input class="text small" type="text" id="shout_color_robot" name="shout_color_robot" size="6" maxlength="6" value="{SHOUT_COLOR_ROBOT}" />&nbsp;&nbsp;
+					<strong><span id="color_robot" style="color: #{SHOUT_COLOR_ROBOT};">{L_SHOUT_ROBOT}</span></strong>&nbsp;
+					<span>[ <a href="{U_SWATCH}" onclick="popup(this.href, 636, 150, '_swatch'); return false">{L_COLOUR_SWATCH}</a> ]</span>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_color_message">{L_SHOUT_ROBOT_COLOR_INFO}</label><br /></dt>
+				<dd><input class="text small" type="text" id="shout_color_message" name="shout_color_message" size="6" maxlength="6" value="{SHOUT_COLOR_MESSAGE}" />&nbsp;&nbsp;
+					<span style="color: #{SHOUT_COLOR_MESSAGE};">{L_SHOUT_MESSAGES}</span>&nbsp;
+					<span>[ <a href="{U_SWATCH_2}" onclick="popup(this.href, 636, 150, '_swatch'); return false">{L_COLOUR_SWATCH}</a> ]</span>
+				</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_post_robot">{L_SHOUT_ROBOT_MESSAGE}:</label><br />{L_SHOUT_ROBOT_MESSAGE_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_post_robot" value="1"<!-- IF SHOUT_POST_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_post_robot" value="0"<!-- IF not SHOUT_POST_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_rep_robot">{L_SHOUT_ROBOT_REP}:</label><br />{L_SHOUT_ROBOT_REP_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_rep_robot" value="1"<!-- IF SHOUT_REP_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio"" name="shout_rep_robot" value="0"<!-- IF not SHOUT_REP_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_edit_robot">{L_SHOUT_ROBOT_EDIT}:</label><br />{L_SHOUT_ROBOT_EDIT_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_edit_robot" value="1"<!-- IF SHOUT_EDIT_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio"" name="shout_edit_robot" value="0"<!-- IF not SHOUT_EDIT_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_post_robot_priv">{L_SHOUT_ROBOT_MES_PRIV}:</label><br />{L_SHOUT_ROBOT_MES_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_post_robot_priv" value="1"<!-- IF SHOUT_POST_ROBOT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_post_robot_priv" value="0"<!-- IF not SHOUT_POST_ROBOT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_rep_robot_priv">{L_SHOUT_ROBOT_REP_PRIV}:</label><br />{L_SHOUT_ROBOT_REP_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_rep_robot_priv" value="1"<!-- IF SHOUT_REP_ROBOT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_rep_robot_priv" value="0"<!-- IF not SHOUT_REP_ROBOT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_edit_robot_priv">{L_SHOUT_ROBOT_EDIT_PRIV}:</label><br />{L_SHOUT_ROBOT_EDIT_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_edit_robot_priv" value="1"<!-- IF SHOUT_EDIT_ROBOT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_edit_robot_priv" value="0"<!-- IF not SHOUT_EDIT_ROBOT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_prez_form">{L_SHOUT_ROBOT_PREZ}:</label><br />{L_SHOUT_ROBOT_PREZ_EXPLAIN}</dt>
+				<dd><br /><input class="text small" type="text" id="shout_prez_form" name="shout_prez_form" value="{SHOUT_PREZ_FORM}" maxlength="3" size="3" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_exclude_forums">{L_SHOUT_ROBOT_EXCLU}:</label><br />{L_SHOUT_ROBOT_EXCLU_EXPLAIN}</dt>
+				<dd><br /><input class="text small" type="text" id="shout_exclude_forums" name="shout_exclude_forums" value="{SHOUT_EXCLUDE_FORUMS}" maxlength="50" size="20" /></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_delete_robot">{L_SHOUT_ROBOT_DEL}:</label><br />{L_SHOUT_ROBOT_DEL_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_delete_robot" value="1"<!-- IF SHOUT_DELETE_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_delete_robot" value="0"<!-- IF not SHOUT_DELETE_ROBOT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_sessions">{L_SHOUT_ROBOT_SESSION}:</label><br />{L_SHOUT_ROBOT_SESSION_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_sessions" value="1"<!-- IF SHOUT_SESSIONS --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_sessions" value="0"<!-- IF not SHOUT_SESSIONS --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_sessions_priv">{L_SHOUT_ROBOT_SESSION_PRIV}:</label><br />{L_SHOUT_ROBOT_SESSION_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_sessions_priv" value="1"<!-- IF SHOUT_SESSIONS_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_sessions_priv" value="0"<!-- IF not SHOUT_SESSIONS_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_sessions_bots">{L_SHOUT_ROBOT_SESSION_R}:</label><br />{L_SHOUT_ROBOT_SESSION_R_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_sessions_bots" value="1"<!-- IF SHOUT_SESSIONS_BOTS --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_sessions_bots" value="0"<!-- IF not SHOUT_SESSIONS_BOTS --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_sessions_bots_priv">{L_SHOUT_ROBOT_SESSION_R_PRIV}:</label><br />{L_SHOUT_ROBOT_SESSION_R_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_sessions_bots_priv" value="1"<!-- IF SHOUT_SESSIONS_BOTS_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_sessions_bots_priv" value="0"<!-- IF not SHOUT_SESSIONS_BOTS_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_hello">{L_SHOUT_ROBOT_HELLO}:</label><br />{L_SHOUT_ROBOT_HELLO_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_hello" value="1"<!-- IF SHOUT_HELLO --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_hello" value="0"<!-- IF not SHOUT_HELLO --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_hello_priv">{L_SHOUT_ROBOT_HELLO_PRIV}:</label><br />{L_SHOUT_ROBOT_HELLO_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_hello_priv" value="1"<!-- IF SHOUT_HELLO_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_hello_priv" value="0"<!-- IF not SHOUT_HELLO_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_hello_hour">{L_SHOUT_ROBOT_HELLO_H}:</label><br />{L_SHOUT_ROBOT_HELLO_H_EXPLAIN}</dt>
+				<dd><br /><input class="text small" type="text" id="shout_hello_hour" name="shout_hello_hour" value="{SHOUT_HELLO_HOUR}" maxlength="2" size="2" /> {L_SHOUT_HOURS} - {SERVER_HOUR}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_newest">{L_SHOUT_ROBOT_NEWEST}:</label><br />{L_SHOUT_ROBOT_NEWEST_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_newest" value="1"<!-- IF SHOUT_NEWEST --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_newest" value="0"<!-- IF not SHOUT_NEWEST --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_newest_priv">{L_SHOUT_ROBOT_NEWEST_PRIV}:</label><br />{L_SHOUT_ROBOT_NEWEST_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_newest_priv" value="1"<!-- IF SHOUT_NEWEST_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_newest_priv" value="0"<!-- IF not SHOUT_NEWEST_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_birthday">{L_SHOUT_ROBOT_BIRTHDAY}:</label><br />{L_SHOUT_ROBOT_BIRTHDAY_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_birthday" value="1"<!-- IF SHOUT_BIRTHDAY --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_birthday" value="0"<!-- IF not SHOUT_BIRTHDAY --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_birthday_priv">{L_SHOUT_ROBOT_BIRTHDAY_PRIV}:</label><br />{L_SHOUT_ROBOT_BIRTHDAY_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_birthday_priv" value="1"<!-- IF SHOUT_BIRTHDAY_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_birthday_priv" value="0"<!-- IF not SHOUT_BIRTHDAY_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_birthday_hour">{L_SHOUT_ROBOT_BIRTHDAY_H}:</label><br />{L_SHOUT_ROBOT_BIRTHDAY_H_EXPLAIN}</dt>
+				<dd><br /><input class="text small" type="text" id="shout_birthday_hour" name="shout_birthday_hour" value="{SHOUT_BIRTHDAY_HOUR}" maxlength="2" size="2" /> {L_SHOUT_HOURS} - {SERVER_HOUR}</dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_robot_choice">{L_SHOUT_ROBOT_CHOICE}:</label><br />{L_SHOUT_ROBOT_CHOICE_EXPLAIN}</dt>
+				<dd><br />
+					<label><input type="checkbox" name="shout_robot_choice[]" value="1"<!-- IF CHOICE_1 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_CONNECT}</label>
+					<label><input type="checkbox" name="shout_robot_choice[]" value="2"<!-- IF CHOICE_2 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_SUBJET}</label>
+					<label><input type="checkbox" name="shout_robot_choice[]" value="3"<!-- IF CHOICE_3 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_REPONSE}</label>
+					<br /><br />
+					<label><input type="checkbox" name="shout_robot_choice[]" value="4"<!-- IF CHOICE_4 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_DAY}</label>
+					<label><input type="checkbox" name="shout_robot_choice[]" value="5"<!-- IF CHOICE_5 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_BIRTHDAY}</label>
+					<label><input type="checkbox" name="shout_robot_choice[]" value="6"<!-- IF CHOICE_6 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_NEWS}</label>
+					<br /><br />
+					<label><input type="checkbox" name="shout_robot_choice[]" value="8"<!-- IF CHOICE_8 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_PRIV}</label>
+					<label><input type="checkbox" name="shout_robot_choice[]" value="7"<!-- IF CHOICE_7 --> checked="checked"<!-- ENDIF --> /> {L_SHOUT_ON_MODS}</label>
+				</dd>
+			</dl>
+		</fieldset>
+
+		<fieldset style="text-align: center;">
+			<legend>{IMAGE_SUBMIT} {L_SUBMIT}</legend>
+			<input class="button1" type="submit" id="submit" name="update" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+<!-- ENDIF -->
+
+<!-- IF S_ROBOT_MOD -->
+	<form id="shout_robot" method="post" action="{U_ACTION}">
+		<!-- IF ALL_FALSE -->
+		<div class="errorbox">
+			<p>{L_SHOUT_NO_MOD_ROBOT}</p>
+		</div>
+		<!-- ELSE -->
+		<div class="successbox">
+			<p>{L_SHOUT_MOD_ROBOT}</p>
+		</div>
+		<!-- ENDIF -->
+		<!-- IF S_ERROR -->
+		<div class="errorbox">
+			<h3>{L_WARNING}</h3>
+			<p>{ERROR_MSG}</p>
+		</div>
+		<!-- ELSE -->
+		<div class="successbox" style="text-align: left;">
+			{L_SHOUT_MODS_DISPO}:<br />
+			{LINES}
+		</div>
+		<!-- ENDIF -->
+		
+		<!-- IF IS_TRACKER -->
+		<fieldset>
+		<legend>{IMAGE_REGLAGES} {L_MOD_TRACKER}</legend>
+			<dl>
+				<dt><label for="shout_tracker">{L_SHOUT_TRACKER}:</label><br />{L_SHOUT_TRACKER_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_tracker" value="1"<!-- IF SHOUT_TRACKER --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_tracker" value="0"<!-- IF not SHOUT_TRACKER --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_tracker_rep">{L_SHOUT_TRACKER_REP}:</label><br />{L_SHOUT_TRACKER_REP_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_tracker_rep" value="1"<!-- IF SHOUT_TRACKER_REP --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_tracker_rep" value="0"<!-- IF not SHOUT_TRACKER_REP --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_tracker_edit">{L_SHOUT_TRACKER_EDIT}:</label><br />{L_SHOUT_TRACKER_EDIT_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_tracker_edit" value="1"<!-- IF SHOUT_TRACKER_EDIT --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_tracker_edit" value="0"<!-- IF not SHOUT_TRACKER_EDIT --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_tracker_priv">{L_SHOUT_TRACKER_PRIV}:</label><br />{L_SHOUT_TRACKER_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_tracker_priv" value="1"<!-- IF SHOUT_TRACKER_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_tracker_priv" value="0"<!-- IF not SHOUT_TRACKER_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_tracker_rep_priv">{L_SHOUT_TRACKER_REP_PRIV}:</label><br />{L_SHOUT_TRACKER_REP_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_tracker_rep_priv" value="1"<!-- IF SHOUT_TRACKER_REP_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_tracker_rep_priv" value="0"<!-- IF not SHOUT_TRACKER_REP_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_tracker_edit_priv">{L_SHOUT_TRACKER_EDIT_PRIV}:</label><br />{L_SHOUT_TRACKER_EDIT_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_tracker_edit_priv" value="1"<!-- IF SHOUT_TRACKER_EDIT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_tracker_edit_priv" value="0"<!-- IF not SHOUT_TRACKER_EDIT_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+		</fieldset>
+		<!-- ENDIF -->
+		<!-- IF IS_ULTIMATE -->
+		<fieldset>
+		<legend>{IMAGE_REGLAGES} {L_MOD_UPS}</legend>
+			<dl>
+				<dt><label for="shout_robbery">{L_SHOUT_ROBBERY}:</label><br />{L_SHOUT_ROBBERY_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_robbery" value="1"<!-- IF SHOUT_ROBBERY --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_robbery" value="0"<!-- IF not SHOUT_ROBBERY --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_lottery">{L_SHOUT_LOTTERY}:</label><br />{L_SHOUT_LOTTERY_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_lottery" value="1"<!-- IF SHOUT_LOTTERY --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_lottery" value="0"<!-- IF not SHOUT_LOTTERY --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			{SEPARATION}
+			<dl>
+				<dt><label for="shout_robbery_priv">{L_SHOUT_ROBBERY_PRIV}:</label><br />{L_SHOUT_ROBBERY_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_robbery_priv" value="1"<!-- IF SHOUT_ROBBERY_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_robbery_priv" value="0"<!-- IF not SHOUT_ROBBERY_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_lottery_priv">{L_SHOUT_LOTTERY_PRIV}:</label><br />{L_SHOUT_LOTTERY_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_lottery_priv" value="1"<!-- IF SHOUT_LOTTERY_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_lottery_priv" value="0"<!-- IF not SHOUT_LOTTERY_PRIV --> checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+			</dl>
+		</fieldset>
+		<!-- ENDIF -->
+		<!-- IF IS_HANGMAN -->
+		<fieldset>
+		<legend>{IMAGE_REGLAGES} {L_MOD_HANGMAN}</legend>
+			<dl>
+				<dt><label for="shout_hangman">{L_SHOUT_HANGMAN}:</label><br />{L_SHOUT_HANGMAN_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_hangman" value="1"<!-- IF SHOUT_HANGMAN --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_hangman" value="0"<!-- IF not SHOUT_HANGMAN --> checked="checked"<!-- ENDIF -->  /> {L_NO}</label></dd>
+			</dl>
+			<dl>
+				<dt><label for="shout_hangman_priv">{L_SHOUT_HANGMAN_PRIV}:</label><br />{L_SHOUT_HANGMAN_PRIV_EXPLAIN}</dt>
+				<dd><br /><label><input type="radio" class="radio" name="shout_hangman_priv" value="1"<!-- IF SHOUT_HANGMAN_PRIV --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="shout_hangman_priv" value="0"<!-- IF not SHOUT_HANGMAN_PRIV --> checked="checked"<!-- ENDIF -->  /> {L_NO}</label></dd>
+			</dl>
+		</fieldset>
+		<!-- ENDIF -->
+
+		<fieldset style="text-align: center;">
+			<legend>{IMAGE_SUBMIT} {L_SUBMIT}</legend>
+			<input class="button1" type="submit" id="submit" name="update" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+		{S_FORM_TOKEN}
+	</form>
+<!-- ENDIF -->
+
+<p align="center"><span style="font-size: 1.05em;"><em>{SHOUTBOX_VERSION}</em></span></p>
+
+<!-- INCLUDE overall_footer.html -->

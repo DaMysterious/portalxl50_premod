@@ -1,0 +1,25 @@
+<table class="tablebg" cellspacing="1" width="100%">
+<!--<tr>
+	<th colspan="3">{L_REFERER_PAGE_TITLE}</td>
+</tr>-->
+	<tr>
+		<th>{L_REF_HTTP_IP}&nbsp;</th>
+        <!--<th>{L_REF_HTTP_PROXY}&nbsp;</th> -->
+		<th>{L_REF_HTTP_HOST}&nbsp;</th>
+		<th>{L_REF_HHTP_LASTVISIT}&nbsp;</th>
+		<th>{L_REF_HITS}&nbsp;</th>
+	</tr>
+	<!-- BEGIN refererrow -->
+	<tr>
+		<td width="100" class="<!-- IF refererrow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">{refererrow.HTTP_IP}</td>
+		<!--<td width="100" class="<!-- IF refererrow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">{refererrow.HTTP_PROXY}</td> -->
+		<!--<td class="<!-- IF refererrow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->"><a href="{refererrow.U_HTTP_HOST}" title="{refererrow.HHTP_HOST_FULL}" target="_blank">{refererrow.HTTP_HOST}</a></td> -->
+		<td class="<!-- IF refererrow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">{refererrow.HTTP_HOST}</td>
+		<td width="115" class="<!-- IF refererrow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">{refererrow.HHTP_LASTVISIT}</td>
+		<td width="20" align="center" class="<!-- IF refererrow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">{refererrow.HITS}</td>
+	</tr>
+	<!-- END refererrow -->
+	<tr>
+		<td colspan="5" class="<!-- IF refererrow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->"><br />{L_REF_TOTAL}:&nbsp;<strong>{TOTAL_REF}</strong></td>
+	</tr>
+</table>

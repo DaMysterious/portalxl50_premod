@@ -1,0 +1,135 @@
+<!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+<script type="text/javascript">
+var persistclose = 0 //set to 0 or 1. 1 means once the bar is manually closed, it will remain closed for browser session
+var startX = 30 //set x offset of bar in pixels
+var startY = 5 //set y offset of bar in pixels
+var verticalpos = "fromtop" //enter "fromtop" or "frombottom"
+
+function iecompattest(){
+return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
+}
+
+function get_cookie(Name) {
+var search = Name + "="
+var returnvalue = "";
+if (document.cookie.length > 0) {
+offset = document.cookie.indexOf(search)
+if (offset != -1) {
+offset += search.length
+end = document.cookie.indexOf(";", offset);
+if (end == -1) end = document.cookie.length;
+returnvalue=unescape(document.cookie.substring(offset, end))
+}
+}
+return returnvalue;
+}
+
+function closebar(){
+  if (persistclose)
+  document.cookie="remainclosed=1"
+  document.getElementById("floating_bar").style.visibility="hidden"
+}
+
+function staticbar(){
+ barheight=document.getElementById("floating_bar").offsetHeight
+ var ns = (navigator.appName.indexOf("Netscape") != -1) || window.opera;
+ var d = document;
+ function ml(id){
+  var el=d.getElementById(id);
+  if (!persistclose || persistclose && get_cookie("remainclosed")=="")
+  el.style.visibility="visible"
+  if(d.layers)el.style=el;
+  el.sP=function(x,y){this.style.left=x+"px";this.style.top=y+"px";};
+  el.x = startX;
+  if (verticalpos=="fromtop")
+  el.y = startY;
+  else{
+  el.y = ns ? pageYOffset + innerHeight : iecompattest().scrollTop + iecompattest().clientHeight;
+  el.y -= startY;
+  }
+  return el;
+ }
+ 
+ window.stayTopLeft=function(){
+  if (verticalpos=="fromtop"){
+  var pY = ns ? pageYOffset : iecompattest().scrollTop;
+  ftlObj.y += (pY + startY - ftlObj.y)/8;
+  }
+  else{
+  var pY = ns ? pageYOffset + innerHeight - barheight: iecompattest().scrollTop + iecompattest().clientHeight - barheight;
+  ftlObj.y += (pY - startY - ftlObj.y)/8;
+  }
+  ftlObj.sP(ftlObj.x, ftlObj.y);
+  setTimeout("stayTopLeft()", 10);
+ }
+ ftlObj = ml("floating_bar");
+ stayTopLeft();
+}
+
+if (window.addEventListener)
+window.addEventListener("load", staticbar, false)
+else if (window.attachEvent)
+window.attachEvent("onload", staticbar)
+else if (document.getElementById)
+window.onload=staticbar
+</script>
+
+<style type="text/css">
+#floating_bar{
+    background: #FFFFFF;
+	border: 2px groove black;
+	margin: 15%;
+	-moz-border-radius: 5px;
+	padding: 2%;
+	position: absolute;
+	visibility: hidden;
+	-webkit-border-radius: 5px;
+	width: 620px;
+	z-index: 10000;
+}
+
+.font{
+	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, Sans-serif;
+	font-size: 2.1em;
+	color: #006;
+}
+
+.font a:link{
+	font-weight: bold;
+	color: #F00;
+	text-decoration: none;
+}
+
+.table_bar{
+    background: #FFE1C4;
+	border: 2px groove black;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	opacity: 0.75; /* Current standard in CSS */
+	-moz-opacity: 0.75; /* Old school versions like Netscape Navigator */
+	-khtml-opacity: 0.75; /* Old versions of Safari (1.x) */
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; /* IE8 first! */
+	filter: alpha(opacity=75); /* IE IE5-7 second! */
+	zoom: 1; /* hasLayout for IE6 and IE7 */
+}
+</style>
+
+<div align="center" id="floating_bar" class="font">
+<table class="table_bar" width="95%" cellspacing="1" cellpadding="0">
+  <tr>
+    <td align="center" class="row1"><span><!-- INCLUDE portal/portal_visitor_welcome.html --></span></td>
+  </tr>
+  <tr>
+    <td align="center" class="row1"><span>Not registered yet? <a href="{U_REGISTER}">{L_REGISTER}</a> @ {SITENAME}. It's free!</span></td>
+  </tr>
+  <tr>
+    <td align="center" class="row1">
+    <!-- IF S_DISPLAY_FULL_LOGIN and (U_SEND_PASSWORD or U_RESEND_ACTIVATION) -->
+        <!-- IF U_SEND_PASSWORD --><br /><a href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a><!-- ENDIF -->
+        <!-- IF U_RESEND_ACTIVATION --><br /><a href="{U_RESEND_ACTIVATION}">{L_RESEND_ACTIVATION}</a><!-- ENDIF -->
+    <!-- ENDIF -->
+    </td>
+  </tr>
+</table>
+</div>
+<!-- ENDIF -->

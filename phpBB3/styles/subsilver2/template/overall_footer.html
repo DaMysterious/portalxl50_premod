@@ -1,0 +1,54 @@
+    
+	<!-- INCLUDE breadcrumbs_footer.html -->
+	<br style="clear: both;" />
+    
+	<!-- IF not S_IS_BOT -->{RUN_CRON_TASK}<!-- ENDIF -->
+</div>
+
+<div id="wrapfooter">
+	<!-- IF GYM_LINKS --><span>{GYM_HTML_NEWS_LINK} {GYM_HTML_MAP_LINK} {GYM_GOOGLE_LINK} {GYM_RSS_LINK} {GYM_RSS_CHAN_LINK}</span><br /><!-- ENDIF -->
+	<!-- IF U_ACP --><span class="gensmall">[ <a href="{U_ACP}">{L_ACP}</a> ]</span><br /><br /><!-- ENDIF -->
+	<span class="copyright">{CREDIT_LINE}
+    <!-- IF PORTAL --><br /><a href="{U_PORTAL_MODS}" title="{L_PORTAL_MODS}">{L_PORTAL_MODS}</a> :: <a href="{U_IMPRESSUM}" title="{L_IMPRESSUM}">{L_IMPRESSUM}</a> :: <a href="{U_CRAWLER_LINKER}" title="{L_CRAWLER_LINKS}">{L_CRAWLER_LINKS}</a> :: <a href="#" onclick="$.fn.ShowEasyWidgets(); return false" title="{L_PORTAL_RESET_BLOCKS}">{L_PORTAL_RESET_BLOCKS}</a><!-- ENDIF -->
+	<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->
+	<!-- IF DEBUG_OUTPUT --><br /><bdo dir="ltr">[ {DEBUG_OUTPUT} ]</bdo><!-- ENDIF --></span>
+    </span>
+</div>
+    
+<link rel="stylesheet" href="{ROOT_PATH}cookie_control/jquery.cookiecontrol-5.1.min.css" type="text/css" charset="utf-8">
+<script type="text/javascript" src="{ROOT_PATH}cookie_control/jquery.cookiecontrol-5.1.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+jQuery(document).ready(function() {
+	cookieControl({
+		introText:"{L_COOKIE_CONTROL_INTROTEXT}",
+		fullText:"{L_COOKIE_CONTROL_FULLTEXT}",
+		cookieOnText:"{L_COOKIE_CONTROL_COOKIES_ON}",
+		cookieOffText:"{L_COOKIE_CONTROL_COOKIES_OFF}",
+		cookieName:"accept_cookielaw",
+		position:'left',
+		shape:'triangle',
+		theme:'light',
+		startOpen:true, // true , false
+		autoHide:60000, // Time in miliseconds
+		protectedCookies: ['accept_cookielaw','style_cookie','PHPSESSID'], //list the cookies you do not want deleted ['analytics', 'twitter']
+		consentModel:'explicit', // information_only , implicit , explicit
+		subdomains:'true', // true , false
+		onAccept:function(cc){cc.setCookie('ShowCookieIcon', 'no');$('#ccc-icon').hide();reloadDoc()},
+		onReady:function(){},
+		onCookiesAllowed:function(){},
+		onCookiesNotAllowed:function(){},
+		countries:'Netherlands,Belgium,United Kingdom' // Or supply a list ['United Kingdom,Greece']
+      });
+		
+	  function reloadDoc()
+	  {
+		window.location.reload(true);
+	  }		
+});
+/* ]]> */
+</script>
+
+<div style="display: none;" id="resizemod"></div>
+</body>
+</html>

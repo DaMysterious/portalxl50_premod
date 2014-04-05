@@ -1,0 +1,20 @@
+<table class="tablebg" cellspacing="1" width="100%">
+<!--<tr>
+	<th colspan="1">{L_FCATEGORIES}</td>
+</tr>-->  
+  <!-- BEGIN forumcount -->
+  <tr>
+    <td align="left" class="row1">{forumcount.FORUM_CAT_IMAGE}&nbsp;<a href="{forumcount.U_VIEWFORUM}" title="{forumcount.FORUM_NAME}">{forumcount.FORUM_NAME}</a></td>
+  </tr>
+  <tr>
+    <td class="row1" align="left">
+      <span class="genmed" style="margin-left:20px;">{L_TOPICS}: {forumcount.FORUM_TOPICS} |
+      {L_POSTS}: {forumcount.FORUM_POSTS}</span> <br>
+    </td>
+  </tr>
+  <!-- BEGINELSE -->
+  <tr>
+    <td class="row1" colspan="5" align="center"><p class="genmed">{L_NO_FORUMS}</p></td>
+  </tr>
+  <!-- END forumcount -->
+</table>

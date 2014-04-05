@@ -1,0 +1,74 @@
+<script type='text/javascript' src='{T_TEMPLATE_PATH}/portal/src/jquery.marquee.min.js'></script>
+<script type="text/javascript">
+// <![CDATA[
+$(document).ready(function (){
+  $("#marquee-gallery_vertical_scroll_multi").marquee({
+	    loop: -1,
+		showSpeed: 850,
+		scrollSpeed: 20,
+		pauseSpeed: 5000,
+		pauseOnHover: true,
+		fxEasingShow: "swing",
+		/* define the class statements */
+		cssShowing: "marquee-gallery_vertical_scroll_multi"
+	});
+});
+// ]]>
+</script>
+<style type='text/css'>
+ul.marquee-gallery_vertical_scroll_multi {
+	display: block;
+	height: 950px;
+	line-height: 1;
+	list-style: none;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+
+ul.marquee-gallery_vertical_scroll_multi li {
+	position: absolute;
+	top: -999em;
+	left: 0;
+	display: block;
+}
+</style>
+
+<table class="tablebg" cellspacing="1" width="100%" style="margin-top: 5px;">
+  <tr>
+    <td align="center" valign="top" class="bg1 rounded">
+
+        <div align="center">
+        <ul id="marquee-gallery_vertical_scroll_multi" class="marquee-gallery_vertical_scroll_multi">
+             <li>
+           <!-- BEGIN image_random_scroll_col -->
+                  <table width="100%" cellpadding="2" cellspacing="5" border="0" class="forumline">
+                    <tr>
+                   <td class="bg1 rounded" align="center" style="height: {S_THUMBNAIL_SIZE}px; overflow: hidden; padding: 5px;">
+                      <a href="{image_random_scroll_col.U_PIC}">{image_random_scroll_col.THUMBNAIL}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                        <td class="bg2 rounded" valign="top">
+                         <div class="gensmall" style="overflow: hidden; padding:5px;">
+                         {image_random_scroll_col.POSTER}
+                         </div>
+                        </td>
+                  </tr>
+                 </table>
+          <!-- END image_random_scroll_col -->
+            </li>
+        </ul>
+        </div>
+
+      </td>
+  </tr>
+  <!-- BEGIN no_pics -->
+  <tr>
+    <td align="center" class="row1"><strong>{L_NO_IMAGES_LONG}</strong></td>
+  </tr>
+  <!-- END no_pics -->
+  <tr>
+    <td align="center" class="row1"><br /><span class="gensmall">[ <a href="{U_GALLERY_MOD}" title="{L_GALLERY}" target="_self">{L_GALLERY}</a> ]</span></td>
+  </tr>
+</table>

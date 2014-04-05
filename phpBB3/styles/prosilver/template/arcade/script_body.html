@@ -1,0 +1,48 @@
+<script type="text/javascript">
+// <![CDATA[
+var arcade_lang = new Array();
+<!-- IF S_ARCADE_GAME_PLAY -->
+	arcade_lang['INFO_BLOCK_CLOSE']		= '{L_ARCADE_GAME_PLAY_INFO_BLOCK_CLOSE}';
+	arcade_lang['INFO_BLOCK_OPEN']		= '{L_ARCADE_GAME_PLAY_INFO_BLOCK_OPEN}';
+<!-- ENDIF -->
+	arcade_lang['XML_ERROR']			= '{L_ARCADE_XML_ERROR}';
+	arcade_lang['DOUBLE_REQUEST_FOUND']	= '{L_ARCADE_REQUEST_DOUBLE}';
+	arcade_lang['REQUEST_ERROR']		= '{L_ARCADE_REQUEST_ERROR}';
+	arcade_lang['ERROR']				= '{L_GENERAL_ERROR}';
+	arcade_lang['SESSION_TIME_END']		= '{L_SESSION_TIME_END}';
+	arcade_lang['EMPTY_DATA']			= '{L_ARCADE_EMPTY_DATA}';
+<!-- IF S_POPUP -->
+var arcade_game_popup		= 'yes';
+<!-- ELSE -->
+var arcade_game_popup		= 'no';
+<!-- ENDIF -->
+var arcade_game_id			= '{GAME_ID}';
+var arcade_game_width		= '{GAME_WIDTH}';
+var arcade_game_height		= '{GAME_HEIGHT}';
+var arcade_game_swf			= '{GAME_SWF}';
+var arcade_flash_player_up	= '{T_ARCADE_FLASH_UPDATE}';
+var arcade_flash_version	= '{FLASH_VERSION}';
+var arcade_game_ibprov3		= '{GAME_IBPROV3}';
+var arcade_gid_encoded		= '{GAME_GID_ENCODED}';
+var arcade_game_sid			= '{GAME_SID}';
+var gametop					= '{GAMETOP}';
+var root_path				= '{ROOT_PATH}';
+var phpex					= '{PHPEX}';
+<!-- IF not POPUP_TITLE -->
+var loading_img1			= '{LOADING_IMG1}';
+var loading_img2			= '{LOADING_IMG2}';
+var star_img				= '{STAR_IMG}';
+<!-- ENDIF -->
+// ]]>
+</script>
+<!-- IF S_ARCADE_GAME_PLAY -->
+<script type="text/javascript" src="{T_ARCADE_JS_PATH}/swfobject.js"></script>
+<!-- ENDIF -->
+<script type="text/javascript" src="{T_ARCADE_JS_PATH}/arcade.js"></script>
+<!-- IF not POPUP_TITLE -->
+<script type="text/javascript">
+	// <![CDATA[
+		arcade_add_head();
+	// ]]>
+</script>
+<!-- ENDIF -->

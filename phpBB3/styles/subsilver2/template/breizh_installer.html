@@ -1,0 +1,232 @@
+<!-- INCLUDE overall_header.html -->
+<!--// breizh_installer.html v1.1.0 -->
+<style type="text/css">
+<!--
+div#license {
+	font-size: 12px;
+	overflow: auto;
+	width: 600px;
+	height: 330px;
+	padding: 15px;
+	text-align: justify;
+	margin-bottom: 15px;
+	background-color: #fff8dc;
+	border: 1px solid rgb(200,200,200);
+	-webkit-border-radius: 14px / 12px;
+	-moz-border-radius: 14px / 12px;
+	border-radius: 14px / 12px;
+	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+}
+table.contour {
+	margin: 5px;
+	/*padding: 8px;*/
+	border: 1px solid rgb(200,200,200);
+	-webkit-border-radius: 14px / 12px;
+	-moz-border-radius: 14px / 12px;
+	border-radius: 14px / 12px;
+	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+}
+th.arrondi, input.btnmain:hover {
+	-webkit-border-radius: 12px / 12px;
+	-moz-border-radius: 12px / 12px;
+	border-radius: 12px / 12px;
+	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+}
+input.btnmain:hover {
+	text-shadow: #fff 1px 1px 3px;
+}
+input.btnmain {
+	font-size: 1.2em;
+	text-shadow: #333 1px 1px 3px;
+	-webkit-border-radius: 5px / 5px;
+	-moz-border-radius: 5px / 5px;
+	border-radius: 5px / 5px;
+	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+}
+table.rules {
+	background-color: #e9967a;
+	color: #8b0000;
+}
+th.titre {
+	font-size: 13px;
+	text-shadow: #000 2px 2px 3px;
+}
+input.radio, input.styled, select.diz {
+	cursor: pointer;
+}
+-->
+</style>
+
+<form id="confirm" action="{S_CONFIRM_ACTION}" method="post">
+	<table class="tablebg row1 contour" width="100%" cellspacing="0">
+		<tr>
+			<th class="arrondi titre" colspan="3" valign="middle" ></th>
+		</tr>
+		<tr>
+			<td colspan="3" style="text-align: center;padding: 10px 0;"><h1 style="text-shadow: #000 2px 2px 3px;">{MESSAGE_TITLE}</h1></td>
+		</tr>
+	</table>
+	
+	<!-- IF IN_LICENSE -->
+	<table class="tablebg row1 contour" width="100%" cellspacing="0">
+		<tr>
+			<th class="arrondi titre" colspan="3" valign="middle">{L_INSTALL_LICENSE}</th>
+		</tr>
+		<tr>
+			<td colspan="3" style="text-align: center;padding: 10px 0;font-size: 12px;"><p>{INSTALL_TERMS}</p></td>
+		</tr>
+		<!-- IF S_LANG_FR -->
+		<tr>
+			<td colspan="3" style="text-align: center;padding: 15px 0;font-size: 11px;">
+				<p><a href="{U_TERMS_LANG}" title="{INSTAL_TERMS_LANG}">{INSTALL_TERMS_LANG}</a></p>
+			</td>
+		</tr>
+		<!-- ENDIF -->
+		<tr>
+			<td width="30%">&nbsp;</td>
+			<td width="40%"><div id="license">{CONTENT}</div></td>
+			<td width="30%">&nbsp;</td>
+		</tr>
+		<tr>
+			<td width="30%">&nbsp;</td>
+			<td width="40%" style="font-size: 12px;">
+				<label><input type="radio" class="radio" id="accept0" name="accept" value="0" checked="checked" /> {L_INSTALL_NO_ACCEPT} </label>&nbsp;&nbsp;&nbsp;
+				<label><input type="radio" id="accept1" name="accept" value="1" /> {L_INSTALL_ACCEPT_TERMS}</label>
+			</td>
+			<td width="30%">&nbsp;</td>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+	
+	<!-- IF MESSAGE_TEXT -->
+	<table class="tablebg row1 contour" width="100%" cellspacing="0">
+		<tr>
+			<th class="arrondi titre" colspan="4" valign="middle">{INSTALL_WELCOME_TEXT}</th>
+		</tr>
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td width="85%" colspan="3" style="padding: 10px 0;font-size: 12px;"><p>{MESSAGE_TEXT}</p></td>
+		</tr>
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td width="85%" colspan="3" style="padding: 10px 0;font-size: 12px;"><p>{INFO_TEXT}</p></td>
+		</tr>
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td width="85%" colspan="3" style="padding: 10px 0;font-size: 12px;"><p>{INSTALL_INFO_STYLE}</p></td>
+		</tr>
+		<!-- IF ERROR_THEME -->
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td width="85%" colspan="3" style="padding: 10px 0;font-size: 12px;"><p>{ERROR_THEME}</p></td>
+		</tr>
+		<!-- ENDIF -->
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td width="25%">&nbsp;</td>
+			<td width="40%" style="font-size: 12px;padding: 15px 0;">
+				<!-- IF INSTALL_BUTTON --><label><input type="radio" class="radio" name="delete" value="0" checked="checked" /> {INSTALL_UPDATE} </label><!-- ENDIF -->
+				<!-- IF INSTALL_BUTTON and DELETE_BUTTON --><br /><br /><!-- ELSE -->&nbsp;&nbsp;<!-- ENDIF -->
+				<!-- IF DELETE_BUTTON --><label><input type="radio" class="radio" name="delete" value="1" /> {L_INSTALL_BUTTON_DEL}</label><!-- ENDIF -->
+			</td>
+			<td width="20%">&nbsp;</td>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+	
+	<!-- IF S_IN_CHECK -->
+	<table class="tablebg row1 contour" width="100%" cellspacing="0">
+		<tr>
+			<th class="arrondi titre" colspan="4" valign="middle">{CHECK_TITLE}:</th>
+		</tr>
+		<tr>
+			<td colspan="4" style="text-align: center;padding: 10px 0;font-size: 12px;"><p>{CHECK_MESSAGE}</p></td>
+		</tr>
+		<!-- IF FINISH_MESSAGE -->
+		<tr>
+			<td colspan="4" style="text-align: center;padding: 10px 0;font-size: 12px;"><p>{FINISH_MESSAGE}</p></td>
+		</tr>
+		<tr>
+			<td colspan="4" style="text-align: center;padding: 10px 0;font-size: 12px;"><p>{L_INSTALL_BREIZH}</p></td>
+		</tr>
+		<!-- ENDIF -->
+		<!-- IF DEL_BUTTON -->
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td width="25%">&nbsp;</td>
+			<td width="40%" style="font-size: 12px;padding: 15px 0;">
+				<label><input type="radio" class="radio" name="del" value="0" checked="checked" /> {L_NO} </label>&nbsp;&nbsp;
+				<label><input type="radio" class="radio" name="del" value="1" /> {L_YES}</label>
+			</td>
+			<td width="20%">&nbsp;</td>
+		</tr>
+		<!-- ENDIF -->
+	</table>
+	<!-- ENDIF -->
+	
+	<!-- IF MESSAGE_LOG -->
+	<table class="tablebg row1 contour" width="100%" cellspacing="0">
+		<tr>
+			<th class="arrondi titre" colspan="2" valign="middle">{L_INSTALL_LOG_TITLE}:</th>
+		</tr>
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td style="padding: 10px 0;font-size: 12px;">{MESSAGE_LOG}</td>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+	
+	<!-- IF ERROR -->
+	<table class="tablebg row1 contour rules" width="100%" cellspacing="0">
+		<tr>
+			<th class="arrondi titre" valign="middle"><img src="./images/alert.png" alt="{L_INSTALL_ERROR}" title="{L_INSTALL_ERROR}" /> {L_INSTALL_ERROR}</th>
+		</tr>
+		<tr>
+			<td style="text-align: center;padding: 10px 0;font-size: 13px;">{ERROR}</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;padding: 10px 0;font-size: 13px;">{L_INSTALL_DEL_ERROR}</td>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+	
+	<table class="<!-- IF ERROR -->rules<!-- ELSE -->tablebg<!-- ENDIF --> row1 contour" width="100%" cellspacing="0">
+		<tr>
+			<td colspan="3" style="text-align: center;padding: 10px 0;">
+				<input type="submit" name="confirm" value="{SUBMIT_BUTTON}" title="{SUBMIT_BUTTON}" class="btnmain" />
+			</td>
+		</tr>
+	</table>
+	
+	<!-- IF MESSAGE_ETAT and not MESSAGE_TEXT and not S_IN_MODE_DEL -->
+	<table class="tablebg row1 contour" width="100%" cellspacing="0">
+		<tr>
+			<th class="arrondi titre" colspan="2" valign="middle">{L_INSTALL_ETAT}</th>
+		</tr>
+		<tr>
+			<td width="15%">&nbsp;</td>
+			<td style="padding: 10px 0;font-size: 12px;">
+				<table style="margin-left: 30%;font-size: 11px;">
+					{MESSAGE_ETAT}
+				</table><br />
+				<p style="margin-left: 25%;font-size:11px;">{INSTALL_ETAT_INFO}</p>
+			</td>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+	
+</form>
+<table class="tablebg row1 contour" width="100%" cellspacing="0">
+	<tr>
+		<td style="text-align: center;padding: 5px 0;"><span class="copyright">{INSTALL_COPYRIGHT}</span></td>
+	</tr>
+</table>
+<!-- INCLUDE overall_footer.html -->

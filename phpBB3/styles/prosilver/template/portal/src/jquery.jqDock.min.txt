@@ -1,0 +1,260 @@
+<script type="text/javascript">
+// <![CDATA[
+$(function(){
+	var jqDockOpts = {align: 'left', duration: 200, labels: 'tc', size: 48, distance: 85};
+	$('#jqDock').jqDock(jqDockOpts);
+});	
+// ]]>
+</script>
+
+
+**** Sub-menus as labels ****
+
+/*position and hide the menu initially - leave room for menu items to expand...*/
+#page {padding-top:160px; padding-bottom:20px; width:100%;}
+#menu {position:absolute; top:0; left:0; width:100%; display:none;}
+/*hide the submenus...*/
+#submenus {display:none;}
+/*dock styling...*/
+/*...centre the dock...*/
+#menu div.jqDockWrap {margin:0 auto;}
+/*...set the cursor...*/
+#menu div.jqDock {cursor:pointer;}
+/*label styling...*/
+/*this is actually the sub-menu positioning and styling...*/
+.jqDockLabel {z-index:999;}
+.jqDockLabel ul {position:absolute; top:-20px; right:2px; padding:0; margin:0;
+list-style-type:none; white-space:nowrap; background-color:#ff9900; border:2px solid #666666;}
+.jqDockLabel li {position:relative; border:0 none; padding:0; margin:0;}
+.jqDockLabel li a {display:block; height:18px; line-height:18px; outline:0 none; position:relative;}
+.jqDockLabel li a.clicked {background-color:#ffff00;}
+.jqDockLabel li a:hover {background-color:#0000cc; color:#ffffff;}
+.jqDockLabel li a.clicked:hover {background-color:#0066cc; color:#ffffff;}
+.jqDockLabel li a span {padding:0 15px 0 5px; display:block;}
+.jqDockLabel a img {position:absolute; top:4px; right:0;}
+/*...and sub-sub-menus...*/
+.jqDockLabel ul ul {left:100%; top:-2px; right:auto; display:none;}
+
+
+jQuery(document).ready(function($){
+  // set up the options to be used for jqDock...
+  var dockOptions =
+    { align: 'top' // horizontal menu, with expansion DOWN from a fixed TOP edge
+    , size: 60 //increase 'at rest' size to 60px
+    , labels: true  // add labels (defaults to 'br')
+    , setLabel: function(txt, i, el){
+        //append a clone of the relevant sub-menu to the label, div.jqDockLabel...
+        //Note that I don't need to add the inner wrapper - div.jqDockLabelText - 
+        //because I can reposition the sub-menus within div.jqDockLabel itself
+        $(el).append($('#submenus>li>ul').eq(i).clone(true))
+          //...and intercept mousemoves to prevent propagation and stop
+          //the dock resizing as the cursor moves over the sub-menus...
+          .bind('mousemove', function(){ 
+            return false; 
+          })
+          //put a one-off mouseenter on every sub-menu to (re)set
+          //contained anchor widths...
+          .find('ul').one('mouseenter', function(){
+            $('>li>a', this).each(function(){
+                $(this).width($(this).parent().width());
+              });
+            return false;
+          }).end()
+          //for this example, put a click handler on every sub-menu anchor
+          //that simply toggles a class to change background colour...
+          .find('a').click(function(){
+            $(this).toggleClass('clicked');
+            this.blur();
+            return false;
+          })
+          //put a hover on any sub-menu LI that has a child menu, to show/hide
+          //that child menu; and allow mouseleave to propagate up so that coming
+          //completely off the sub-menu structure will still collapse the dock...
+          .next('ul').parent().hover(function(ev){
+            var mLeave = ev.type == 'mouseleave';
+            $('>ul', this)[mLeave ? 'hide' : 'show']();
+            return mLeave;
+          })
+          //add a visual indicator that a child menu exists...
+          .find('>a').append("<"+"img src='images/submenu.gif' alt='' />");
+        return false;
+      }
+    };
+  // ...and apply...
+  $('#menu').jqDock(dockOptions);
+});
+
+
+<div id='page'>
+  <div id='menu'>
+    <img src='images/library.png' title='Library' alt='' />
+    <img src='images/tunes.png' title='Tunes' alt='' />
+    <img src='images/images.png' title='Images' alt='' />
+    <img src='images/movies.png' title='Movies' alt='' />
+    <img src='images/private.png' title='Private' alt='' />
+  </div>
+  <ul id='submenus'>
+    <li><!-- Library sub-menu... -->
+      <ul>
+        <li><a href='#'><span>sub-option L1</span></a>
+          <ul>
+            <li><a href='#'><span>sub-sub-option L1-S1</span></a></li>
+            <li><a href='#'><span>sub-sub L1-S2</span></a></li>
+          </ul>
+        </li>
+        <li><a href='#'><span>sub L2</span></a></li>
+        <li><a href='#'><span>sub-option L3</span></a>
+          <ul>
+            <li><a href='#'><span>sub-sub-option L3-S1</span></a></li>
+            <li><a href='#'><span>sub-sub L3-S2</span></a></li>
+            <li><a href='#'><span>sub-sub-option L3-S3</span></a>
+              <ul>
+                <li><a href='#'><span>sub-sub-sub L3-S3-S1</span></a></li>
+                <li><a href='#'><span>sub-sub-sub L3-S3-S2</span></a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href='#'><span>sub-option L4</span></a></li>
+        <li><a href='#'><span>sub-option L5</span></a></li>
+        <li><a href='#'><span>sub-option L6</span></a></li>
+      </ul>
+    </li>
+    <li><!-- Tunes sub-menu... -->
+      <ul>
+        <li><a href='#'><span>sub-option T1</span></a></li>
+        <li><a href='#'><span>sub-option T2</span></a></li>
+        <li><a href='#'><span>sub-option T3</span></a></li>
+      </ul>
+    </li>
+    <li><!-- Images sub-menu... -->
+      <ul>
+        <li><a href='#'><span>sub-option I1</span></a></li>
+        <li><a href='#'><span>sub-option I2</span></a></li>
+        <li><a href='#'><span>sub-option I3</span></a></li>
+      </ul>
+    </li>
+    <li><!-- Movies sub-menu... -->
+      <ul>
+        <li><a href='#'><span>sub-option M1</span></a></li>
+        <li><a href='#'><span>sub-option M2</span></a></li>
+        <li><a href='#'><span>sub-option M3</span></a></li>
+      </ul>
+    </li>
+    <li><!-- Private sub-menu... -->
+      <ul>
+        <li><a href='#'><span>sub-option P1</span></a>
+          <ul>
+            <li><a href='#'><span>sub-sub-option P1-S1</span></a></li>
+            <li><a href='#'><span>sub-sub P1-S2</span></a></li>
+          </ul>
+        </li>
+        <li><a href='#'><span>sub-option P2</span></a></li>
+        <li><a href='#'><span>sub-option P3</span></a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+
+**** onReady() false to hide menu initially ****
+
+CSS:
+
+/*position and hide (invisible!) the menu initially - leave room for menu items to expand...*/
+/*NB: I use visibility:hidden to initially 'hide' the menu in order to be able to*/
+/*    get the dock's width and height in onDockReady()*/
+#page {padding-top:150px; padding-bottom:20px; width:100%;}
+#menu {position:absolute; top:0; left:0; width:100%; visibility:hidden;}
+/*dock styling...*/
+/*...centre the dock...*/
+#menu div.jqDockWrap {margin:0 auto;}
+/*...set the cursor, and give the dock a background and partial border...*/
+#menu img {cursor:pointer;}
+#menu div.jqDock {background-color:#660066; border:2px solid #cccccc; border-top:0 none;}
+/*label styling...*/
+div.jqDockLabel {font-weight:bold; font-style:italic; white-space:nowrap; color:#ffffff; cursor:pointer;}
+/*silhouette (of the dock) styling...*/
+#silhouette {position:absolute; top:0; left:0; width:100%; display:none;}
+#silhouette div {background-color:#333333; border:1px dashed #666666; border-top:0 none; width:0; height:0;
+margin:0 auto; color:#666666; font-size:24px; font-style:italic; line-height:44px; text-align:center; cursor:default;}
+
+Javascript:
+
+jQuery(document).ready(function($){
+    // set up a handler for the docksleep event...
+  var evDockSleep = function(ev){ //scope (this) is the #menu element
+        var menu = $(this)
+          , top = -1 * menu.height();
+        if(ev){
+          //slide the original menu off the top of the window, with fade-out...
+          menu.animate({top:top, opacity:0}, 800);
+        }else{ //...has been called from onDockReady()...
+          //set as for the end of the slide (above), but also make visible 
+          //(because the false returned by onDockReady() will have prevented
+          //jqDock from doing so)...
+          menu.css({top:top, opacity:0, visibility:'visible'});
+        }
+        //bind a one-off mousemove event to the silhouette child...
+        $('#silhouette div').one('mousemove', function(){
+            //we only need to provide a nudge, because that will trigger a
+            //dockwake which we will catch and act on in evDockWake() below...
+            //NB: I could just as easily do evDockWake's animation here as well!
+            //    But even if I did, I would *still* have to provide a nudge so
+            //    that the idle timer got reset
+            menu.trigger('docknudge');
+            return false;
+          });
+      }
+    // ...and a handler for the dockwake event...
+    , evDockWake = function(){ //scope (this) is the #menu element
+        //slide the menu back into the window, fading back in at the same time...
+        $(this).stop().animate(
+            {opacity:1, top:0}
+          , 800
+          , function(){ $(this).css({filter:''}); }
+          );
+      }
+    // ...and a handler for the onReady callback...
+    , onDockReady = function(){ //scope (this) is the #menu element
+        //bind the event handlers, and find the dock...
+        var dock = $(this).bind('dockwake', evDockWake)
+          .bind('docksleep', evDockSleep).find('.jqDock');
+        //set silhouette child's width & height from the dock, and show parent...
+        $('#silhouette div').css({width:dock.width(), height:dock.height()})
+          .parent().show();
+        evDockSleep.call(this);
+        //do not reveal the dock, and leave it asleep...
+        return false;
+        //NB: I could have let jqDock reveal the dock and not done it myself in 
+        //evDockSleep, but then the dock would have been out of sight but not 
+        //asleep, and a nudge will not 'wake' a non-sleeping dock! The user would
+        //have had to wait for the idle timer to expire before first being able
+        //to bring the dock into view!
+      }
+    // set up the options to be used for jqDock...
+    , dockOptions =
+      { align: 'top' // horizontal menu, with expansion DOWN from a fixed TOP edge
+      , idle: 7000 // set idle timeout to 7 seconds
+      , onReady: onDockReady // handler declared above
+      }
+    ;
+  // ...and apply...
+  $('#menu').jqDock(dockOptions);
+});
+
+HTML:
+
+<div id='page'>
+  <div id='silhouette'>
+    <div>show menu...</div>
+  </div>
+  <div id='menu'>
+    <img src='images/previous.png' title='Previous' alt='' />
+    <img src='images/stop.png' title='Stop' alt='' />
+    <img src='images/pause.png' title='Pause' alt='' />
+    <img src='images/play.png' title='Play' alt='' />
+    <img src='images/next.png' title='Next' alt='' />
+  </div>
+</div>
+

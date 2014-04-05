@@ -1,0 +1,96 @@
+﻿	<dl>
+		<dt><label for="schedule">{L_SCHEDULE_GROUP_MEMBERSHIP}:</label></dt>
+		<dd><label><input name="schedule" type="radio" class="radio" value="1" onclick="dE('schedulemembership', 1, '')" /> {L_YES}</label>
+			<label><input name="schedule" type="radio" class="radio" id="schedule" value="0" checked="checked" onclick="dE('schedulemembership', -1, '')" /> {L_NO}</label></dd>
+	</dl>
+	<fieldset id="schedulemembership" style="display: none;">
+		<legend>{L_MEMBERSHIP_SCHEDULING}</legend>
+		<dl>
+			<dt><label for="timespan">{L_SCHEDULING_WEEKDAY}:</label><br /><span>{L_SCHEDULING_WEEKDAY_EXPLAIN}</span></dt>
+			<dd>
+	        <label for="sun">{L_SUN}</label><input name="weekday_chk[]" type="checkbox" class="radio" id="sun" value="0" />
+	        &nbsp;
+	        <label for="mon">{L_MON}</label><input name="weekday_chk[]" type="checkbox" class="radio" id="mon" value="1" />
+	        &nbsp;
+	        <label for="tue">{L_TUE}</label><input name="weekday_chk[]" type="checkbox" class="radio" id="tue" value="2" />
+	        &nbsp;
+	        <label for="wed">{L_WED}</label><input name="weekday_chk[]" type="checkbox" class="radio" id="wed" value="3" />
+	        &nbsp;
+	        <label for="thu">{L_THU}</label><input name="weekday_chk[]" type="checkbox" class="radio" id="thu" value="4" />
+	        &nbsp;
+	        <label for="fri">{L_FRI}</label><input name="weekday_chk[]" type="checkbox" class="radio" id="fri" value="5" />
+	        &nbsp;
+	        <label for="sat">{L_SAT}</label><input name="weekday_chk[]" type="checkbox" class="radio" id="sat" value="6" />
+	        </dd>
+		</dl>
+	    <dl>
+	        <dt><label for="timespan_start_hour">{L_TIMESPAN_START_TIME}:</label><br /><span>{L_TIMESPAN_START_TIME_EXPLAIN}</span></dt>
+	        <dd>
+	        <select id="timespan_start_hour" name="timespan_start_hour">
+				{HOURS_SCHEDULING}
+	        </select>
+	        :
+	        <select id="timespan_start_minute" name="timespan_start_minute">
+	            {MINUTES_SCHEDULING}
+	        </select>
+	        &nbsp;
+	        <select id="timespan_start_ampm" name="timespan_start_ampm">
+	            <option value="">--</option>
+	            <option value="AM">{L_TIME_AM}</option>
+	            <option value="PM">{L_TIME_PM}</option>
+	        </select>
+	        </dd>
+		</dl>
+	    <dl>
+	        <dt><label for="timespan_end_hour">{L_TIMESPAN_END_TIME}:</label><br /><span>{L_TIMESPAN_END_TIME_EXPLAIN}</span></dt>
+			<dd>
+	        <select id="timespan_end_hour" name="timespan_end_hour">
+	            {HOURS_SCHEDULING}
+	        </select>
+	        :
+	        <select id="timespan_end_minute" name="timespan_end_minute">
+	            {MINUTES_SCHEDULING}
+	        </select>
+	        &nbsp;
+	        <select id="timespan_end_ampm" name="timespan_end_ampm">
+	            <option value="">--</option>
+	            <option value="AM">{L_TIME_AM}</option>
+	            <option value="PM">{L_TIME_PM}</option>
+	        </select>
+	        </dd>
+		</dl>
+	    <dl>
+	        <dt><label for="start_day">{L_START_DATE}:</label><br /><span>{L_START_DATE_EXPLAIN}</span></dt>
+			<dd>
+			{L_DAY}:
+	        <select id="start_day" name="start_day">
+	            {DAYS_SCHEDULING}
+	        </select>
+	        {L_MONTH}:
+	        <select id="start_month" name="start_month">
+	            {MONTHS_SCHEDULING}
+	        </select>
+	        {L_YEAR}:
+	        <select id="start_year" name="start_year">
+	            {YEARS_SCHEDULING}
+	        </select>
+	        </dd>
+		</dl>
+	    <dl>
+	        <dt><label for="end_day">{L_END_DATE}:</label><br /><span>{L_END_DATE_EXPLAIN}</span></dt>
+			<dd>
+			{L_DAY}:
+	        <select id="end_day" name="end_day">
+	            {DAYS_SCHEDULING}
+	        </select>
+	        {L_MONTH}:
+	        <select id="end_month" name="end_month">
+	            {MONTHS_SCHEDULING}
+	        </select>
+	        {L_YEAR}:
+	        <select id="end_year" name="end_year">
+	            {YEARS_SCHEDULING}
+	        </select>
+	        </dd>
+		</dl>
+	</fieldset>

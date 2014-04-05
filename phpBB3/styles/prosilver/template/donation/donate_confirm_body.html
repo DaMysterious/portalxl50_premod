@@ -1,0 +1,40 @@
+<!-- INCLUDE overall_header.html -->
+  
+<form action="{PAYPAL_ACTION}" method="post">
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+<table class="tablebg" cellspacing="1" width="100%">
+<tr>
+	<th><h2>{L_TOPUP_TITLE}</h2></th>
+</tr>
+<tr>
+   <td class="row1"><span>{L_AMOUNT_TO_PAY}</span></td>
+</tr>
+<tr>
+   <td class="row1">
+
+    <table class="tablebg" cellspacing="0" width="100%">	
+        <tr>
+          <td class="row1" width="{RWO_WIDTH}%" align="center"><span>&nbsp;</span></td>
+          <!-- IF S_PAYPAL_DONATION -->
+          <td class="row1" width="{RWO_WIDTH}%" align="center"><span>{SUBMIT_HIDDEN_FIELDS} {SUBMIT_ACTION}</span></td>
+          <!-- ENDIF -->
+          <td class="row1" width="{RWO_WIDTH}%" align="center"><span>&nbsp;</span></td>
+        </tr>
+    </table>	
+    
+	</td>
+  </tr>
+  <tr>
+     <td class="cat" colspan="3" align="center">&nbsp;</td>
+  </tr>
+  </table>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+</form>
+<br clear="all" />
+
+<!-- INCLUDE overall_footer.html -->

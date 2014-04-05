@@ -1,0 +1,9 @@
+<Files *>
+	Order Allow,Deny
+	Deny from All
+</Files>
+
+<Files "ajax.php">
+	Order Allow,Deny
+	Allow from All
+</Files>

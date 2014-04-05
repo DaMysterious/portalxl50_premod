@@ -1,0 +1,21 @@
+<!-- IF S_CHARTS -->
+<table class="tablebg" cellspacing="1" width="100%">
+<!--<tr>
+	<th colspan="1">{L_DM_MC_PORTAL_HEADER}</td>
+</tr>-->
+<!-- BEGIN current_charts -->
+	<!-- IF current_charts.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+		<td valign="top"><!-- IF current_charts.COVER --><img src="{current_charts.COVER}" alt="{current_charts.TITLE}" height="30" width="30" /><!-- ENDIF --></td>
+		<td valign="top">{current_charts.NEWEST_POST_IMG}&nbsp;<b>{current_charts.TITLE}</b><br clear="all" />{L_DM_MC_FROM}&nbsp;<b>{current_charts.ARTIST}</b></td>
+		<td>{current_charts.READ_POST_IMG}&nbsp;{L_DM_MC_PORTAL_POSTER}&nbsp;{current_charts.POST_AUTHOR_FULL}</td>
+	</tr>
+	<!-- BEGINELSE -->
+	<tr>
+		<td class="row1" colspan="<!-- IF S_CLEAR_ALLOWED -->9<!-- ELSE -->8<!-- ENDIF -->" align="center"><span class="gen">{L_DM_MC_NO_CHARTS}</span></td>
+	</tr>
+<!-- END current_charts -->
+	<tr>
+		<td class="row3" colspan="3" align="center" height="30px"><span class="genmed"><b><a href="{U_GO_CHARTS}">{L_DM_MC_PORTAL_GOTO}</a></b><br /></span></td>
+	</tr>
+</table>
+<!-- ENDIF -->

@@ -1,0 +1,70 @@
+<!-- INCLUDE overall_header.html -->
+
+<form action="{PAYPAL_ACTION}" method="post">
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+<table class="tablebg" cellspacing="1" width="100%">
+<tr>
+	<th><h2>{L_DONATE_EXPLANATION}</h2></th>
+</tr>
+<tr>
+   <td class="row1">
+   
+    <table class="tablebg" cellspacing="1" width="100%">
+      <tr>
+         <td class="row1"><div class="forumrules">{L_DONATE_EXPLANATION_TEXT}</div></td>
+         <td class="row1" align="center"><img src="./images/paypal/paypal_verified.png" width="183" height="160" /></td>
+      </tr>
+    </table>
+   
+   </td>
+</tr>
+<tr>
+   <td class="row1" valign="top">
+   
+    <table class="tablebg" cellspacing="1" width="100%">
+    <tr>
+        <td class="cat" colspan="2"><h2>{L_TOPUP_TITLE}</h2></td>
+    </tr>
+    <tr>
+        <td class="row1" width="30%" style="padding-bottom: 10px;"><b class="genmed">{L_AMOUNT_TO_PAY} </b></td>
+        <td class="row2" style="padding-bottom: 10px;"><input type="text" name="amount" /></td>
+    </tr>
+    <tr>
+        <td class="row1" width="30%" style="padding-bottom: 10px;"><b class="genmed">{L_CURRENCY_TO_PAY} </b></td>
+        <td class="row2" style="padding-bottom: 10px;">{CURRENCY_OPTIONS}</td>
+    </tr>
+    <tr>
+        <td class="row1" width="30%" style="padding-bottom: 10px;"><b class="genmed">{L_DONATE_METHOD} </b></td>
+        <td class="row2" style="padding-bottom: 10px;">{DONATE_METHOD_OPTIONS}<br />{DONATE_METHOD_EXPLAIN}</td>
+    </tr>
+    <tr>
+        <td class="row1" width="30%" style="padding-bottom: 10px;"><b class="genmed">{L_DONATE_WAY} </b></td>
+        <td class="row2" style="padding-bottom: 10px;"><input type="checkbox" name="donate_anonymous" value="1" />{WANT_ANONYMOUS}</td>
+    </tr>
+    <tr>
+       <td class="row1" colspan="2" align="center"><input type="submit" name="submit" class="mainoption" value="GO" /></td>
+    </tr>
+    </table>
+
+	</td>
+  </tr>
+  <tr>
+     <td class="cat" colspan="3" align="center">&nbsp;</td>
+  </tr>
+  </table>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+</form>
+<br clear="all" />
+
+<table width="100%" cellspacing="0">
+<tr>
+	<td align="{S_CONTENT_FLOW_END}"><!-- INCLUDE jumpbox.html --></td>
+</tr>
+</table>
+
+<!-- INCLUDE overall_footer.html -->

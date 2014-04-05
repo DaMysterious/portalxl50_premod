@@ -1,0 +1,42 @@
+<script type="text/javascript" src="{T_TEMPLATE_PATH}/portal/src/jquery.coolclock.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+$(document).ready(function (){
+	var clocks = new Array();
+	var shuffle = clocks.sort(function() {Math.floor((Math.random()*20)+1);});
+	for (var skin in CoolClock.config.skins) {
+		if (skin != 'chunkySwissOnBlack') {
+			clocks.push('<div class="clock"><canvas class="CoolClock:'+skin+'"></canvas></div>');
+		}
+	}
+	// shuffle
+	$('#MyOwnCoolClock').append(shuffle.join('\n'));
+	CoolClock.findAndCreateClocks();
+});
+// ]]>
+</script>
+<style type='text/css'>
+.clock {
+	text-align: center;
+	display:block; margin:5px; padding:5px;
+}
+</style>
+ 
+<table class="tablebg" cellspacing="1" width="100%">
+<!--<tr>
+	<th>{L_CLOCK}</td>
+</tr>-->
+<tr>
+	<td class="row1" valign="top" align="center">
+    
+      <!--<div id="MyOwnCoolClock"></div>-->
+        
+      <div class="clock" style="height: inherit; width: inherit;">
+       <canvas id="MyCoolClock" class="CoolClock:fancy:75">
+        <p>Content or message to display if the browser does not support Canvas/HTML5.</p>
+       </canvas>
+     </div>
+      
+	</td>
+</tr>
+</table>

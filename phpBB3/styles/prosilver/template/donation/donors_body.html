@@ -1,0 +1,76 @@
+<!-- INCLUDE overall_header.html -->
+   
+<table width="100%" cellspacing="2" border="0" align="center" cellpadding="2">
+  <tr> 
+    <td align="right" valign="middle" nowrap="nowrap"><span class="nav">{PAGINATION}</span></td>
+  </tr>
+  <tr>
+    <td align="left" colspan="3"><span class="nav">{PAGE_NUMBER}</span></td>
+  </tr>
+</table>
+
+<form method="post" action="{S_RECORDS_DAYS_ACTION}">
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+<table class="tablebg" cellspacing="1" width="100%">
+<tr>
+	<th align="center"><h2>{L_DONATE_THANKS}</h2></th>
+</tr>
+<tr>
+   <td class="row1">
+    
+    <table class="table1" cellspacing="1" width="100%">
+      <tr> 
+        <th class="name" width="30%"><div align="center">{L_DONORS_NAME}</div></th>
+        <th class="name" width="25%"><div align="center">{L_MONEY}</div></th>
+        <th class="name" width="25%"><div align="center">{L_DATE}</div></th>
+        <th class="name" width="20%"><div align="center">{L_DATE_END}</div></th>
+      </tr>
+      <!-- BEGIN donorrow -->
+      <tr> 
+        <td class="row2" valign="middle"><span class="postdetails">{donorrow.DONORS_NAME}</span></td>
+        <td class="row1" align="center" valign="middle"><span class="postdetails">{donorrow.MONEY}</span></td>
+        <td class="row2" align="center" valign="middle" nowrap="nowrap"><span class="postdetails">{donorrow.DATE}</span></td>
+        <td class="row2" align="right" valign="middle" nowrap="nowrap"><span class="postdetails">{donorrow.DATE_END}</span></td>
+      </tr>
+      <!-- END donorrow -->
+      <!-- IF S_NO_RECORDS -->
+      <tr> 
+        <td class="row1" colspan="4" align="center" valign="middle"><span class="gen">{L_NO_RECORDS}</span></td>
+      </tr>
+      <!-- ENDIF -->
+      <tr> 
+        <td class="bg1" align="center" valign="middle" colspan="4" style="padding-top: 20px;"><span class="genmed">{L_DISPLAY_TOPICS}&nbsp;{S_SELECT_TOPIC_DAYS}&nbsp; 
+          {HIDDEN_FIELDS}<input type="submit" class="liteoption" value="{L_GO}" name="submit" />
+          </span></td>
+      </tr>
+    </table>
+
+	</td>
+  </tr>
+  <tr>
+     <td class="cat" colspan="4" align="center">&nbsp;</td>
+  </tr>
+  </table>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+</form>
+  
+<table width="100%" cellspacing="2" border="0" align="center" cellpadding="2">
+  <tr> 
+    <td align="right" valign="middle" nowrap="nowrap"><span class="nav">{PAGINATION}</span></td>
+  </tr>
+  <tr>
+    <td align="left" colspan="4"><span class="nav">{PAGE_NUMBER}</span></td>
+  </tr>
+</table>
+
+<table width="100%" cellspacing="0">
+<tr>
+	<td align="{S_CONTENT_FLOW_END}"><!-- INCLUDE jumpbox.html --></td>
+</tr>
+</table>
+
+<!-- INCLUDE overall_footer.html -->

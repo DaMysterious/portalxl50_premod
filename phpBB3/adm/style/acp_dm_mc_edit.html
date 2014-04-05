@@ -1,0 +1,56 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{L_DM_MC_PAGE_TITLE}</h1>
+
+<p>{L_DM_MC_PAGE_DESC}</p>
+
+<form method="post" action="{U_ACTION}" >
+	<input type="hidden" name="id" value="{ID}" />
+	<fieldset>
+		<legend>{L_DM_MC_EDIT}</legend>
+		<dl>
+			<dt><label>{L_DM_MC_SONG_TITLE}:</label><br /><span>{L_DM_MC_SONG_TITLE_EXPLAIN}</span></dt>
+			<dd><input type="text" name="chart_song_name" size="50" value="{TITLE}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DM_MC_SONG_ARTIST}:</label><br /><span>{L_DM_MC_SONG_ARTIST_EXPLAIN}</span></dt>
+			<dd><input type="text" name="chart_artist" size="50" value="{ARTIST}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DM_MC_SONG_ALBUM}:</label><br /><span>{L_DM_MC_SONG_ALBUM_EXPLAIN}</span></dt>
+			<dd><input type="text" name="chart_album" size="50" value="{ALBUM}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DM_MC_SONG_PICTURE}:</label><br /><span>{L_DM_MC_SONG_PICTURE_EXPLAIN}</span></dt>
+			<dd><input type="text" name="chart_picture" size="50" value="{PICTURE}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DM_MC_SONG_YEAR}:</label><br /><span>{L_DM_MC_SONG_YEAR_EXPLAIN}</span></dt>
+			<dd><input type="text" name="chart_year" size="50" value="{YEAR}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DM_MC_SONG_URL}:</label><br /><span>{L_DM_MC_SONG_URL_EXPLAIN}</span></dt>
+			<dd><input type="text" name="chart_website" size="50" value="{URL}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DM_MC_SONG_VIDEO}:</label><br /><span>{L_DM_MC_SONG_VIDEO_EXPLAIN}</span></dt>
+			<dd><textarea rows="3" cols="62" id="chart_video">{VIDEO}</textarea></dd>
+		</dl>
+		<!-- IF S_DM_VIDEO -->
+		<dl>
+			<dt><label>{L_DM_MC_SONG_VIDEO_ID}:</label><br /><span>{L_DM_MC_SONG_VIDEO_ID_EXPLAIN}</span></dt>
+			<dd><input type="text" name="chart_video_no" size="5" value="{VIDEO_ID}" /></dd>
+		</dl>
+		<!-- ENDIF -->
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<legend>{L_SUBMIT}</legend>
+		<input type="hidden" name="sk" value="{SK}" />
+		<input type="hidden" name="sd" value="{SD}" />
+		<input class="button1" id="submit" name="submit" value="{L_SUBMIT}" type="submit" />&nbsp;
+		<input class="button2" id="reset" name="reset" value="{L_RESET}" type="reset" />
+	</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,23 @@
+<table class="tablebg" cellspacing="1" width="100%">
+<!--<tr>
+	<th colspan="1">{L_DM_MC_LAST_WINNERS_PORTAL}</td>
+</tr>-->
+	<tr>
+		<th style="text-align: center; width: 8%;" class="row3">{L_DM_MC_RANK}</th>
+		<th style="text-align: center; width: 12%;" class="row3">{L_DM_MC_USER}</th>
+		<th style="text-align: left; width: 70%;" class="row3">{L_DM_MC_SONG}</th>
+	</tr>
+	<tbody>
+	<!-- BEGIN winners -->
+	<!-- IF winners.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+		<td style="text-align: center;">{winners.RANK}</td>
+		<td style="text-align: center;">{winners.USER}</td>
+		<td style="text-align: left;"> <b>{winners.SONG}</b> {L_DM_MC_FROM} <b>{winners.ARTIST}</b></td>
+	</tr>
+	<!-- BEGINELSE -->
+	<tr>
+		<td class="row1" colspan="<!-- IF S_CLEAR_ALLOWED -->4<!-- ELSE -->3<!-- ENDIF -->" align="center"><span class="gen">{L_DM_MC_NO_WINNER}</span></td>
+	</tr>
+	<!-- END charts -->
+	</tbody>
+</table>

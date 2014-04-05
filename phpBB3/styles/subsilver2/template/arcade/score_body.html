@@ -1,0 +1,124 @@
+<!-- IF S_USE_SIMPLE_HEADER -->
+<!-- INCLUDE simple_header.html -->
+<!-- ELSE -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+
+<!-- INCLUDE arcade/script_body.html -->
+
+<!-- IF S_SCORE_DONE -->
+<!-- IF S_USE_SIMPLE_HEADER -->
+<script type="text/javascript">
+// <![CDATA[
+    arcade_resize_screen(.7, .6);
+// ]]>
+</script>
+<!-- ENDIF -->
+<a name="game_done"></a>
+<table class="tablebg" width="100%" cellspacing="1">
+	<tr>
+		<th class="thTop">{L_ARCADE_GAME_OVER}</th>
+	</tr>
+
+	<tr>
+		<td class="row1">
+			<div style="float: left; padding: 5px; margin: 5px;">
+				<a href="{GAME_URL}"><img src="{GAME_IMAGE}" alt="{GAME_NAME}" title="{GAME_NAME}" /></a>
+			</div>
+			<div style="float: right; padding: 5px; margin: 5px;">
+				<a href="{GAME_URL}"><img src="{GAME_IMAGE}" alt="{GAME_NAME}" title="{GAME_NAME}" /></a>
+			</div>
+			<div class="gen" align="center">{GAME_RATING_IMG}<br />{L_ARCADE_DONE}</div>
+		</td>
+	</tr>
+</table>
+<!-- ELSE -->
+<!-- IF S_USE_SIMPLE_HEADER and not S_SCORE_DONE -->
+<script type="text/javascript">
+// <![CDATA[
+    arcade_resize_screen(.80, .93);
+// ]]>
+</script>
+<!-- ENDIF -->
+<script language="javascript" type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/editor.js"></script>
+<a name="game_done"></a>
+<form action="{S_ACTION}" method="post" name="postform">
+<table class="tablebg" width="100%" cellspacing="1">
+	<tr>
+		<th colspan="2" class="thTop">{L_ARCADE_GAME_OVER}</th>
+	</tr>
+	<tr>
+		<td colspan="2" align="center" class="row2"><span class="genmed"><b>{ARCADE_SCORE_DESC}</b></span></td>
+	</tr>
+
+	<!-- IF S_HAS_PERM_COMMENT -->
+	<tr>
+		<td class="row1" valign="top" width="22%">
+		<!-- IF S_SMILIES_ALLOWED -->
+			<table width="100%" cellspacing="5" cellpadding="0" border="0" align="center">
+			<tr>
+				<td class="gensmall" align="center"><b>{L_SMILIES}</b></td>
+			</tr>
+			<tr>
+				<td align="center">
+					<!-- BEGIN smiley -->
+						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;" style="line-height: 20px;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" hspace="2" vspace="2" /></a>
+					<!-- END smiley -->
+				</td>
+			</tr>
+
+			<!-- IF S_SHOW_SMILEY_LINK -->
+				<tr>
+					<td align="center"><a class="nav" href="{U_MORE_SMILIES}" onclick="popup(this.href, 300, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a></td>
+				</tr>
+			<!-- ENDIF -->
+
+			</table>
+		<!-- ENDIF -->
+		</td>
+		<td class="row2" valign="top" width="78%">
+			<script type="text/javascript">
+			// <![CDATA[
+				var form_name = 'postform';
+				var text_name = 'message';
+			// ]]>
+			</script>
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<!-- INCLUDE posting_buttons.html -->
+			<tr>
+				<td valign="top" style="width: 100%;"><textarea name="message" rows="15" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="initInsertions();" style="width: 98%;">{TICKET_DESC}</textarea></td>
+				<!-- IF S_BBCODE_ALLOWED -->
+				<td width="80" align="center" valign="top">
+					<script type="text/javascript">
+					// <![CDATA[
+						colorPalette('v', 7, 6)
+					// ]]>
+					</script>
+				</td>
+				<!-- ENDIF -->
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<!-- ENDIF -->
+
+	<tr>
+		<td colspan="2" align="center" class="row2">
+			<input class="btnlite" type="submit" name="submit" value="{L_SUBMIT}" />
+			{S_HIDDEN_FIELDS}
+			{S_FORM_TOKEN}
+		</td>
+	</tr>
+</table>
+</form>
+<!-- ENDIF -->
+
+<!-- IF not S_USE_SIMPLE_HEADER -->
+<br clear="all" />
+<!-- INCLUDE breadcrumbs.html -->
+<!-- ENDIF -->
+
+<!-- IF S_CAN_VIEW_WHOISPLAYING -->
+<!-- INCLUDE arcade/online_body.html -->
+<!-- ENDIF -->
+<!-- INCLUDE arcade/footer_body.html -->

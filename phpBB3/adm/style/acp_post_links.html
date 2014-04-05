@@ -1,0 +1,43 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{L_ACP_POST_LINKS_TITLE}</h1>
+
+<p>{L_POST_LINKS_INTRO}</p>
+
+<form id="acp_share_topic" method="post" action="{U_ACTION}">
+  <fieldset>
+    
+    <dl>
+      <dt><label for="pl_enable">{L_PL_ENABLE}:</label><br /><span>{L_PL_ENABLE_EXPLAIN}</span></dt>
+      <dd><label><input type="radio" class="radio" id="pl_enable" name="pl_enable" value="1"<!-- IF PL_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+      <label><input type="radio" class="radio" name="pl_enable" value="0"<!-- IF not PL_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label></dd>
+    </dl>
+    
+    <dl>
+      <dt><label for="pl_link">{L_PL_LINK_ENABLE}:</label><br /><span>{L_PL_LINK_ENABLE_EXPLAIN}</span></dt>
+      <dd><label><input type="radio" class="radio" id="pl_link" name="pl_link" value="1"<!-- IF PL_LINK_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+      <label><input type="radio" class="radio" name="pl_link" value="0"<!-- IF not PL_LINK_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label></dd>
+    </dl>
+    
+    <dl>
+      <dt><label for="pl_bbcode">{L_PL_BBCODE_ENABLE}:</label><br /><span>{L_PL_BBCODE_ENABLE_EXPLAIN}</span></dt>
+      <dd><label><input type="radio" class="radio" id="pl_bbcode" name="pl_bbcode" value="1"<!-- IF PL_BBCODE_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+      <label><input type="radio" class="radio" name="pl_bbcode" value="0"<!-- IF not PL_BBCODE_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label></dd>
+    </dl>
+    
+    <dl>
+      <dt><label for="pl_html">{L_PL_HTML_ENABLE}:</label><br /><span>{L_PL_HTML_ENABLE_EXPLAIN}</span></dt>
+      <dd><label><input type="radio" class="radio" id="pl_html" name="pl_html" value="1"<!-- IF PL_HTML_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+      <label><input type="radio" class="radio" name="pl_html" value="0"<!-- IF not PL_HTML_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label></dd>
+    </dl>
+		
+		<p class="submit-buttons">
+		  <input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		  <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+    </p>
+		
+    {S_FORM_TOKEN}
+	</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

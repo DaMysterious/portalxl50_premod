@@ -1,0 +1,110 @@
+<script type="text/javascript">
+// <![CDATA[
+var panels_index = new Array('login-panel', 'online-panel', 'birthday-panel', 'statistics-panel');
+
+/**
+* Alternate display of subPanels
+*
+* Based of Prosilver
+* file forum_fn.js
+* function subPanels()
+**/
+function subpanels_index(p)
+{
+	var i, e, t;
+
+	if (typeof(p) == 'string')
+	{
+		show_panel = p;
+	}
+
+	for (i = 0; i < panels_index.length; i++)
+	{
+		e = document.getElementById(panels_index[i]);
+		t = document.getElementById(panels_index[i] + '-tab');
+
+		if (e)
+		{
+			if (panels_index[i] == show_panel)
+			{
+				e.style.display = 'block';
+				if (t)
+				{
+					t.className = 'activetab';
+				}
+			}
+			else
+			{
+				e.style.display = 'none';
+				if (t)
+				{
+					t.className = '';
+				}
+			}
+		}
+	}
+}
+// ]]>
+</script>
+
+<div id="tabs" style="margin-top: 5px;">
+	<ul>
+        <!-- IF not S_USER_LOGGED_IN and not S_IS_BOT and S_DISP_LOGIN -->
+		<li class="" id="login-panel-tab"><a name="login" href="#login-panel-tab" onclick="subpanels_index('login-panel'); return false;"><span>{L_LOGIN}</span></a></li>
+		<!-- ENDIF -->
+        <!-- IF S_DISPLAY_ONLINE_LIST and S_DISP_WHOISONLINE -->
+		<li class="<!-- IF not S_USER_LOGGED_IN -->activetab<!-- ELSE -->activetab<!-- ENDIF -->" id="online-panel-tab"><a name="online" href="#online-panel-tab" onclick="subpanels_index('online-panel'); return false;"><span>{L_WHO_IS_ONLINE}</span></a></li>
+		<!-- ENDIF -->
+        <!-- IF S_DISPLAY_BIRTHDAY_LIST and BIRTHDAY_LIST -->
+		<li class="" id="birthday-panel-tab"><a name="birthday" href="#birthday-panel-tab" onclick="subpanels_index('birthday-panel'); return false;"><span>{L_BIRTHDAYS}</span></a></li>
+		<!-- ENDIF -->
+        <!-- IF TOTAL_IMAGES -->
+		<li class="" id="statistics-panel-tab"><a name="statistics" href="#statistics-panel" onclick="subpanels_index('statistics-panel'); return false;"><span>{L_STATISTICS}</span></a></li>
+		<!-- ENDIF -->
+	</ul>
+</div>
+
+<div id="panel-tab" class="panel bg3">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+<!-- IF not S_USER_LOGGED_IN and not S_IS_BOT and S_DISP_LOGIN -->
+  <div id="login-panel" style="display: none;">
+	<form method="post" action="{S_LOGIN_ACTION}" class="headerspace">
+	<h3><a href="{U_LOGIN_LOGOUT}">{L_LOGIN_LOGOUT}</a><!-- IF S_REGISTER_ENABLED -->&nbsp; &bull; &nbsp;<a href="{U_REGISTER}">{L_REGISTER}</a><!-- ENDIF --></h3>
+		<fieldset class="quick-login">
+			<label for="username">{L_USERNAME}:</label>&nbsp;<input type="text" name="username" id="username" size="10" class="inputbox" title="{L_USERNAME}" />
+			<label for="password">{L_PASSWORD}:</label>&nbsp;<input type="password" name="password" id="password" size="10" class="inputbox" title="{L_PASSWORD}" />
+			<!-- IF S_AUTOLOGIN_ENABLED -->
+				| <label for="autologin">{L_LOG_ME_IN} <input type="checkbox" name="autologin" id="autologin" /></label>
+			<!-- ENDIF -->
+			<input type="submit" name="login" value="{L_LOGIN}" class="button2" />
+		</fieldset>
+	</form>
+  </div>
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_ONLINE_LIST and S_DISP_WHOISONLINE -->
+  <div id="online-panel" style="display: <!-- IF S_USER_LOGGED_IN -->block<!-- ELSE -->block<!-- ENDIF -->;">
+	<!-- IF U_VIEWONLINE --><h3><a href="{U_VIEWONLINE}">{L_WHO_IS_ONLINE}</a></h3><!-- ELSE --><h3>{L_WHO_IS_ONLINE}</h3><!-- ENDIF -->
+	<p>{TOTAL_USERS_ONLINE} ({L_ONLINE_EXPLAIN})<br />{RECORD_USERS}<br /> <br />{LOGGED_IN_USER_LIST}
+	<!-- IF LEGEND --><br /><em>{L_LEGEND}: {LEGEND}</em><!-- ENDIF --></p>
+  </div>
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_BIRTHDAY_LIST and BIRTHDAY_LIST -->
+  <div id="birthday-panel" style="display: none;">
+	<h3>{L_BIRTHDAYS}</h3>
+	<p><!-- IF BIRTHDAY_LIST -->{L_CONGRATULATIONS}: <strong>{BIRTHDAY_LIST}</strong><!-- ELSE -->{L_NO_BIRTHDAYS}<!-- ENDIF --></p>
+  </div>
+<!-- ENDIF -->
+
+<!-- IF TOTAL_IMAGES -->
+  <div id="statistics-panel" style="display: none;">
+	<h3>{L_STATISTICS}</h3>
+	<p>{TOTAL_IMAGES}<!-- IF TOTAL_COMMENTS --> &bull; {TOTAL_COMMENTS}<!-- ENDIF --><!-- IF TOTAL_PGALLERIES --> &bull; {TOTAL_PGALLERIES}<!-- IF NEWEST_PGALLERIES --> &bull; {NEWEST_PGALLERIES}<!-- ENDIF --><!-- ENDIF --></p>
+  </div>
+<!-- ENDIF -->
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<br /><div class="clear"></div>

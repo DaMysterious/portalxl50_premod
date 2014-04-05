@@ -1,0 +1,301 @@
+<!-- DEFINE $PORTALXL = 'dm_music_charts' -->
+<!-- INCLUDE overall_header.html -->
+
+<script type="text/javascript" src="{T_THEME_PATH}/highslide/highslide-full.js"></script>
+<link rel="stylesheet" type="text/css" href="{T_THEME_PATH}/highslide/highslide.css" />
+<script type="text/javascript">
+// <![CDATA[
+hs.graphicsDir = '{T_THEME_PATH}/highslide/graphics/';
+hs.align = 'center';
+hs.transitions = ['expand', 'crossfade'];
+hs.fadeInOut = true;
+hs.dimmingOpacity = 0.8;
+hs.width = 690;
+hs.hight = 660;
+hs.wrapperClassName = 'borderless floating-caption';
+hs.outlineType = 'rounded-white';
+hs.captionEval = 'this.thumb.title';
+hs.marginLeft = 100; // make room for the thumbstrip
+hs.marginBottom = 80 // make room for the controls and the floating caption
+hs.numberPosition = 'caption';
+// This value needs to be set to false, to solve the issue with the highly increasing view counts.
+hs.continuePreloading = false;
+
+// Add the simple close button
+hs.registerOverlay({
+	html: '<div class="closebutton" onclick="return hs.close(this)" title="{L_HIGHSLIDE_CLOSETITLE}"></div>',
+	position: 'top right',
+	fade: 2 // fading the semi-transparent overlay looks bad in IE
+});
+
+// Language strings
+hs.lang = {
+	loadingText :     '{L_HIGHSLIDE_LOADINGTEXT}',
+	loadingTitle :    '{L_HIGHSLIDE_LOADINGTITLE}',
+	focusTitle :      '{L_HIGHSLIDE_FOCUSTITLE}',
+	fullExpandTitle : '{L_HIGHSLIDE_FULLEXPANDTITLE}',
+	fullExpandText :  '{L_HIGHSLIDE_FULLEXPANDTEXT}',
+	creditsText :     '{L_HIGHSLIDE_CREDITSTEXT}',
+	creditsTitle :    '{L_HIGHSLIDE_CREDITSTITLE}',
+	previousText :    '{L_HIGHSLIDE_PREVIOUSTEXT}',
+	previousTitle :   '{L_HIGHSLIDE_PREVIOUSTITLE}',
+	nextText :        '{L_HIGHSLIDE_NEXTTEXT}',
+	nextTitle :       '{L_HIGHSLIDE_NEXTTITLE}',
+	moveTitle :       '{L_HIGHSLIDE_MOVETITLE}',
+	moveText :        '{L_HIGHSLIDE_MOVETEXT}',
+	closeText :       '{L_HIGHSLIDE_CLOSETEXT}',
+	closeTitle :      '{L_HIGHSLIDE_CLOSETITLE}',
+	resizeTitle :     '{L_HIGHSLIDE_RESIZETITLE}',
+	playText :        '{L_HIGHSLIDE_PLAYTEXT}',
+	playTitle :       '{L_HIGHSLIDE_PLAYTITLE}',
+	pauseText :       '{L_HIGHSLIDE_PAUSETEXT}',
+	pauseTitle :      '{L_HIGHSLIDE_PAUSETITLE}',
+	restoreTitle :    '{L_HIGHSLIDE_RESTORETITLE}'
+};
+// ]] >
+</script>
+
+<script type="text/javascript">
+<!--
+function popup2(mylink, windowname)
+{
+if (! window.focus)return true;
+var href;
+if (typeof(mylink) == 'string')
+   href=mylink;
+else
+   href=mylink.href;
+window.open(href, windowname, 'width=685,height=650');
+return false;
+}
+//-->
+</script>
+
+<!-- IF S_LIST or S_LIST_ALL -->
+<table class="tablebg" cellspacing="1" width="100%">
+	<tr>
+		<th>{L_DM_MC_HEADER}</th>
+	</tr>
+	<tr>
+		<td class="row1">
+          <div class="forumrules">
+                  {MC_TITLE_EXPLAIN}
+          </div>
+        </td>
+	</tr>
+	<tr>
+		<td class="row1">
+          <div class="forumrules">
+                  {TOTAL_VOTERS}
+          </div>
+        </td>
+	</tr>
+	<tr>
+		<td class="cat" colspan="2" align="center"></td>
+	</tr>
+</table>
+
+	<br />
+	<h3>{MC_TITLE}</h3>
+	<hr />
+	<br />
+	<p><!-- IF S_ADD_SONG_LIST --><a href="{U_ADD_SONG}">{L_DM_MC_ADD_SONG}</a> | <!-- ENDIF --><!-- IF S_LIST_ALL or S_LIST_NEWEST --><a href="{U_LIST_TOP}">{MC_TOP_XX}</a> | <!-- ENDIF --><!-- IF S_LIST or S_LIST_NEWEST --><a href="{U_LIST_ALL}">{MC_LIST_ALL}</a> | <!-- ENDIF --><a href="{U_LIST_NEWEST}">{MC_NEWEST_XX}</a> | <a href="{U_LAST_WINNERS}">{L_DM_MC_LAST}</a></p>
+    
+	<!-- IF S_LIST_ALL -->
+		<!-- IF PAGINATION or TOTAL_CHARTS -->
+		<div class="pagination">
+			{TOTAL_CHARTS}<!-- IF PAGE_NUMBER --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+		</div>
+		<!-- ENDIF -->
+	<!-- ENDIF -->
+    
+	<table class="tablebg" cellspacing="1" width="100%">
+		<tr class="rowcat">
+			<th align="center" width="3%" style="vertical-align: middle;">{L_DM_MC_CURR_POS}</th>
+			<th align="center" width="45%" style="vertical-align: middle;">{L_DM_MC_SONG_TITLE} {L_DM_MC_SONG_ALBUM} | {L_DM_MC_SONG_ARTIST} | {L_DM_MC_SONG_YEAR}</th>
+			<th align="center" width="5%" style="vertical-align: middle;">{L_DM_MC_SONG_ALBUM_PICTURE}</th>
+			<th align="center" width="5%" style="vertical-align: middle;">{L_DM_MC_SONG_WEBSITE}</th>
+			<th align="center" width="5%" style="vertical-align: middle;">{L_DM_MC_SONG_VIDEO}</th>
+			<th align="center" width="5%" style="vertical-align: middle;">{L_DM_MC_ADDED_BY}</th>
+			<th align="center" width="100%" style="vertical-align: middle;">{L_DM_MC_RATE}</th>
+			<th align="center" width="5%" style="vertical-align: middle;">{L_DM_MC_LAST_POS}</th>
+			<th align="center" width="5%" style="vertical-align: middle;">{L_DM_MC_BEST_POS}</th>
+		</tr>
+		<!-- BEGIN charts -->
+		<!-- IF charts.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+			<td style="text-align: center; vertical-align: middle;">{charts.POSITION}</td>
+			<td style="vertical-align: middle;">
+            
+				<table width="100%" cellspacing="5">
+				<!-- IF charts.S_EDIT_SONG -->
+					<tr style="vertical-align: middle;">
+						<td class="gensmall" align="{S_CONTENT_FLOW_BEGIN}">
+							<a href="{charts.U_EDIT_SONG}" title="{L_DM_MC_EDIT_SONG}">{charts.EDIT_IMG}</a>
+							<!-- IF U_ACP -->
+								<a href="{charts.U_DELETE_SONG}" title="{L_DM_MC_DELETE_SONG}">{charts.DELETE_IMG}</a>
+							<!-- ENDIF -->
+						</td>
+					</tr>
+				<!-- ENDIF -->
+ 					<tr style="vertical-align: middle;">
+						<td class="gensmall" align="{S_CONTENT_FLOW_BEGIN}">
+                          <b>{charts.TITLE}</b><p>
+                          <!-- IF charts.ALBUM -->{charts.ALBUM}<!-- ENDIF -->
+                          <!-- IF charts.ARTIST and charts.ALBUM --> | {charts.ARTIST}<!-- ELSE -->{charts.ARTIST}<!-- ENDIF -->
+                          <!-- IF charts.YEAR and (charts.ARTIST or charts.ALBUM) --> | {charts.YEAR}<!-- ELSE -->{charts.YEAR}<!-- ENDIF -->
+                          <p />
+ 						</td>
+					</tr>
+				</table>
+				<br /><br />
+               
+			</td>
+			<td style="text-align: center; vertical-align: middle;">{charts.ALBUM_IMG}</td>
+			<td style="text-align: center; vertical-align: middle;">{charts.WEBSITE}</td>
+			<!-- IF S_HIGHSLIDE -->
+				<td style="text-align: center; vertical-align: middle;"><a href="{charts.U_SHOW_VIDEO}" onclick="return hs.htmlExpand(this, { objectType: 'iframe' } )">{charts.VIDEO}</a></td>
+			<!-- ELSE -->
+				<td style="text-align: center; vertical-align: middle;"><a href="{charts.U_SHOW_VIDEO}" onclick="return popup2(this, 'showpopup')">{charts.VIDEO}</a></td>
+			<!-- ENDIF -->
+			<td style="text-align: center; vertical-align: middle;">{charts.USERNAME}</td>
+			<td style="text-align: center; vertical-align: middle;">{charts.VOTE_HOT}&nbsp;{charts.VOTE_NOT}<br />{charts.CHART_HOT_NOT}</td>
+			<td style="text-align: center; vertical-align: middle;">{charts.TENDENCY_IMG}&nbsp;{charts.LAST}</td>
+			<td style="text-align: center; vertical-align: middle;">{charts.BEST}</td>
+		</tr>
+		<!-- BEGINELSE -->
+		<tr>
+			<td class="row1" colspan="<!-- IF S_CLEAR_ALLOWED -->11<!-- ELSE -->10<!-- ENDIF -->" style="text-align: center; vertical-align: middle;"><span class="gen">{L_DM_MC_NO_SONGS}</span></td>
+		</tr>
+		<!-- END charts -->
+        <tr>
+            <td class="cat" colspan="<!-- IF S_CLEAR_ALLOWED -->11<!-- ELSE -->10<!-- ENDIF -->" align="center"></td>
+        </tr>
+	</table>
+    
+	<!-- IF S_LIST_ALL -->
+		<!-- IF PAGINATION or TOTAL_CHARTS -->
+		<div class="pagination">
+			{TOTAL_CHARTS}<!-- IF PAGE_NUMBER --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+		</div>
+		<!-- ENDIF -->
+	<!-- ENDIF -->
+	<br style="clear:both" />
+<!-- ENDIF -->
+
+<!-- IF S_ADD_SONG or S_EDIT_SONG -->
+<h2>{L_DM_MC_HEADER}</h2>
+<br />
+<form id="postform" method="post" action="{S_POST_ACTION}" onsubmit="return checkForm(this);"{S_FORM_ENCTYPE}>
+<table class="tablebg" width="100%" cellspacing="1">
+<tr>
+	<th align="center" colspan="4"><!-- IF S_ADD_SONG -->{L_DM_MC_ADD_SONG}<!-- ELSE -->{L_DM_MC_EDIT_SONG}<!-- ENDIF --></th>
+</tr>
+<!-- IF ERROR -->
+	<tr>
+		<td class="row2" colspan="4" align="center"><span class="genmed error">{ERROR}</span></td>
+	</tr>
+<!-- ENDIF -->
+	<tr>
+		<td colspan="2" class="row2" valign="top">{L_DM_MC_NEEDED}<br /><br /></td>
+	</tr>
+	<tr>
+		<td class="row1" valign="top" width="40%"><b class="genmed">{L_DM_MC_SONG_TITLE_ADD}:</b><br />{L_DM_MC_SONG_TITLE_EXPLAIN}</td>
+		<td class="row1" valign="top"><input type="text" id="chart_song_name" tabindex="1" name="chart_song_name" size="65" class="inputbox autowidth" value="{CHART_SONG_NAME}" /></td>
+	</tr>
+	<tr>
+		<td  class="row2" valign="top" width="40%"><b class="genmed">{L_DM_MC_SONG_ARTIST_ADD}:</b><br />{L_DM_MC_SONG_ARTIST_EXPLAIN}</td>
+		<td class="row2" valign="top"><input type="text" id="chart_artist" tabindex="2" name="chart_artist" size="65" class="inputbox autowidth" value="{CHART_ARTIST}" /></td>
+	</tr>
+	<tr>
+		<td class="row1" valign="top" width="40%"><b class="genmed"><!-- IF S_REQ_1 -->[*] <!-- ENDIF -->{L_DM_MC_SONG_ALBUM}:</b><br />{L_DM_MC_SONG_ALBUM_EXPLAIN}</td>
+		<td class="row1" valign="top"><input type="text" id="chart_album" tabindex="3" name="chart_album" size="65" class="inputbox autowidth" value="{CHART_ALBUM}" /></td>
+	</tr>
+	<tr>
+		<td class="row1" valign="top" width="40%"><b class="genmed"><!-- IF S_REQ_2 -->[*] <!-- ENDIF -->{L_DM_MC_SONG_ALBUM_PICTURE}:</b><br />{L_DM_MC_SONG_ALBUM_PICTURE_EXPLAIN}</td>
+		<td class="row1" valign="top"><input type="text" id="chart_picture" tabindex="4" name="chart_picture" size="65" class="inputbox autowidth" value="{CHART_PICTURE}" /></td>
+	</tr>
+	<tr>
+		<td class="row2" valign="top" width="40%"><b class="genmed"><!-- IF S_REQ_3 -->[*] <!-- ENDIF -->{L_DM_MC_SONG_YEAR}:</b><br />{L_DM_MC_SONG_YEAR_EXPLAIN}</td>
+		<td class="row2" valign="top"><input type="text" id="chart_year" tabindex="5" name="chart_year"  size="6" class="inputbox autowidth" value="{CHART_YEAR}" /></td>
+	</tr>
+	<tr>
+		<td class="row2" valign="top" width="40%"><b class="genmed"><!-- IF S_REQ_4 -->[*] <!-- ENDIF -->{L_DM_MC_SONG_WEBSITE}:</b><br />{L_DM_MC_SONG_WEBSITE_EXPLAIN}</td>
+		<td class="row2" valign="top"><input type="text" id="chart_website" tabindex="6" name="chart_website" size="65" class="inputbox autowidth" value="{CHART_WEBSITE}" /></td>
+	</tr>
+	<tr>
+		<td class="row1" valign="top" width="40%"><b class="genmed"><!-- IF S_REQ_5 -->[*] <!-- ENDIF -->{L_DM_MC_SONG_VIDEO}:</b><br />{L_DM_MC_SONG_VIDEO_EXPLAIN}</td>
+		<td class="row1" valign="top"><textarea rows="3" cols="62" id="chart_video" tabindex="7" name="chart_video" class="inputbox autowidth">{CHART_VIDEO}</textarea></td>
+	</tr>
+	<!-- IF S_DM_VIDEO -->
+	<tr>
+		<td class="row2" valign="top" width="40%"><b class="genmed">{L_DM_MC_VIDEO_NO}:</b><br />{L_DM_MC_VIDEO_NO_EXPLAIN}</td>
+		<td class="row2" valign="top"><input type="text" id="chart_video_no" tabindex="8" name="chart_video_no"  size="5" class="inputbox autowidth" value="{CHART_VIDEO_NO}" /></td>
+	</tr>
+	<!-- ENDIF -->
+	<tr>
+		<td class="cat" colspan="2" align="center">
+			{S_FORM_TOKEN}
+			<input type="submit" accesskey="s" tabindex="8" name="post" value="{L_SUBMIT}" class="btnmain" />
+		</td>
+	</tr>
+</table>
+<br clear="all" />
+</form>
+<!-- ENDIF -->
+
+<!-- IF S_LAST_WINNERS -->
+	<h2>{L_DM_MC_HEADER}</h2>
+	<br /><br />
+	<h3>{L_DM_MC_LAST_WINNERS}</h3>
+	<p><!-- IF S_ADD_SONG_LIST --><a href="{U_ADD_SONG}">{L_DM_MC_ADD_SONG}</a> | <!-- ENDIF --><a href="{U_LIST_TOP}">{MC_TOP_XX}</a> | <a href="{U_LIST_ALL}">{MC_LIST_ALL}</a> | <a href="{U_LIST_NEWEST}">{MC_NEWEST_XX}</a> | <a href="{U_LAST_WINNERS}">{L_DM_MC_LAST}</a></p>	
+
+	<table class="tablebg" cellspacing="1" width="100%">
+		<thead>
+		<tr>
+			<th align="center" width="5%">{L_DM_MC_RANK}</th>
+			<th align="center" width="10%">{L_DM_MC_USER}</th>
+			<!-- IF S_UPS -->
+				<th align="left" width="60%"> {L_DM_MC_SONG}</th>
+				<th align="center" width="10%">{L_DM_MC_WON}</th>
+			<!-- ELSE -->
+				<th align="center" width="70%">{L_DM_MC_SONG}</th>
+			<!-- ENDIF -->
+		</tr>
+		</thead>
+		<tbody>
+		<!-- BEGIN winners -->
+		<!-- IF winners.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
+			<td align="center">{winners.RANK}</td>
+			<td align="center">{winners.USER}</td>
+			<!-- IF S_UPS -->
+				<td align="left"> <b>{winners.SONG}</b> {L_DM_MC_FROM} <b>{winners.ARTIST}</b></td>
+				<td align="right"> {winners.WIN}</td>
+			<!-- ELSE -->
+				<td align="left"> <b>{winners.SONG}</b> {L_DM_MC_FROM} <b>{winners.ARTIST}</b></td>
+			<!-- ENDIF -->
+		</tr>
+		<!-- BEGINELSE -->
+		<tr>
+			<!-- IF S_UPS -->
+				<td class="row1" colspan="<!-- IF S_CLEAR_ALLOWED -->5<!-- ELSE -->4<!-- ENDIF -->" align="center"><span class="gen">{L_DM_MC_NO_WINNER}</span></td>
+			<!-- ELSE -->
+				<td class="row1" colspan="<!-- IF S_CLEAR_ALLOWED -->4<!-- ELSE -->3<!-- ENDIF -->" align="center"><span class="gen">{L_DM_MC_NO_WINNER}</span></td>
+			<!-- ENDIF -->
+		</tr>
+		<!-- END charts -->
+        <tr>
+        <!-- IF S_UPS -->
+            <td class="cat" colspan="<!-- IF S_CLEAR_ALLOWED -->5<!-- ELSE -->4<!-- ENDIF -->"></td>
+        <!-- ELSE -->
+            <td class="cat" colspan="<!-- IF S_CLEAR_ALLOWED -->4<!-- ELSE -->3<!-- ENDIF -->"></td>
+        <!-- ENDIF -->
+        </tr>
+		</tbody>
+	</table>
+	<br style="clear:both" />
+<!-- ENDIF -->
+
+<div style="text-align: center;" class="copyright">{L_DM_MC_COPYRIGHT}</div>
+<br clear="all" />
+
+<!-- INCLUDE overall_footer.html -->

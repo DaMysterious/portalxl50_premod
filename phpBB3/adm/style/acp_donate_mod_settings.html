@@ -1,0 +1,172 @@
+<!-- INCLUDE overall_header.html -->
+<h1>{L_CURRENCY_CONFIGURATION_TITLE}</h1>
+
+<p>{L_CURRENCY_CONFIGURATION_EXPLAIN}</p>
+
+<form id="donatemodsettings" action="{S_CURRENCY_CONFIG_ACTION}" method="post">
+		<fieldset>
+			<legend>{L_DONATION_SETTINGS}</legend>
+			<dl>
+				<dt>{L_ENABLE_MOD}: <br />{L_ENABLE_MOD_EXPLAIN}</dt>
+				<dd><input type="radio" name="enable_mod" value="1" {S_ENABLE_MOD_YES} /> {L_YES}&nbsp;
+				<input type="radio" name="enable_mod" value="0" {S_ENABLE_MOD_NO} /> {L_NO}</dd>
+			</dl>
+			<dl>
+				<dt>{L_DISPLAY_X_DONORS}: <br />{L_DISPLAY_X_DONORS_EXPLAIN}</dt>
+				<dd><input type="text" name="dislay_x_donors" value="{DISPLAY_X_DONORS}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_TOP_DONORS}: <br />{L_TOP_DONORS_EXPLAIN}</dt>
+				<dd><input type="radio" name="list_top_donors" value="1" {S_TOP_DONORS_YES} /> {L_YES}&nbsp;
+				<input type="radio" name="list_top_donors" value="0" {S_TOP_DONORS_NO} /> {L_NO}</dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATION_DESCRIPTION}: <br />{L_DONATION_DESCRIPTION_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_description" value="{DONATION_DESCRIPTION}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATION_GOAL}: <br />{L_DONATION_GOAL_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_cur_goal" value="{DONATION_GOAL}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATION_START}: <br />{L_DONATION_START_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_start_time" value="{DONATION_START}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATION_END}: <br />{L_DONATION_END_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_end_time" value="{DONATION_END}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATION_POINTS}: <br />{L_DONATION_POINTS_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_to_points" value="{DONATION_POINTS}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_POSTS_COUNTS}: <br />{L_POSTS_COUNTS_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_to_posts" value="{POSTS_COUNTS}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_TOGRP_ONE}: <br />{L_DONATE_TOGRP_ONE_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_to_grp_one" value="{DONATE_TOGRP_ONE}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_TOGRPONE_AMOUNT}: <br />{L_TOGRPONE_AMOUNT_EXPLAIN}</dt>
+				<dd><input type="text" name="to_grp_one_amount" value="{TOGRPONE_AMOUNT}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_TOGRP_TWO}: <br />{L_DONATE_TOGRP_TWO_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_to_grp_two" value="{DONATE_TOGRP_TWO}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_TOGRPTWO_AMOUNT}: <br />{L_TOGRPTWO_AMOUNT_EXPLAIN}</dt>
+				<dd><input type="text" name="to_grp_two_amount" value="{TOGRPTWO_AMOUNT}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_TORANK_ID}: <br />{L_TORANK_ID_EXPLAIN}</dt>
+				<dd><input type="text" name="donor_rank_id" value="{TORANK_ID}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_EXPLANATION_POSTID}: <br />{L_EXPLANATION_POSTID_EXPLAIN}</dt>
+				<dd><input type="text" name="explanation_postid" value="{EXPLANATION_POSTID}" /></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{L_CURRENCY_GENERAL_SETTINGS}</legend>
+			<dl>
+				<dt>{L_DONATE_CURRENCY}: <br />{L_DONATE_CURRENCY_EXPLAIN}</dt>
+				<dd><input type="text" name="donate_currencies" value="{DONATE_CURRENCY}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_CURRENCY_PRI}: <br />{L_DONATE_CURRENCY_PRI_EXPLAIN}</dt>
+				<dd><input type="text" name="paypal_currency_code" value="{DONATE_CURRENCY_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_USD_TO_PRI}: </dt>
+				<dd><input type="text" name="usd_to_primary" value="{DONATE_USD_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_EUR_TO_PRI}: </dt>
+				<dd><input type="text" name="eur_to_primary" value="{DONATE_EUR_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_GBP_TO_PRI}: </dt>
+				<dd><input type="text" name="gbp_to_primary" value="{DONATE_GBP_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_CAD_TO_PRI}: </dt>
+				<dd><input type="text" name="cad_to_primary" value="{DONATE_CAD_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_JPY_TO_PRI}: </dt>
+				<dd><input type="text" name="jpy_to_primary" value="{DONATE_JPY_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_AUD_TO_PRI}: </dt>
+				<dd><input type="text" name="aud_to_primary" value="{DONATE_AUD_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_CZK_TO_PRI}: </dt>
+				<dd><input type="text" name="czk_to_primary" value="{DONATE_CZK_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_DKK_TO_PRI}: </dt>
+				<dd><input type="text" name="dkk_to_primary" value="{DONATE_DKK_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_HKD_TO_PRI}: </dt>
+				<dd><input type="text" name="hkd_to_primary" value="{DONATE_HKD_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_HUF_TO_PRI}: </dt>
+				<dd><input type="text" name="huf_to_primary" value="{DONATE_HUF_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_NZD_TO_PRI}: </dt>
+				<dd><input type="text" name="nzd_to_primary" value="{DONATE_NZD_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_NOK_TO_PRI}: </dt>
+				<dd><input type="text" name="nok_to_primary" value="{DONATE_NOK_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_PLN_TO_PRI}: </dt>
+				<dd><input type="text" name="pln_to_primary" value="{DONATE_PLN_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_SGD_TO_PRI}: </dt>
+				<dd><input type="text" name="sgd_to_primary" value="{DONATE_SGD_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_SEK_TO_PRI}: </dt>
+				<dd><input type="text" name="sek_to_primary" value="{DONATE_SEK_TO_PRI}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_DONATE_CHF_TO_PRI}: </dt>
+				<dd><input type="text" name="chf_to_primary" value="{DONATE_CHF_TO_PRI}" /></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{L_PAYPAL_GATEWAY_SETTINGS}</legend>
+			<dl>
+				<dt>{L_DM_ENABLE_PAYPAL}: <br />{L_DM_ENABLE_PAYPAL_EXPLAIN}</dt>
+				<dd><input type="radio" name="enable_paypal" value="1" {S_ENABLE_PAYPAL_YES} /> {L_YES}&nbsp;
+				<input type="radio" name="enable_paypal" value="0" {S_ENABLE_PAYPAL_NO} /> {L_NO}</dd>
+			</dl>
+			<dl>
+				<dt>{L_PERSONAL_PAYPAL_ACCT}: <br />{L_PERSONAL_PAYPAL_ACCT_EXPLAIN}</dt>
+				<dd><input type="text" name="paypal_p_acct" value="{PERSONAL_PAYPAL_ACCT}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_BUSINESS_PAYPAL_ACCT}: <br />{L_BUSINESS_PAYPAL_ACCT_EXPLAIN}</dt>
+				<dd><input type="text" name="paypal_b_acct" value="{BUSINESS_PAYPAL_ACCT}" /></dd>
+			</dl>
+			<dl>
+				<dt>{L_CURRENCY_PAYPAL_SUPPORTED}: <br />{L_CURRENCY_PAYPAL_SUPPORTED_EXPLAIN}</dt>
+				<dd><input type="text" name="paypal_support_currency" value="{CURRENCY_PAYPAL_SUPPORTED}" /></dd>
+			</dl>
+		</fieldset>		
+		<fieldset class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</fieldset>
+</form>
+<!-- INCLUDE overall_footer.html -->

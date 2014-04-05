@@ -1,0 +1,33 @@
+<!-- IF S_USE_SIMPLE_HEADER -->
+<!-- INCLUDE simple_header.html -->
+<!-- INCLUDE arcade/script_body.html -->
+	<script type="text/javascript">
+		// <![CDATA[
+			arcade_resize_screen(.80, .50);
+		// ]]>
+	</script>
+<!-- ELSE -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+
+<div class="panel" id="message">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	<h2>{MESSAGE_TITLE}</h2>
+	<p>{MESSAGE_TEXT}</p>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- IF S_RESTART_GAME -->
+<form id="restart_game" action="" method="post">
+	<div class="panel bg2">
+		<div class="inner"><span class="corners-top"><span></span></span>
+			<fieldset class="submit-buttons">
+				<input type="submit" accesskey="s" tabindex="1" value="{L_ARCADE_RESTART_GAME}" class="button1" />&nbsp;
+				{S_HIDDEN_FIELDS}
+				{S_FORM_TOKEN}
+			</fieldset>
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE arcade/footer_body.html -->

@@ -1,0 +1,88 @@
+<script type="text/javascript">
+// <![CDATA[
+$(document).ready(function (){
+	$('#kbaccordion').accordion({
+		header		: 'h5',
+		active      : false,
+		clearStyle  : true,
+		icons: {
+			header: 'ui-icon-circle-arrow-e',
+			headerSelected: 'ui-icon-circle-arrow-s'
+		}
+	});
+});
+// ]]>
+</script>
+<style type='text/css'>
+.kbaccordion-content {
+	min-height: 3em;
+	overflow: hidden;
+	line-height: 1.6em;
+	font-size: 10px;
+}
+
+.kbaccordion-content th {
+	font-weight: normal;
+	font-style: italic;
+	padding-bottom: 2px;
+}
+
+.kbaccordion-topictitle {
+	font-weight: bold;
+}
+
+#kbaccordion h5 {
+	font-weight: normal;
+	font-size: 11px;
+}
+</style>
+
+<div id="kbaccordionResizer">
+    <div id="kbaccordion">
+    
+  <!-- BEGIN kb_recent_articlerow -->
+	<h5><a href="{kb_recent_articlerow.U_VIEW_ARTICLE}">{kb_recent_articlerow.ARTICLE_TITLE}</a></h5>
+	<div class="kbaccordion-content">
+    
+        <table class="tablebg" cellspacing="1" width="100%">
+        <!--<tr>
+            <th colspan="1">{L_KB_RECENT_ARTICLES}</td>
+        </tr>--> 
+          <tr>
+            <td class="<!-- IF kb_recent_articlerow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->" valign="top">
+              {kb_recent_articlerow.ARTICLE_DESC}<br />
+            </td>
+          </tr>
+          <tr class="<!-- IF kb_recent_articlerow.S_ROW_COUNT is even -->row1<!-- ELSE -->row2<!-- ENDIF -->">
+            <td valign="top">
+              <div class="leftside" style="float: left;"><span class="gensmall">{L_ON} {kb_recent_articlerow.TIME} {L_FROM}: <a href="{kb_recent_articlerow.U_USERNAME}">{kb_recent_articlerow.ARTICLE_AUTHOR_FULL}</a></span></div>
+              <div class="rightside" style="float: right;"><span class="gensmall">{L_VIEWS}: {kb_recent_articlerow.VIEWS}</span></div><hr />
+            </td>
+          </tr>
+          <tr class="<!-- IF kb_recent_articlerow.S_ROW_COUNT is not even -->row1<!-- ELSE -->row2<!-- ENDIF -->">
+            <td valign="top">
+                <div style="margin:15px;">{kb_recent_articlerow.ARTICLE_CONTENT}</div>
+            </td>
+          </tr>
+        </table>
+
+	</div>
+  <!-- END kb_recent_articlerow -->
+    <br />
+    
+    <table width="100%" cellspacing="1">
+    <tr>
+    <!-- IF TOTAL_ARTICLES -->
+        <td class="gensmall" width="100%" align="{S_CONTENT_FLOW_END}" nowrap="nowrap">{L_TOTAL_ARTICLES}&nbsp;[ {TOTAL_ARTICLES} ]&nbsp;</td>
+    <!-- ENDIF -->
+    </tr>
+    </table>
+    
+    <table cellspacing="1" width="100%">
+      <tr>
+          <td align="center" class="row1">[ <a href="{U_KB}">{L_KB}</a> ]</td>
+      </tr>
+    </table>
+    
+    </div>
+</div>

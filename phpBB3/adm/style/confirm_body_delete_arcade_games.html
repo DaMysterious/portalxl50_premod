@@ -1,0 +1,24 @@
+<!-- INCLUDE overall_header.html -->
+
+<form id="confirm" method="post" action="{S_CONFIRM_ACTION}">
+
+<fieldset>
+	<h1>{MESSAGE_TITLE}</h1>
+	<p>{MESSAGE_TEXT}</p>
+
+	<p><strong>{L_ARCADE_DELETE_FILES}</strong>&nbsp;
+	<input type="checkbox" class="radio" name="delete_files" value="{L_YES}" />
+	<br />{L_ARCADE_DELETE_FILES_WARNING}</p>
+
+	{S_HIDDEN_FIELDS}
+
+	<div style="text-align: center;">
+		<input type="submit" name="confirm" value="{L_YES}" class="button2" />&nbsp;
+		<input type="submit" name="cancel" value="{L_NO}" class="button2" />
+	</div>
+
+</fieldset>
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,61 @@
+<script type="text/javascript" src="{T_TEMPLATE_PATH}/portal/src/jquery.tagcanvas.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+$(document).ready(function() {
+  if(!$('#myCanvas').tagcanvas({
+	interval: 20,
+	textFont: 'sans-serif', /* Font family for the tag text - empty string or null to use the font of the original link. */  
+	textColour: null, /* Colour "#ff99ff" of the tag text - empty string or null to use the colour of the original link. */
+	textHeight: 12, /* Height of the tag text font (in pixels) */
+	outlineColour: '#f96', /* Colour of the active tag highlight */
+	outlineThickness: 2,
+	freezeActive: false, /* Set to true to pause movement when a tag is highlighted. */
+	shape: 'sphere', /* Currently supported are sphere, hcylinder and vcylinder. */
+	reverse: true, /* Set to true to reverse direction of movement relative to mouse position. */
+	maxSpeed: 0.05, /* Maximum speed of rotation */
+	minSpeed: 0.01, /* Minimum speed of rotation when mouse leaves canvas */
+	depth: 0.92,
+	pulsateTo: 0.2,
+	pulsateTime: 0.75,
+	initial: [0.1,-0.1],
+	decel: 0.98,
+	weight: true, /* Set to true to turn on weighting of tags. */
+	weightFrom: null, /* The link attribute to take the tag weight from. The default of null means that the weight is taken from the calculated link font size. */ 	
+	weightMode: 'colour', /* Method to use for displaying tag weights. Should be one of size, colour or both. */
+	weightGradient: {0:'#f00', 0.33:'#ff0', 0.66:'#0f0', 1:'#00f'}, /* The colour gradient used for colouring tags when using a weight mode of colour or both. */
+	shadow: '#ccf',
+	shadowBlur: 3
+  },'tags')) {
+	// something went wrong, hide the canvas container
+	$('#myCanvasContainer').hide();
+  }
+});
+// ]]>
+</script>
+<style type='text/css'>
+#myCanvasContainer {
+  width:100%; 
+  text-align:center;
+}
+</style>
+
+<table class="tablebg" cellspacing="1" width="100%">
+  <tr class="row1">
+    <td class="gensmall" align="left" valign="middle">
+  
+      <div id="myCanvasContainer">
+        <canvas width="160" height="160" id="myCanvas">
+          <p>Anything in here will be replaced on browsers that support the canvas element</p>
+        </canvas>
+      </div>
+      <div id="tags" style="display:none;">
+        <ul style="list-style:none;">
+        <!-- BEGIN clouds_loop -->
+           <li><a href="{clouds_loop.TAGS_SEARCH_URL}" style="font-size: {clouds_loop.TAGS_FONT_SIZE}px;">{clouds_loop.TAGS}</a></li>
+		<!-- END clouds_loop -->
+        </ul>
+      </div>
+       
+    </td>
+  </tr>
+</table>

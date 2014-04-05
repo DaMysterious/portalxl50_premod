@@ -1,0 +1,24 @@
+<!-- IF S_DISPLAY_ONLINE_LIST -->
+<table class="tablebg" cellspacing="1" width="100%">
+  <tr>
+    <td class="row1 gensmall" colspan="2"><!-- IF U_VIEWONLINE --><a href="{U_VIEWONLINE}"><strong>{L_WHO_IS_ONLINE}</strong></a><!-- ELSE -->{L_WHO_IS_ONLINE}:<!-- ENDIF --></td>
+  </tr>
+  <tr>
+<!-- IF S_USER_LOGGED_IN and USER_AVATAR -->
+    <td class="row1" rowspan="2" align="center" valign="middle" style="padding: 10px;">{USER_AVATAR}</td>
+<!-- ELSE -->
+    <td class="row1" rowspan="2" align="center" valign="middle" style="padding: 10px;"><img src="{T_THEME_PATH}/images/no_avatar.gif" alt="{L_WHO_IS_ONLINE}" /></td>
+<!-- ENDIF -->
+    <td class="row1">
+      <div>{TOTAL_USERS_ONLINE} ({L_ONLINE_EXPLAIN})<br />
+        {RECORD_USERS}<br /><br />
+        {LOGGED_IN_USER_LIST}<br />{ONLINE_BOTLIST}</div>
+        <hr align="left" />
+        <div>{TOTAL_USERS_LASTVISIT}<br /> <br />{LASTVISIT_USER_LIST}<br /></div>
+        <!-- IF LEGEND --><br /><div>{L_LEGEND}: <em>{LEGEND}</em></div><!-- ENDIF -->
+        <br />{NEWEST_USER}<br />
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ENDIF -->

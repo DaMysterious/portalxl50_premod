@@ -1,0 +1,142 @@
+<!-- INCLUDE overall_header.html -->
+<a name="maincontent"></a>
+
+<h1>{L_ACP_ARCADE_INDEX_TITLE}</h1>
+
+<p>{L_ACP_ARCADE_INDEX_TITLE_EXPLAIN}</p>
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+<table cellspacing="1">
+	<caption>{L_ACP_ARCADE_STATS}</caption>
+	<col class="col1" /><col class="col2" /><col class="col1" /><col class="col2" />
+
+	<thead>
+	<tr>
+		<th>{L_STATISTIC}</th>
+		<th>{L_VALUE}</th>
+		<th>{L_STATISTIC}</th>
+		<th>{L_VALUE}</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<tr>
+		<td>{L_ACP_ARCADE_STARTDATE}: </td>
+		<td><strong>{ARCADE_START}</strong></td>
+		<td>{L_ARCADE_DOWNLOAD_TOTAL_GAMES}: </td>
+		<td><strong>{STAT_INSTALL_GAMES}</strong></td>
+	</tr>
+
+	<tr>
+		<td>{L_ACP_ARCADE_RESET}: </td>
+		<td><strong>{ARCADE_RESETDATE}</strong></td>
+		<td>{L_ACP_ARCADE_USERS_PLAYED}: </td>
+		<td><strong>{STAT_USERS_PLAYED}</strong></td>
+	</tr>
+
+	<tr>
+		<td>{L_ARCADE_STATS_TOTAL_DOWNLOADS}: </td>
+		<td><strong>{STAT_DOWNLOAD_GAMES}</strong></td>
+		<td>{L_ACP_ARCADE_DOWNLOAD_GAMES_DAY}: </td>
+		<td><strong>{STAT_DOWNLOAD_GAMES_DAY}</strong></td>
+	</tr>
+
+	<tr>
+		<td>{L_ARCADE_WELCOME_PLAYS}: </td>
+		<td><strong>{STAT_PLAYS_GAMES}</strong></td>
+		<td>{L_ACP_ARCADE_PLAYS_GAMES_DAY}: </td>
+		<td><strong>{STAT_PLAYS_GAMES_DAY}</strong></td>
+	</tr>
+
+	<tr>
+		<td>{L_ACP_ARCADE_VERSION}: </td>
+		<td><strong>2.0.RC1 Do not update!</strong></td>
+		<td>{L_ACP_ARCADE_GAMES_FILESIZE}: </td>
+		<td><strong>{ARCADE_GAMES_FILESIZE}</strong></td>
+	</tr>
+	</tbody>
+</table>
+
+<!-- IF S_ARCADE_MANAGE -->
+<fieldset>
+	<legend>{L_STATISTIC_RESYNC_OPTIONS}</legend>
+
+	<form id="reset_arcade_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_reset_arcade">{L_ARCADE_RESET_ARCADE}</label><br /><span>{L_ARCADE_RESET_ARCADE_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="reset_arcade" /><input class="button2" type="submit" id="action_reset_arcade" name="action_reset_arcade" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+
+	<form id="reset_scores_all_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_reset_scores_all">{L_ARCADE_RESET_SCORES_ALL}</label><br /><span>{L_ARCADE_RESET_SCORES_ALL_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="reset_scores_all" /><input class="button2" type="submit" id="action_reset_scores_all" name="action_reset_scores_all" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+
+	<form id="reset_users_data_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_reset_users_data">{L_ARCADE_RESET_USERS_DATA}</label><br /><span>{L_ARCADE_RESET_USERS_DATA_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="reset_users_data" /><input class="button2" type="submit" id="action_reset_users_data" name="action_reset_users_data" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+
+	<form id="reset_users_settings_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_reset_users_settings">{L_ARCADE_RESET_USERS_SETTINGS}</label><br /><span>{L_ARCADE_RESET_USERS_SETTINGS_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="reset_users_settings" /><input class="button2" type="submit" id="action_reset_users_settings" name="action_reset_users_settings" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+
+	<form id="reset_downloads_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_reset_downloads">{L_ARCADE_RESET_DOWNLOADS}</label><br /><span>{L_ARCADE_RESET_DOWNLOADS_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="reset_downloads" /><input class="button2" type="submit" id="action_reset_downloads" name="action_reset_downloads" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+
+<!-- IF S_USER_FOUNDER -->
+	<form id="purge_sessions_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_purge_sessions">{L_ARCADE_PURGE_SESSIONS}</label><br /><span>{L_ARCADE_PURGE_SESSIONS_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="purge_sessions" /><input class="button2" type="submit" id="action_purge_sessions" name="action_purge_sessions" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+<!-- ENDIF -->
+
+	<form id="resync_total_data_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_resync_totals_data">{L_ARCADE_RESYNC_TOTALS_DATA}</label><br /><span>{L_ARCADE_RESYNC_TOTALS_DATA_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="resync_totals_data" /><input class="button2" type="submit" id="action_resync_totals_data" name="action_resync_totals_data" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+
+</fieldset>
+<!-- IF S_SHOW_POINTS -->
+<fieldset>
+	<legend>{L_ARCADE_RESET_POINTS}</legend>
+
+	<form id="reset_jackpot_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_reset_jackpot">{L_ARCADE_RESET_JACKPOT}</label><br /><span>{L_ARCADE_RESET_JACKPOT_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="reset_jackpot" /><input class="button2" type="submit" id="action_reset_jackpot" name="action_reset_jackpot" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+
+	<form id="reset_points_form" method="post" action="{U_ACTION}">
+		<dl>
+			<dt><label for="action_reset_points">{L_ARCADE_RESET_POINTS}</label><br /><span>{L_ARCADE_RESET_POINTS_EXPLAIN}</span></dt>
+			<dd><input type="hidden" name="action" value="reset_points" /><input class="button2" type="submit" id="action_reset_points" name="action_reset_points" value="{L_RUN}" /></dd>
+		</dl>
+	</form>
+</fieldset>
+<!-- ENDIF -->
+<!-- ENDIF -->
+
+<!-- INCLUDE overall_footer.html -->

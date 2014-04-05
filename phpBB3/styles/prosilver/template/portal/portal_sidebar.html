@@ -1,0 +1,330 @@
+<script type="text/javascript">
+// <![CDATA[
+var menuids=["xlsidebar1"] //Enter id(s) of each Side Bar Menu's main UL, separated by commas
+
+function initxlsidebar(){
+for (var i=0; i<menuids.length; i++){
+  var ultags=document.getElementById(menuids[i]).getElementsByTagName("ul")
+    for (var t=0; t<ultags.length; t++){
+    ultags[t].parentNode.getElementsByTagName("a")[0].className+=" subfolderstyle"
+  if (ultags[t].parentNode.parentNode.id==menuids[i]) //if this is a first level submenu
+   ultags[t].style.left=ultags[t].parentNode.offsetWidth+"px" //dynamically position first level submenus to be width of main menu item
+  else //else if this is a sub level submenu (ul)
+    ultags[t].style.left=ultags[t-1].getElementsByTagName("a")[0].offsetWidth+"px" //position menu to the right of menu item that activated it
+    ultags[t].parentNode.onmouseover=function(){
+    this.getElementsByTagName("ul")[0].style.display="block"
+    }
+    ultags[t].parentNode.onmouseout=function(){
+    this.getElementsByTagName("ul")[0].style.display="none"
+    }
+    }
+  for (var t=ultags.length-1; t>-1; t--){ //loop through all sub menus again, and use "display:none" to hide menus (to prevent possible page scrollbars
+  ultags[t].style.visibility="visible"
+  ultags[t].style.display="none"
+  }
+  }
+}
+
+if (window.addEventListener)
+window.addEventListener("load", initxlsidebar, false)
+else if (window.attachEvent)
+window.attachEvent("onload", initxlsidebar)
+// ]]>
+</script>
+
+<style type="text/css">
+* html #xlsidebar {
+	position: absolute;
+}
+
+* html #xlsidebar li.header, * html #xlsidebar li.header dl, * html #xlsidebar li.header dl dt {
+	height: 18px;
+}
+
+#xlsidebar {
+	background-color: #0076b1;
+	border: 1px solid #C9D2D8;
+	font-size: 1.0em;
+	left: -185px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	position: fixed;
+	top: 20px;
+	-webkit-border-radius: 5px; /* Safari, Chrome */
+	-moz-border-radius: 5px;  /* Firefox */
+	border-radius: 5px; /* CSS3 */
+	width: 190px;
+	z-index: 2010;
+}
+
+#xlsidebar li.header {
+	padding: 0 5px;
+}
+
+#xlsidebar ul {
+	font-size: 1.0em;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 180px; /* Main Menu Item widths */
+}
+
+#xlsidebar ul li {
+	padding: 1px;
+	position: relative;
+}
+
+/* Top level menu links style */
+#xlsidebar ul li a {
+	border: 1px solid #C9D2D8;
+	display: block;
+	overflow: auto; /*force hasLayout in IE7 */
+	padding: 4px;
+	margin: 4px;
+	text-decoration: none;
+	-webkit-border-radius: 5px; /* Safari, Chrome */
+	-moz-border-radius: 5px;  /* Firefox */
+	border-radius: 5px; /* CSS3 */
+}
+
+/*Sub level menu items */
+#xlsidebar ul li ul {
+	position: absolute;
+	top: 0;
+	visibility: hidden;
+	width: 200px; /*Sub Menu Items width */
+	z-index: 2020;
+}
+
+#xlsidebar:hover, #xlsidebar.iehover {
+	left: -5px;
+}
+
+#xlsidebar a.subfolderstyle {
+  background: url('{T_THEME_PATH}/images/arrow_user_right.gif') no-repeat 97% 50%;
+}
+ 
+.bgli {
+	background-color: #fff;
+	border: 1px solid #C9D2D8;
+	-webkit-border-radius: 5px; /* Safari, Chrome */
+	-moz-border-radius: 5px;  /* Firefox */
+	border-radius: 5px; /* CSS3 */
+}
+
+/* Holly Hack for IE \*/
+* html #xlsidebar ul li { float: left; height: 1%; }
+* html #xlsidebar ul li a { height: 1%; }
+/* End */
+</style>
+
+<div id="xlsidebar">
+        
+  <div class="xlsidebar">
+    <ul id="xlsidebar1">
+    
+    <li class="bgli"><a href="{U_PORTAL}">{L_PORTAL}</a>
+      <ul>
+        <li class="bgli"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
+        <li class="bgli"><a href="{U_INDEX}">{L_INDEX}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_RECENT_TOPICS}">{L_RECENT_TOPICS}</a></li>
+        <li class="bgli"><a href="{U_KB}">{L_KB}</a></li>
+        <li class="bgli"><a href="{U_CALENDAR}">{L_CALENDAR}</a></li>
+        <li class="bgli"><a href="{U_GALLERY_MOD}">{L_GALLERY}</a></li>
+        <li class="bgli"><a href="{U_ARCADE}">{L_ARCADE}</a></li>
+        <!-- IF S_DISPLAY_MEMBERLIST -->
+        <li class="bgli"><a href="{U_MEMBERLIST}">{L_MEMBERLIST}</a></li>
+        <!-- ENDIF -->
+
+        <!-- IF S_DISPLAY_SEARCH -->
+        <li class="bgli"><a href="{U_SEARCH}">{L_SEARCH}</a></li>
+        <!-- ENDIF -->
+        <li class="bgli"><a href="{U_DOWNLOADS}">{L_DOWNLOADS}</a></li>
+		<li class="bgli"><a href="{U_DM_MUSIC_CHARTS}">{L_DM_MUSIC_CHARTS}</a></li>
+      </ul>
+    </li>
+        
+    <li class="bgli"><a href="{U_INDEX}">{L_INDEX}</a>
+      <ul>
+        <li class="bgli"><a href="{U_PORTAL_GROUPS}">{L_GROUPS}</a></li>
+        <li class="bgli"><a href="{U_RADIO}" onclick="window.open('{U_RADIO}','','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=550, height=500, left=20, top=20'); return false;">{L_RADIO}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_MODS}">{L_PORTAL_MODS}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_SMILES}">{L_SMILES_TITLE}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_RANKS}">{L_RANKS}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_FLAGS}">{L_COUNTRY_FLAGS}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_BBCODES}">{L_BBCODES_TITLE}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_ACRONYM}">{L_ACRONYMS}</a></li>
+        <li class="bgli"><a href="{U_CRAWLER_LINKER}">{L_CRAWLER_LINKS}</a></li>
+        <!-- IF S_VIDEO_EXIST -->
+        <li class="bgli"><a href="{U_DMV_VIDEO}">{L_DMV_VIDEO}</a></li>
+        <!-- ENDIF -->
+        <!-- IF S_HACKLIST_ON -->
+        <li class="bgli"><a href="{U_HACKLIST}">{L_HACKLIST}</a></li>
+        <!-- ENDIF -->
+        <!-- IF S_BUGTRACKER_ON -->
+        <li class="bgli"><a href="{U_BUG_TRACKER}">{L_BUG_TRACKER}</a></li>
+        <!-- ENDIF -->
+        <li class="bgli"><a href="{U_PORTAL_PAGES}">{L_PAGES_LIST_TITLE}</a></li>
+      </ul>
+    </li>
+        
+    <li class="bgli"><a href="{U_CONTACT}">{L_CONTACT_BOARD_ADMIN_SHORT}</a>
+      <ul>
+        <!-- IF S_CONTACT_ENABLED -->
+        <li class="bgli"><a href="{U_CONTACT}">{L_CONTACT_BOARD_ADMIN_SHORT}</a></li>
+        <!-- ENDIF -->
+        <li class="bgli"><a href="{U_FAQ}">{L_FAQ}</a></li>
+        <li class="bgli"><a href="{U_PORTAL_FAQ}">{L_PORTAL} {L_FAQ}</a></li>
+        <li class="bgli"><a href="{U_RULES_FAQ}">{L_RULES_PAGE}</a></li>
+        <li class="bgli"><a href="{U_IMPRESSUM}">{L_IMPRESSUM}</a></li>
+        <li class="bgli"><a href="{U_TEAM}">{L_THE_TEAM}</a></li>
+      </ul>
+    </li>
+      
+    <!-- IF S_USER_LOGGED_IN -->
+    <li class="bgli"><a href="#">{L_PROFILE}</a>
+      <ul>
+        <!-- IF U_MCP -->
+        <li class="bgli"><a href="{U_MCP}">{L_MCP}</a></li>
+        <!-- ENDIF -->
+        <!-- IF U_ACP -->
+        <li class="bgli"><a href="{U_ACP}">{L_ACP}</a></li>
+        <!-- ENDIF -->
+        <li class="bgli"><a href="#">{L_OVERVIEW_INFO}</a>
+          <ul>
+            <li class="bgli"><a href="{U_FRONTPAGE}">{L_FRONTPAGE}</a></li>
+            <li class="bgli"><a href="{U_BOOKMARKS}">{L_BOOKMARKS}</a></li>
+            <li class="bgli"><a href="{U_SUBSCRIBED}">{L_SUBSCRIPTION}</a></li>
+            <li class="bgli"><a href="{U_DRAFTS}">{L_DRAFTS}</a></li>
+            <li class="bgli"><a href="{U_ATTACHMENTS}">{L_ATTACHMENTS}</a></li>
+          </ul>
+        </li>
+        <li class="bgli"><a href="#">{L_PRIVATE_MESSAGES}</a>
+          <ul>
+            <li class="bgli"><a href="{U_INBOX}">{L_INBOX}</a></li>
+            <li class="bgli"><a href="{U_OUTBOX}">{L_OUTBOX}</a></li>
+            <li class="bgli"><a href="{U_COMPOSEPMMESSAGESG}">{L_COMPOSEPMMESSAGESG}</a></li>
+            <li class="bgli"><a href="{U_SENDMESSAGEBOX}">{L_SENDMESSAGEBOX}</a></li>
+            <li class="bgli"><a href="{U_UNREADMESSAGES}">{L_UNREADMESSAGES}</a></li>
+            <li class="bgli"><a href="{U_RULEFOLDERSETTING}">{L_RULEFOLDERSETTING}</a></li>
+          </ul>
+        </li>
+        <li class="bgli"><a href="#">{L_FRIENDS_FOES}</a>
+          <ul>
+            <li class="bgli"><a href="{U_MANAGEFRIENDS}">{L_MANAGEFRIENDS}</a></li>
+            <li class="bgli"><a href="{U_MANAGEFOES}">{L_MANAGEFOES}</a></li>
+          </ul>
+        </li>
+        <li class="bgli"><a href="#">{L_CHANGING_PREFERENCES}</a>
+          <ul>
+            <li class="bgli"><a href="{U_GLOBALSETTINGS}">{L_GLOBALSETTINGS}</a></li>
+            <li class="bgli"><a href="{U_POSTINDEFAULT}">{L_POSTINDEFAULT}</a></li>
+            <li class="bgli"><a href="{U_DISPLAYOPTIONS}">{L_DISPLAYOPTIONS}</a></li>
+          </ul>
+        </li>
+        <li class="bgli"><a href="#">{L_READ_PROFILE}</a>
+          <ul>
+            <li class="bgli"><a href="{U_UPROFILE}">{L_UPROFILE}</a></li>
+            <li class="bgli"><a href="{U_SIGNATURE}">{L_SIGNATURE}</a></li>
+            <li class="bgli"><a href="{U_AVATAR}">{L_AVATAR}</a></li>
+            <li class="bgli"><a href="{U_ACCOUNT}">{L_ACCOUNT}</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <!-- ENDIF -->
+        
+    <!-- IF not S_IS_BOT -->
+    <li class="bgli"><a href="{U_LOGIN_LOGOUT}">{L_LOGIN_LOGOUT}</a>
+      <ul>
+        <!-- IF S_USER_LOGGED_IN -->
+        <li class="bgli">
+          <!-- INCLUDE portal/portal_visitor_welcome.html -->
+          <a href="{U_LOGIN_LOGOUT}">
+          <h4>{L_LOGIN_LOGOUT}</h4>
+          </a> <br />
+          {L_LOGOUT_PORTAL_INFO}
+          <p>{L_LOGOUT_MORE_PORTAL_INFO}</p>
+        </li>
+        <!-- ELSE -->
+        <li class="bgli">
+          <!-- INCLUDE portal/portal_visitor_welcome.html -->
+          <a href="{U_LOGIN_LOGOUT}">
+          <h4>{L_LOGIN_LOGOUT}</h4>
+          </a> <br />
+          {L_LOGIN_PORTAL_INFO}
+          <p>{L_LOGIN_MORE_PORTAL_INFO}</p>
+        </li>
+        <!-- ENDIF -->
+      </ul>
+    </li>
+    <!-- ENDIF -->
+        
+    <!-- IF not S_USER_LOGGED_IN -->
+    <li class="bgli"><a href="{U_REGISTER}">{L_REGISTER}</a>
+      <ul>
+        <li class="bgli">
+          <!-- INCLUDE portal/portal_visitor_welcome.html -->
+          <a href="{U_REGISTER}">
+          <h4>{L_REGISTER}</h4>
+          </a> <br />
+          {L_LOGIN_INFO}<br />
+          <a href="{U_TERMS_USE}">{L_TERMS_USE}</a> <a href="{U_PRIVACY}">{L_PRIVACY}</a> <a href="./faq.php?mode=rules">{L_RULES_PAGE}</a> </li>
+      </ul>
+    </li>
+    <!-- ENDIF -->
+        
+    <li class="bgli"><a href="#">{L_PORTAL_WIDGET_STATES}</a>
+      <ul>
+        <li class="bgli"><a href="#" onclick="$('.widget-menu').show();">{L_PORTAL_OPEN_MENUS}</a></li>
+        <li class="bgli"><a  href="#" onclick="$('.widget-menu').hide();">{L_PORTAL_CLOSE_MENUS}</a></li>
+        <!-- IF $PORTALXL == 'portal' or $PORTALXL == 'portal_pages' -->
+        <li class="bgli"><a href="#" onclick="$.fn.ShowEasyWidgets();">{L_PORTAL_OPEN_COLUMNS}</a></li>
+        <li class="bgli"><a href="#" onclick="$.fn.HideEasyWidgets();">{L_PORTAL_CLOSE_COLUMNS}</a></li>
+        <!-- ENDIF -->
+        <li class="bgli"><a href="#" onclick="$.fn.ShowEasyWidgets(); return false">{L_PORTAL_RESET_BLOCKS}</a></li>
+      </ul>
+    </li>
+        
+    <!-- IF U_RESTORE_PERMISSIONS -->
+    <li class="bgli"><a href="#">{L_RESTORE_PERMISSIONS}</a>
+      <ul>
+        <li class="bgli"><a href="{U_RESTORE_PERMISSIONS}">{L_RESTORE_PERMISSIONS}</a></li>
+      </ul>
+    </li>
+    <!-- ENDIF -->
+        
+    <!-- IF U_MCP -->
+    <li class="bgli"><a href="#">{L_M_MCP}</a>
+      <ul>
+        <li class="bgli"><a href="{U_MCP}">{L_MCP}</a></li>
+      </ul>
+    </li>
+    <!-- ENDIF -->
+    
+    <!-- IF U_ACP -->
+    <li class="bgli"><a href="#">{L_M_ACP}</a>
+      <ul>
+        <li class="bgli"><a href="{U_ACP}">{L_ACP}</a></li>
+      </ul>
+    </li>
+    <!-- ENDIF -->
+
+    <!-- [+] include single extra links between here -->
+
+<!-- IF S_USER_LOGGED_IN and S_DISPLAY_DONATION_LIST -->
+    <li class="bgli"><a href="{U_DONATE}" title="{L_DONATE_EXPLAIN}">{L_DONATE}</a>
+      <!-- IF S_USER_LOGGED_IN and not S_IS_BOT and S_DISPLAY_DONATION_LIST -->
+      <ul>
+        <li class="bgli"><a href="{U_DONORS}" title="{L_MORE_DONORS}">{L_MORE_DONORS}</a></li>
+      </ul>
+      <!-- ENDIF -->
+    </li>
+<!-- ENDIF -->
+    
+    <!-- [-] include single extra links between here -->
+
+    </ul>
+  </div>
+    
+</div>

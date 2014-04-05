@@ -1,0 +1,67 @@
+<script type="text/javascript">
+// <![CDATA[
+$(document).ready(function (){
+	$("#most_donors-accordion").accordion({
+		header		: 'h5',
+		active      : 0,
+		autoHeight	: false,
+		icons: {
+			header: 'ui-icon-circle-arrow-e',
+			headerSelected: 'ui-icon-circle-arrow-s'
+		}
+	});
+});
+// ]]>
+</script>
+<style type='text/css'>
+.most_donors-accordion-content {
+	min-height: 3em;
+	overflow: hidden;
+	line-height: 1.1em;
+	font-size: 10px;
+}
+
+.most_donors-accordion-content th {
+	font-weight: normal;
+	font-style: italic;
+	padding-bottom: 2px;
+}
+
+.most_donors-accordion-topictitle {
+	font-weight: bold;
+}
+
+#most_donors-accordion h5 {
+	font-weight: normal;
+	font-size: 11px;
+	min-height: 1.4em;
+	padding-left: 25px;
+}
+</style>
+
+<div id="most_donors-accordionResizer">
+    <div id="most_donors-accordion">
+    
+    <!-- BEGIN most_donors -->
+    <h5>{most_donors.USERNAME}</h5>
+    <div class="most_donors-accordion-content">
+    
+    <table class="tablebg" cellspacing="1" width="100%">
+    <tr>
+        <td class="row1">
+        <!-- IF most_donors.DONORS_AV -->{most_donors.DONORS_AV} <br /><!-- ENDIF -->  
+        <span class="postdetails">{L_USERNAME}: {most_donors.DONORS_NAME}</span> <br />
+        <span class="postdetails">{L_RANK_TITLE}: {most_donors.RANK_TITLE}</span> <br />
+        <!-- IF most_donors.FLAG_IMG -->{L_COUNTRY}: {most_donors.FLAG_IMG} <br /><!-- ENDIF --> 
+        <!-- IF most_donors.U_WWW --><a href="{most_donors.U_WWW}" title="{L_VISIT_WEBSITE}: {most_donors.U_WWW}"><span>{L_WEBSITE}</span></a> <br /><!-- ENDIF -->
+        <span class="postdetails">{L_MONEY}: {most_donors.MONEY}</span> <br />
+        <span class="postdetails">{L_DATE}: {most_donors.DATE}</span>
+        </td>
+    </tr>
+    </table>
+    
+    </div>
+    <!-- END most_donors -->
+
+    </div>
+</div>

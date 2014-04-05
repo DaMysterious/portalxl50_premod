@@ -1,0 +1,147 @@
+<!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+<script type="text/javascript">
+var persistclose = 0 //set to 0 or 1. 1 means once the bar is manually closed, it will remain closed for browser session
+var startX = 30 //set x offset of bar in pixels
+var startY = 5 //set y offset of bar in pixels
+var verticalpos = "fromtop" //enter "fromtop" or "frombottom"
+
+function iecompattest(){
+return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
+}
+
+function get_cookie(Name) {
+var search = Name + "="
+var returnvalue = "";
+if (document.cookie.length > 0) {
+offset = document.cookie.indexOf(search)
+if (offset != -1) {
+offset += search.length
+end = document.cookie.indexOf(";", offset);
+if (end == -1) end = document.cookie.length;
+returnvalue=unescape(document.cookie.substring(offset, end))
+}
+}
+return returnvalue;
+}
+
+function closebar(){
+  if (persistclose)
+  document.cookie="remainclosed=1"
+  document.getElementById("floating_bar").style.visibility="hidden"
+}
+
+function staticbar(){
+ barheight=document.getElementById("floating_bar").offsetHeight
+ var ns = (navigator.appName.indexOf("Netscape") != -1) || window.opera;
+ var d = document;
+ function ml(id){
+  var el=d.getElementById(id);
+  if (!persistclose || persistclose && get_cookie("remainclosed")=="")
+  el.style.visibility="visible"
+  if(d.layers)el.style=el;
+  el.sP=function(x,y){this.style.left=x+"px";this.style.top=y+"px";};
+  el.x = startX;
+  if (verticalpos=="fromtop")
+  el.y = startY;
+  else{
+  el.y = ns ? pageYOffset + innerHeight : iecompattest().scrollTop + iecompattest().clientHeight;
+  el.y -= startY;
+  }
+  return el;
+ }
+ 
+ window.stayTopLeft=function(){
+  if (verticalpos=="fromtop"){
+  var pY = ns ? pageYOffset : iecompattest().scrollTop;
+  ftlObj.y += (pY + startY - ftlObj.y)/8;
+  }
+  else{
+  var pY = ns ? pageYOffset + innerHeight - barheight: iecompattest().scrollTop + iecompattest().clientHeight - barheight;
+  ftlObj.y += (pY - startY - ftlObj.y)/8;
+  }
+  ftlObj.sP(ftlObj.x, ftlObj.y);
+  setTimeout("stayTopLeft()", 10);
+ }
+ ftlObj = ml("floating_bar");
+ stayTopLeft();
+}
+
+if (window.addEventListener)
+window.addEventListener("load", staticbar, false)
+else if (window.attachEvent)
+window.attachEvent("onload", staticbar)
+else if (document.getElementById)
+window.onload=staticbar
+</script>
+
+<style type="text/css">
+#floating_bar{
+	margin: 0px auto;
+	min-width: 650px;
+	padding: 0px 22% 0 22%;
+	width: 600px; /* change here to set the outer width (borders) of the wrapper */
+	padding-top: 15%;
+	position: absolute;
+	visibility: hidden;
+	z-index: 10000;
+}
+
+.font{
+	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, Sans-serif;
+	font-size: 1.9em;
+	color: #FFF;
+}
+</style>
+
+<div align="center" id="floating_bar" class="font">
+
+    <div class="forabg">
+      <div class="inner"> <span class="corners-top"><span></span></span>
+      
+        <ul class="topiclist">
+          <li class="header">
+            <dl class="icon">
+              <dt style="width: {$PORTALXL_DD-DT-WIDTH};">
+                <!-- INCLUDE portal/portal_visitor_welcome.html -->
+              </dt>
+            </dl>
+          </li>
+        </ul>
+        <ul class="topiclist forums">
+          <li class="row">
+            <dl class="icon">
+              <dd style="width: {$PORTALXL_DD-DT-WIDTH};">
+              
+              <table class="tablebg" width="100%" cellspacing="0">
+                  <tr>
+                    <td align="center"><span>{L_LOGIN_VIEWFORUM}<br />
+                      <a href="{U_REGISTER}">{L_REGISTER}</a> @ {SITENAME}.</span></td>
+                  </tr>
+                  <tr>
+                    <td align="center"><!-- IF S_DISPLAY_FULL_LOGIN -->
+                      <!-- IF U_SEND_PASSWORD -->
+                      <br />
+                      <a class="gensmall" href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a>
+                      <!-- ENDIF -->
+                      <!-- IF U_RESEND_ACTIVATION and not S_ADMIN_AUTH -->
+                      <br />
+                      <a class="gensmall" href="{U_RESEND_ACTIVATION}">{L_RESEND_ACTIVATION}</a>
+                      <!-- ENDIF -->
+                      <!-- ENDIF --></td>
+                  </tr>
+                  <tr>
+                    <td align="{S_CONTENT_FLOW_END}"><a href="#" onclick="closebar(); return false;"><span style="font-size:9px;">{L_CLOSE_WINDOW}</span></a>&nbsp;</td>
+                  </tr>
+              </table>
+              
+              </dd>
+            </dl>
+          </li>
+        </ul>
+        
+        <span class="corners-bottom"><span></span></span> </div>
+    </div>
+
+
+</div>
+<!-- ENDIF -->
