@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_footer.php 27 2012/12/29 OXPUS
+* @file				dl_footer.php 28 2013/06/11 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -252,7 +252,7 @@ if (sizeof($index) || $cat)
 		$template->assign_var('S_FOOTER_LEGEND', true);
 	}
 
-	if ($config['dl_todo_link_onoff'])
+	if ($config['dl_todo_link_onoff'] && $config['dl_todo_onoff'])
 	{
 		$template->assign_var('S_TODO_LINK', true);
 	}

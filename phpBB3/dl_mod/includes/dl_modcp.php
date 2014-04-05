@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_modcp.php 49 2013/01/31 OXPUS
+* @file				dl_modcp.php 53 2014/03/07 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -18,7 +18,8 @@ if ( !defined('IN_PHPBB') )
 	exit;
 }
 
-$deny_modcp = 0;
+$own_edit = false;
+$deny_modcp = true;
 
 if (($action == 'edit' || $action == 'save') && $config['dl_edit_own_downloads'])
 {
@@ -42,10 +43,10 @@ else
 	$own_edit = false;
 }
 
-if (isset($own_edit) && $own_edit == true)
+if ($own_edit == true)
 {
 	$access_cat[0] = $cat_id;
-	$deny_modcp = 0;
+	$deny_modcp = false;
 }
 else
 {
@@ -56,15 +57,24 @@ else
 $cat_auth = array();
 $cat_auth = dl_auth::dl_cat_auth($cat_id);
 
-if (!$cat_id && !$cat_auth['auth_mod'] && !isset($index[$cat_id]['auth_mod']) && !$auth->acl_get('a_') && !$access_cat)
+if (sizeof($access_cat) || $auth->acl_get('a_'))
 {
-	$deny_modcp = true;
+	$deny_modcp = false;
+}
+
+if (isset($index[$cat_id]['auth_mod']) && $index[$cat_id]['auth_mod'])
+{
+	$deny_modcp = false;
+}
+
+if ($cat_id && $cat_auth['auth_mod'])
+{
+	$deny_modcp = false;
 }
 
 if ($deny_modcp)
 {
-	$view = '';
-	$action = '';
+	trigger_error($user->lang['DL_NO_PERMISSION']);
 }
 else
 {
@@ -515,6 +525,13 @@ else
 					$upload_file->move_file($config['dl_download_dir'] . $dl_path, false, false, CHMOD_ALL);
 					@chmod($upload_file->destination_file, 0777);
 
+					$error_count = sizeof($upload_file->error);
+					if ($error_count)
+					{
+						$upload_file->remove();
+						trigger_error(implode('<br />', $upload_file->error), E_USER_ERROR);
+					}
+
 					$hash_method = $config['dl_file_hash_algo'];
 					$func_hash = $hash_method . '_file';
 					$file_hash = $func_hash($phpbb_root_path . $config['dl_download_dir'] . $dl_path . $real_file_new);
@@ -699,32 +716,17 @@ else
 								$sql_fav_user
 								AND (" . $db->sql_in_set('user_id', explode(',', $processing_user)) . '
 									OR user_type = ' . USER_FOUNDER . ')';
-						$result = $db->sql_query($sql);
-		
-						include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-						$messenger = new messenger();
-		
-						while ($row = $db->sql_fetchrow($result))
-						{
-							$messenger->template($email_template, $row['user_lang']);
-		
-							$messenger->to($row['user_email'], $row['username']);
-		
-							$messenger->assign_vars(array(
-								'SITENAME'		=> $config['sitename'],
-								'BOARD_EMAIL'	=> $config['board_email_sig'],
-								'USERNAME'		=> htmlspecialchars_decode($row['username']),
-								'DOWNLOAD'		=> htmlspecialchars_decode($description),
-								'DESCRIPTION'	=> htmlspecialchars_decode($long_desc),
-								'CATEGORY'		=> htmlspecialchars_decode(str_replace("&nbsp;&nbsp;|___&nbsp;", '', $index[$cat_id]['cat_name'])),
-								'U_APPROVE'		=> generate_board_url() . "/downloads.$phpEx?view=modcp&action=approve",
-								'U_CATEGORY'	=> generate_board_url() . "/downloads.$phpEx?cat=$cat_id",
-							));
-		
-							$messenger->send(NOTIFY_EMAIL);
-						}
-		
-						$messenger->save_queue();
+
+						$mail_data = array(
+							'query'				=> $sql,
+							'email_template'	=> $email_template,
+							'description'		=> $description,
+							'long_desc'			=> $long_desc,
+							'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+							'cat_id'			=> $cat_id,
+						);
+
+						dl_email::send_dl_notify($mail_data);
 					}
 		
 					if (!$config['dl_disable_popup'] && !$disable_popup_notify)
@@ -1289,6 +1291,7 @@ else
 		
 				'ENCTYPE' => 'enctype="multipart/form-data"',
 		
+				'S_TODO_LINK_ONOFF'		=> ($config['dl_todo_onoff']) ? true : false,
 				'S_SELECT_VERSION'		=> $s_select_version,
 				'S_SELECT_VER_DEL'		=> $s_select_ver_del,
 				'S_CHECK_FREE'			=> $s_check_free,
@@ -1297,7 +1300,7 @@ else
 				'S_DOWNLOADS_ACTION'	=> append_sid("{$phpbb_root_path}downloads.$phpEx", "view=modcp"),
 				'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields))
 			);
-		
+
 			// Init and display the custom fields with the existing data
 			$cp->get_profile_fields($df_id);
 			$cp->generate_profile_fields($user->get_iso_lang_id());

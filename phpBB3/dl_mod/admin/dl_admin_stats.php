@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_admin_stats.php 15 2012/04/11 OXPUS
+* @file				dl_admin_stats.php 16 2013/09/26 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -21,12 +21,19 @@ if ( !defined('IN_PHPBB') )
 $sorting = (!$sorting) ? 'username' : $sorting;
 $sql_order_dir = ($sort_order === '') ? 'ASC' : $sort_order;
 
-$del_id = request_var('del_id', array(0));
-$del_guests = request_var('del_guests', 0);
+$del_id			= request_var('del_id', array(0));
+$del_stat		= request_var('del_stat', 0);
 
 if ($delete)
 {
-	if ($del_guests)
+	if ($del_stat == 1)
+	{
+		$sql = 'DELETE FROM ' . DL_STATS_TABLE;
+		$db->sql_query($sql);
+
+		add_log('admin', 'DL_LOG_STATS_ALL');
+	}
+	else if ($del_stat == 2)
 	{
 		$sql = 'DELETE FROM ' . DL_STATS_TABLE . '
 			WHERE user_id = ' . ANONYMOUS;

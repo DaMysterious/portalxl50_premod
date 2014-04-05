@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_details.php 45 2013/02/17 OXPUS
+* @file				dl_details.php 47 2013/05/23 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -129,14 +129,17 @@ if (!$config['dl_traffic_off'])
 		$cat_limit = DL_GUESTS_TRAFFICS;
 	}
 
-	$cat_traffic = $index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'];
-
-	if ($index[$cat_id]['cat_traffic'] && $cat_traffic > 0)
+	if (isset($index[$cat_id]['cat_traffic']) && isset($index[$cat_id]['cat_traffic_use']))
 	{
-		$cat_traffic = ($cat_traffic > $cat_overall_traffic && $cat_limit == true) ? $cat_overall_traffic : $cat_traffic;
-		$cat_traffic = dl_format::dl_size($cat_traffic);
+		$cat_traffic = $index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'];
 
-		$template->assign_var('S_CAT_TRAFFIC', true);
+		if ($index[$cat_id]['cat_traffic'] && $cat_traffic > 0)
+		{
+			$cat_traffic = ($cat_traffic > $cat_overall_traffic && $cat_limit == true) ? $cat_overall_traffic : $cat_traffic;
+			$cat_traffic = dl_format::dl_size($cat_traffic);
+	
+			$template->assign_var('S_CAT_TRAFFIC', true);
+		}
 	}
 }
 else
@@ -1016,7 +1019,7 @@ $template->assign_vars(array(
 	'U_EDIT'		=> append_sid("{$phpbb_root_path}downloads.$phpEx", "view=modcp&amp;action=edit&amp;df_id=$file_id&amp;cat_id=$cat_id"),
 	'U_EDIT_THUMBS'	=> append_sid("{$phpbb_root_path}downloads.$phpEx", "view=thumbs&amp;df_id=$file_id&amp;cat_id=$cat_id"),
 	'U_FAVORITE'	=> $u_favorite,
-	'U_DL_SEARCH'	=> '[ <a href="' . append_sid("{$phpbb_root_path}downloads.$phpEx", "view=search") . '">' . $user->lang['DL_SEARCH_DOWNLOAD'] . '</a> ]',
+	'U_DL_SEARCH'	=> append_sid("{$phpbb_root_path}downloads.$phpEx", "view=search"),
 ));
 
 if ($dl_files['dl_topic'])
@@ -1078,6 +1081,56 @@ for ($i = 0; $i < sizeof($detail_cat_names); $i++)
 			'CAT_ID'	=> $i,
 		));
 	}
+}
+
+/**
+* Find similar downloads
+*/	
+if ($config['dl_similar_dl'])
+{
+	$stopword_file = $phpbb_root_path . 'dl_mod/dl_stopwords.txt';
+	$stopwords = array();
+	
+	if (file_exists($stopword_file))
+	{
+		$stopwords = array_map('trim', file($stopword_file));
+	}
+	
+	$description = $dl_files['description'];
+	
+	if (sizeof($stopwords))
+	{
+		foreach ($stopwords as $key => $value)
+		{
+			$description = preg_replace('/\b' . $stopwords[$key] . '\b/iu', '', $description);
+		}
+	
+		$description = trim($description);
+	}
+	
+	$sql = 'SELECT id, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . "
+		WHERE MATCH (description) AGAINST ('" . $db->sql_escape($description) . "')
+			AND id <> " . (int) $df_id . '
+			AND cat = ' . (int) $cat_id . '
+		ORDER BY description';
+	$result = $db->sql_query_limit($sql, $config['dl_similar_limit']);
+	
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$similar_id		= $row['id'];
+		$similar_desc	= $row['description'];
+		$desc_uid		= $dl_files['desc_uid'];
+		$desc_bitfield	= $dl_files['desc_bitfield'];
+		$desc_flags		= $dl_files['desc_flags'];
+		$similar_desc	= generate_text_for_display($similar_desc, $desc_uid, $desc_bitfield, $desc_flags);
+	
+		$template->assign_block_vars('similar_dl', array(
+			'DOWNLOAD'		=> $similar_desc,
+			'U_DOWNLOAD'	=> append_sid("{$phpbb_root_path}downloads.$phpEx", "view=detail&amp;df_id=$similar_id"),
+		));
+	}
+	
+	$db->sql_freeresult($result);	
 }
 
 /*

@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_bug_tracker.php 21 2012/03/23 OXPUS
+* @file				dl_bug_tracker.php 22 2014/03/07 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -16,16 +16,6 @@
 if ( !defined('IN_PHPBB') )
 {
 	exit;
-}
-
-/*
-* initiate the messenger module
-*/
-include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-
-if (!isset($messenger))
-{
-	$messenger = new messenger();
 }
 
 /*
@@ -242,38 +232,16 @@ if ($action == 'status' && $fav_id && $allow_bug_mod)
 	// Send email to report author about new status if it will not be the current one
 	if ($report_author_id <> $user->data['user_id'])
 	{
-		$sql = 'SELECT user_email, user_lang, username FROM ' . USERS_TABLE . '
-			WHERE user_id = ' . (int) $report_author_id;
-		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
+		$mail_data = array(
+			'email_template'	=> 'dl_bt_status',
+			'report_author_id'	=> $report_author_id,
+			'new_status_text'	=> $new_status_text,
+			'report_title'		=> $report_title,
+			'report_status'		=> $report_status,
+			'fav_id'			=> $fav_id,
+		);
 
-		if ($new_status_text)
-		{
-			$status_text = sprintf($user->lang['DL_BUG_REPORT_EMAIL_STATUS'], $new_status_text);
-		}
-		else
-		{
-			$status_text = '';
-		}
-
-		$messenger->template('dl_bt_status', $row['user_lang']);
-
-		$messenger->to($row['user_email'], $row['username']);
-
-		$messenger->assign_vars(array(
-			'SITENAME'		=> $config['sitename'],
-			'BOARD_EMAIL'	=> $config['board_email_sig'],
-			'USERNAME'		=> $user->data['username'],
-			'REPORT_TITLE'	=> htmlspecialchars_decode($report_title),
-			'STATUS'		=> htmlspecialchars_decode($user->lang['DL_REPORT_STATUS'][$report_status]),
-			'STATUS_TEXT'	=> htmlspecialchars_decode($status_text),
-			'U_BUG_REPORT'	=> generate_board_url() . "/downloads.$phpEx?view=bug_tracker&action=detail&fav_id=$fav_id"
-		));
-
-		$messenger->send(NOTIFY_EMAIL);
-		$messenger->save_queue();
-
-		$db->sql_freeresult($result);
+		dl_email::send_bt_status($mail_data);
 	}
 
 	$action = 'detail';
@@ -324,19 +292,15 @@ if ($action == 'assign' && $df_id && $fav_id && $allow_bug_mod)
 	// Send email to new assigned user if it will not be the current one
 	if ($new_user_id <> $user->data['user_id'])
 	{
-		$messenger->template('dl_bt_assign', $report_assign_user_lang);
+		$mail_data = array(
+			'email_template'	=> 'dl_bt_assign',
+			'user_lang'			=> $report_assign_user_lang,
+			'user_mail'			=> $report_assign_user_email,
+			'username'			=> $report_assign_user,
+			'fav_id'			=> $fav_id,
+		);
 
-		$messenger->to($report_assign_user_email, $report_assign_user);
-
-		$messenger->assign_vars(array(
-			'SITENAME'		=> $config['sitename'],
-			'BOARD_EMAIL'	=> $config['board_email_sig'],
-			'USERNAME'		=> $user->data['username'],
-			'U_BUG_REPORT'	=> generate_board_url() . "/downloads.$phpEx?view=bug_tracker&action=detail&fav_id=$fav_id"
-		));
-
-		$messenger->send(NOTIFY_EMAIL);
-		$messenger->save_queue();
+		dl_email::send_bt_assign($mail_data);
 	}
 
 	$action = 'detail';

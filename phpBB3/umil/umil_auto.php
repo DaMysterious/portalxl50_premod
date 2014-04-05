@@ -63,14 +63,12 @@ if (isset($logo_img))
 	$template->assign_var('LOGO_IMG', $phpbb_root_path . $logo_img);
 }
 
-/* Check disabled to be able to install all Portal XL 5.0 Premod included mods unattended
 // Display a login box if they are not logged in
 if (!$user->data['is_registered'])
 {
 	login_box();
 }
-Check disabled to be able to install all Portal XL 5.0 Premod included mods unattended */
- 
+
 if (!class_exists('umil_frontend'))
 {
     if (!file_exists($phpbb_root_path . 'umil/umil_frontend.' . $phpEx))
@@ -84,14 +82,12 @@ if (!class_exists('umil_frontend'))
 $force_display_results = request_var('display_results', (defined('DEBUG') ? true : false));
 $umil = new umil_frontend($mod_name, true, $force_display_results);
 
-/* Check disabled to be able to install all Portal XL 5.0 Premod included mods unattended
 // Check after initiating UMIL.
 if ($user->data['user_type'] != USER_FOUNDER)
 {
 	trigger_error('FOUNDERS_ONLY');
 }
-Check disabled to be able to install all Portal XL 5.0 Premod included mods unattended */
- 
+
 // We will sort the actions to prevent issues from mod authors incorrectly listing the version numbers
 uksort($versions, 'version_compare');
 

@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_comments.php 19 2012/04/11 OXPUS
+* @file				dl_comments.php 20 2014/03/07 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -167,39 +167,21 @@ if ($action)
 		{
 			$processing_user = (dl_auth::cat_auth_comment_read($cat_id) == 3) ? 0 : dl_auth::dl_auth_users($cat_id, 'auth_mod');
 	
-			$email_template = 'downloads_approve_comment';
-	
 			$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
 				WHERE ' . $db->sql_in_set('user_id', explode(',', $processing_user)) . '
 					OR user_type = ' . USER_FOUNDER;
-			$result = $db->sql_query($sql);
-	
-			include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-			$messenger = new messenger();
-	
-			while ($row = $db->sql_fetchrow($result))
-			{
-				$messenger->template($email_template, $row['user_lang']);
-	
-				$messenger->to($row['user_email'], $row['username']);
-	
-				$messenger->assign_vars(array(
-					'SITENAME'		=> $config['sitename'],
-					'BOARD_EMAIL'	=> $config['board_email_sig'],
-					'CATEGORY'		=> htmlspecialchars_decode($index[$cat_id]['cat_name']),
-					'USERNAME'		=> htmlspecialchars_decode($row['username']),
-					'DOWNLOAD'		=> htmlspecialchars_decode($description),
-					'U_APPROVE'		=> generate_board_url() . "/downloads.$phpEx?view=modcp&action=capprove",
-					'U_DOWNLOAD'	=> generate_board_url() . "/downloads.$phpEx?view=comment&action=view&cat_id=$cat_id&df_id=$df_id",
-				));
-	
-				$messenger->send(NOTIFY_EMAIL);
-			}
-	
-			$db->sql_freeresult($result);
-	
-			$messenger->save_queue();
-	
+
+			$mail_data = array(
+				'query'				=> $sql,
+				'email_template'	=> 'downloads_approve_comment',
+				'cat_id'			=> $cat_id,
+				'df_id'				=> $df_id,
+				'description'		=> $description,
+				'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+			);						
+
+			dl_email::send_comment_notify($mail_data);
+
 			$approve_message	= '';
 			$return_parameters	= "view=comment&amp;action=view&amp;cat_id=$cat_id&amp;df_id=$df_id";
 			$return_text		= $user->lang['CLICK_RETURN_COMMENTS'];
@@ -268,37 +250,21 @@ if ($action)
 	
 				if ($send_notify)
 				{
-					$email_template = 'downloads_comment_notify';
-		
 					$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
 						WHERE user_id <> ' . (int) $user->data['user_id'] . ' 
 							AND user_allow_fav_download_email = 1 
 							AND user_allow_fav_comment_email = 1' . $sql_fav_user;
-					$result = $db->sql_query($sql);
-		
-					include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-					$messenger = new messenger();
-		
-					while ($row = $db->sql_fetchrow($result))
-					{
-						$messenger->template($email_template, $row['user_lang']);
-		
-						$messenger->to($row['user_email'], $row['username']);
-		
-						$messenger->assign_vars(array(
-							'SITENAME'		=> $config['sitename'],
-							'BOARD_EMAIL'	=> $config['board_email_sig'],
-							'USERNAME'		=> htmlspecialchars_decode($row['username']),
-							'DOWNLOAD'		=> htmlspecialchars_decode($description),
-							'CATEGORY'		=> htmlspecialchars_decode(str_replace("&nbsp;&nbsp;|___&nbsp;", '', $index[$cat_id]['cat_name'])),
-							'U_DOWNLOAD'	=> generate_board_url() . "/downloads.$phpEx?view=comment&action=view&cat_id=$cat_id&df_id=$df_id",
-						));
-		
-						$messenger->send(NOTIFY_EMAIL);
-					}
-		
-					$db->sql_freeresult($result);
-					$messenger->save_queue();
+
+					$mail_data = array(
+						'query'				=> $sql,
+						'email_template'	=> 'downloads_comment_notify',
+						'cat_id'			=> $cat_id,
+						'df_id'				=> $df_id,
+						'description'		=> $description,
+						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+					);						
+
+					dl_email::send_comment_notify($mail_data);
 				}
 			}
 	

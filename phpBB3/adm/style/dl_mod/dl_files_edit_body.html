@@ -126,6 +126,7 @@
 </fieldset>
 <!-- ENDIF -->
 
+<!-- IF S_USE_MOD_DESC or S_TODO_LINK_ONOFF -->
 <fieldset>
 
 	<legend>{L_DL_MOD_LIST_SHORT}</legend>
@@ -152,12 +153,19 @@
 		<dd>&nbsp;(<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_WARNING_EXPLAIN}')">?</a>)&nbsp;<textarea name="warning" rows="4" cols="75">{MOD_WARNING}</textarea></dd>
 	</dl>
 	<!-- ENDIF -->
+	<!-- IF S_TODO_LINK_ONOFF -->
 	<dl>
 		<dt><label>{L_DL_MOD_TODO}</label></dt>
 		<dd>&nbsp;(<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_TODO_EXPLAIN}')">?</a>)&nbsp;<textarea name="todo" rows="4" cols="75">{MOD_TODO}</textarea></dd>
 	</dl>
+	<!-- ENDIF -->
 
 </fieldset>
+<!-- ENDIF -->
+
+<!-- IF not S_TODO_LINK_ONOFF -->
+<div><input type="hidden" name="todo" value="{MOD_TODO}" /></div>
+<!-- ENDIF -->
 
 <!-- BEGIN download_fields -->
 <!-- IF download_fields.S_FIRST_ROW -->

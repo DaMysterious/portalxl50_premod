@@ -12,16 +12,9 @@ var ajax_page_charset = '{S_CONTENT_ENCODING}';
 <script type="text/javascript" src="{ROOT_PATH}dl_mod/js/ajax/ajax_dl.js"></script>
 <!-- ENDIF -->
 
-<div>
-	<div class="inner"><span class="corners-top"><span></span></span>
-
-	<ul class="linklist">
-	<!-- IF DL_MODCP --><li class="leftside"><span>[ {DL_MODCP} ]</span></li><!-- ENDIF -->
-		<li class="rightside"><!-- IF S_DL_UPLOAD -->{DL_UPLOAD}&nbsp;&bull;&nbsp;<!-- ENDIF -->{U_DL_SEARCH}&nbsp;&nbsp;</li>
-	</ul>
-
-	<span class="corners-bottom"><span></span></span></div>
-</div>
+<!-- IF DL_MODCP --><div><span>[ {DL_MODCP} ]</span></div><!-- ENDIF -->
+<br /><!-- IF S_DL_UPLOAD --><div class="buttons" style="float: left;"><div class="icon-dl-upload"><a href="{DL_UPLOAD}"><span></span>{L_DL_UPLOAD}</a></div></div><!-- ENDIF --><div class="buttons" style="float: right;"><div class="icon-dl-search"><a href="{U_DL_SEARCH}"><span></span>{L_DL_SEARCH_DOWNLOAD}</a></div></div>
+<br style="clear: both;" />
 
 <!-- IF S_CAT_TRAFFIC -->
 <div class="panel bg3">

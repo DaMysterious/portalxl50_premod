@@ -25,7 +25,7 @@ var ajax_page_charset = '{S_CONTENT_ENCODING}';
 </tr>
 <!-- ENDIF -->
 <tr>
-	<td align="right"><!-- IF S_FAV_BLOCK -->[ <a href="{U_FAVORITE}">{FAVORITE}</a>] &nbsp;&bull;&nbsp;<!-- ENDIF --><!-- IF S_EDIT_BUTTON -->[ <a href="{U_EDIT}">{EDIT_IMG}</a> ]&nbsp;&bull;&nbsp;<!-- ENDIF -->{U_DL_SEARCH}</td>
+	<td align="right"><!-- IF S_FAV_BLOCK -->[ <a href="{U_FAVORITE}">{FAVORITE}</a>] &nbsp;&bull;&nbsp;<!-- ENDIF --><!-- IF S_EDIT_BUTTON -->[ <a href="{U_EDIT}">{EDIT_IMG}</a> ]&nbsp;&bull;&nbsp;<!-- ENDIF -->[ <a href="{U_DL_SEARCH}">{L_DL_SEARCH_DOWNLOAD}</a> ]</td>
 </tr>
 </table>
 
@@ -307,6 +307,19 @@ var ajax_page_charset = '{S_CONTENT_ENCODING}';
 <!-- END hash_row -->
 </table>
 <!-- ENDIF -->
+
+<!-- BEGIN similar_dl -->
+<!-- IF similar_dl.S_FIRST_ROW -->
+<br /><h3>{L_DL_SIMILAR_DL}</h3>
+<table width="100%" cellpadding="3" cellspacing="1" border="0" class="forumline">
+<!-- ENDIF -->
+<tr>
+	<td><a href="{similar_dl.U_DOWNLOAD}">{similar_dl.DOWNLOAD}</a></td>
+</tr>
+<!-- IF similar_dl.S_LAST_ROW -->
+</table>
+<!-- ENDIF -->
+<!-- END similar_dl -->
 
 <br />
 

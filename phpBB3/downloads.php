@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				downloads.php 72 2013/02/17 OXPUS
+* @file				downloads.php 77 2014/03/07 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -73,6 +73,11 @@ $file_ver_del	= request_var('file_ver_del', array(0));
 $dl_mod_is_active = true;
 $dl_mod_link_show = true;
 $dl_mod_is_active_for_admins = false;
+
+if ($cat < 0)
+{
+	$cat = 0;
+}
 
 if (!$config['dl_active'])
 {
@@ -425,6 +430,11 @@ if ($view != 'load' && $view != 'broken')
 */
 if ($view == 'todo')
 {
+	if (!$config['dl_todo_onoff'])
+	{
+		trigger_error($user->lang['DL_NO_PERMISSION'], E_USER_WARNING);
+	}
+
 	$todo_access_ids = dl_main::full_index(0, 0, 0, 2);
 	$total_todo_ids = sizeof($todo_access_ids);
 
@@ -655,37 +665,18 @@ if ($view == 'broken' && $df_id && $cat_id && ($user->data['is_registered'] || (
 
 		$processing_user = dl_auth::dl_auth_users($cat_id, 'auth_mod');
 
-		$report_notify_text = request_var('report_notify_text', '');
+		$report_notify_text = utf8_normalize_nfc(request_var('report_notify_text', '', true));
 		$report_notify_text = ($report_notify_text) ? sprintf($user->lang['DL_REPORT_NOTIFY_TEXT'], $report_notify_text) : '';
 
-		$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
-			WHERE ' . $db->sql_in_set('user_id', explode(', ', $processing_user)) . '
-				OR user_type = ' . USER_FOUNDER . '
-			GROUP BY user_email, username, user_lang';
-		$result = $db->sql_query($sql);
+		$mail_data = array(
+			'email_template'		=> 'downloads_report_broken',
+			'processing_user'		=> $processing_user,
+			'report_notify_text'	=> $report_notify_text,
+			'cat_id'				=> $cat_id,
+			'df_id'					=> $df_id,
+		);
 
-		include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-		$messenger = new messenger();
-
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$username = (!$user->data['is_registered']) ? $user->lang['DL_A_GUEST'] : $user->data['username'];
-
-			$messenger->template('downloads_report_broken', $row['user_lang']);
-			$messenger->to($row['user_email'], $row['username']);
-
-			$messenger->assign_vars(array(
-				'BOARD_EMAIL' => $config['board_email_sig'],
-				'SITENAME' => $config['sitename'],
-				'REPORTER' => $username,
-				'REPORT_NOTIFY_TEXT' => $report_notify_text,
-				'USERNAME' => $row['username'],
-				'U_DOWNLOAD' => generate_board_url() . "/downloads.$phpEx?view=detail&cat_id=$cat_id&df_id=$df_id")
-			);
-
-			$messenger->send(NOTIFY_EMAIL);
-		}
-		$messenger->save_queue();
+		dl_email::send_report($mail_data);
 	}
 
 	redirect(append_sid("{$phpbb_root_path}downloads.$phpEx", "view=detail&df_id=$df_id&cat_id=$cat_id"));
@@ -961,7 +952,7 @@ if (in_array($view, $view_check))
 	dl_version::dl_mod_version('check');
 }
 
-if (!in_array($view, $view_check))
+if (!in_array($view, $view_check) || !isset($template->filename['body']))
 {
 	trigger_error('DL_NO_PERMISSION');
 }

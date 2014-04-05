@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				class_dl_status.php 4 2012/08/29 OXPUS
+* @file				class_dl_status.php 6 2013/05/23 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -122,12 +122,14 @@ class dl_status extends dl_mod
 		{
 			return array('status' => '', 'file_name' => '', 'auth_dl' => 0, 'file_detail' => '', 'status_detail' => $user->img('dl_red', $user->lang['DL_RED_EXPLAIN_ALT']));
 		}
+
 		$cat_id = $dl_file_p[$df_id]['cat'];
 		$cat_auth = array();
 		$cat_auth = dl_auth::dl_cat_auth($cat_id);
 		$index = array();
 		$index = dl_main::full_index($cat_id);
 		$status = '';
+		$status_detail = $user->img('dl_red', $user->lang['DL_RED_EXPLAIN_ALT']);
 		$file_name = '';
 		$auth_dl = 0;
 
@@ -177,6 +179,13 @@ class dl_status extends dl_mod
 			$auth_dl = 0;
 		}
 
+		if (!$user_logged_in && !$dl_file_p[$df_id]['extern'] && !$dl_file_p[$df_id]['free'])
+		{
+			$status_detail = $user->img('dl_red', $user->lang['DL_RED_EXPLAIN_ALT']);
+			$status = '<a href="' . append_sid(dl_init::phpbb_root_path() . "downloads" . dl_init::phpEx(), "view=detail&amp;df_id=$df_id") . '">' . $status_detail . '</a>';
+			$auth_dl = 0;
+		}
+
 		if ($dl_file_p[$df_id]['free'] == 1)
 		{
 			$status_detail = $user->img('dl_green', $user->lang['DL_GREEN_EXPLAIN']);
@@ -186,7 +195,7 @@ class dl_status extends dl_mod
 
 		if ($dl_file_p[$df_id]['free'] == 2)
 		{
-			if ($config['dl_icon_free_for_reg'] || (!$config['dl_icon_free_for_reg'] && $user_logged_in))
+			if (($config['dl_icon_free_for_reg'] && !$user_logged_in) || (!$config['dl_icon_free_for_reg'] && $user_logged_in))
 			{
 				$status_detail = $user->img('dl_white', $user->lang['DL_WHITE_EXPLAIN']);
 				$status = '<a href="' . append_sid(dl_init::phpbb_root_path() . "downloads" . dl_init::phpEx(), "view=detail&amp;df_id=$df_id") . '">' . $status_detail . '</a>';

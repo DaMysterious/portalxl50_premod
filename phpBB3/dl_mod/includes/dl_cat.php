@@ -2,7 +2,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_cat.php 6 2013/01/20 OXPUS
+* @file				dl_cat.php 7 2013/05/23 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -302,7 +302,14 @@ if ($cat)
 			$cat_limit = DL_GUESTS_TRAFFICS;
 		}
 
-		$cat_traffic = $index_cat[$cat]['cat_traffic'] - $index_cat[$cat]['cat_traffic_use'];
+		if (isset($index_cat[$cat]['cat_traffic_use']))
+		{
+			$cat_traffic = $index_cat[$cat]['cat_traffic'] - $index_cat[$cat]['cat_traffic_use'];
+		}
+		else
+		{
+			$cat_traffic = 0;
+		}
 
 		if ($index_cat[$cat]['cat_traffic'] && $cat_traffic > 0)
 		{
@@ -508,13 +515,13 @@ $template->assign_vars(array(
 	'CAT_TRAFFIC'	=> (isset($cat_traffic)) ? sprintf($user->lang['DL_CAT_TRAFFIC_MAIN'], $cat_traffic) : '',
 	'DL_MODCP'		=> (isset($total_downloads) && $total_downloads <> 0 && dl_auth::user_auth($cat, 'auth_mod')) ? sprintf($user->lang['DL_MODCP_MOD_AUTH'], '<a href="'.append_sid("{$phpbb_root_path}downloads.$phpEx", "view=modcp&amp;cat_id=$cat").'">', '</a>') : '',
 	'T_DL_CAT'		=> (isset($index[$cat]['cat_name']) && $cat) ? $index[$cat]['cat_name'] : $user->lang['DL_CAT_NAME'],
-	'DL_UPLOAD'		=> '[ <a href="'.append_sid("{$phpbb_root_path}downloads.$phpEx", "view=upload&amp;cat_id=$cat").'">' . $user->lang['DL_UPLOAD'] . '</a> ]',
+	'DL_UPLOAD'		=> append_sid("{$phpbb_root_path}downloads.$phpEx", "view=upload&amp;cat_id=$cat"),
 	'PHPEX'			=> $phpEx,
 
 	'S_ENABLE_RATE'	=> (isset($config['dl_enable_rate']) && $config['dl_enable_rate']) ? true : false,
 
 	'U_DOWNLOADS'	=> append_sid("{$phpbb_root_path}downloads.$phpEx", (($cat) ? 'cat=' . $cat : '')),
-	'U_DL_SEARCH'	=> (sizeof($index) || $cat) ? '[ <a href="' . append_sid("{$phpbb_root_path}downloads.$phpEx", "view=search") . '">' . $user->lang['DL_SEARCH_DOWNLOAD'] . '</a> ]' : '',
+	'U_DL_SEARCH'	=> (sizeof($index) || $cat) ? append_sid("{$phpbb_root_path}downloads.$phpEx", "view=search") : '',
 ));
 
 ?>

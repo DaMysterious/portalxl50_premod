@@ -2,7 +2,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_search.php 14 2012/04/11 OXPUS
+* @file				dl_search.php 16 2013/12/19 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -94,12 +94,12 @@ if ($search_keywords != '' && !$search_author)
 			}
 			else
 			{
-				$search_result = $row[$search_in_field];
+				$search_result = $row[$search_in_fields];
 			}
 
 			for ($i = 0; $i < sizeof($search_words); $i++)
 			{
-				if (@strpos(strtolower($search_result), $search_words[$i]) !== false)
+				if (preg_match_all('/' . preg_quote($search_words[$i], '/') . '/iu', $search_result))
 				{
 					$search_ids[] = $row['id'];
 					$search_counter++;

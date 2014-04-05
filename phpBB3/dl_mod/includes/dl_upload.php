@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_upload.php 39 2013/01/20 OXPUS
+* @file				dl_upload.php 42 2014/03/07 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -250,6 +250,13 @@ if ($submit)
 			$upload_file->move_file($config['dl_download_dir'] . $dl_path, false, false, CHMOD_ALL);
 			@chmod($upload_file->destination_file, 0777);
 
+			$error_count = sizeof($upload_file->error);
+			if ($error_count)
+			{
+				$upload_file->remove();
+				trigger_error(implode('<br />', $upload_file->error), E_USER_ERROR);
+			}
+
 			$hash_method = $config['dl_file_hash_algo'];
 			$func_hash = $hash_method . '_file';
 			$file_hash = $func_hash($phpbb_root_path . $config['dl_download_dir'] . $dl_path . $real_file);		
@@ -398,33 +405,16 @@ if ($submit)
 
 		if (!$config['dl_disable_email'] && !$send_notify)
 		{
-			$result = $db->sql_query($sql);
+			$mail_data = array(
+				'query'				=> $sql,
+				'email_template'	=> $email_template,
+				'description'		=> $description,
+				'long_desc'			=> $long_desc,
+				'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+				'cat_id'			=> $cat_id,
+			);
 
-			include($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-			$messenger = new messenger();
-
-			while ($row = $db->sql_fetchrow($result))
-			{
-				$messenger->template($email_template, $row['user_lang']);
-
-				$messenger->to($row['user_email'], $row['username']);
-
-				$messenger->assign_vars(array(
-					'SITENAME'		=> $config['sitename'],
-					'BOARD_EMAIL'	=> $config['board_email_sig'],
-					'USERNAME'		=> htmlspecialchars_decode($row['username']),
-					'DOWNLOAD'		=> htmlspecialchars_decode($description),
-					'DESCRIPTION'	=> htmlspecialchars_decode($long_desc),
-					'CATEGORY'		=> htmlspecialchars_decode(str_replace("&nbsp;&nbsp;|___&nbsp;", '', $index[$cat_id]['cat_name'])),
-					'U_APPROVE'		=> generate_board_url() . "/downloads.$phpEx?view=modcp&action=approve",
-					'U_CATEGORY'	=> generate_board_url() . "/downloads.$phpEx?cat=$cat_id",
-				));
-
-				$messenger->send(NOTIFY_EMAIL);
-			}
-
-			$db->sql_freeresult($result);
-			$messenger->save_queue();
+			dl_email::send_dl_notify($mail_data);
 		}
 
 		if (!$config['dl_disable_popup'] && !$disable_popup_notify && $approve)
@@ -622,6 +612,7 @@ $template->assign_vars(array(
 
 	'ENCTYPE'	=> 'enctype="multipart/form-data"',
 
+	'S_TODO_LINK_ONOFF'		=> ($config['dl_todo_onoff']) ? true : false,
 	'S_CHECK_FREE'			=> $s_check_free,
 	'S_TRAFFIC_RANGE'		=> $s_traffic_range,
 	'S_HACKLIST'			=> $s_hacklist,

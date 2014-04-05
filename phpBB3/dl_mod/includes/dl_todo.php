@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_todo.php 10 2012/03/23 OXPUS
+* @file				dl_todo.php 11 2013/06/11 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -16,6 +16,11 @@
 if ( !defined('IN_PHPBB') )
 {
 	exit;
+}
+
+if (!$config['dl_todo_onoff'])
+{
+	trigger_error($user->lang['DL_NO_PERMISSION'], E_USER_WARNING);
 }
 
 $todo	= utf8_normalize_nfc(request_var('todo', '', true));

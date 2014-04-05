@@ -148,7 +148,9 @@
 		<td class="row2" style="width: 68%"><input type="text" name="hack_dl_url" size="40" maxlength="255" value="{HACK_DL_URL}" /></td>
 	</tr>
 	<!-- ENDIF -->
+	<!-- IF S_ALLOW_EDIT_MOD_DESC and S_TODO_LINK_ONOFF-->
 	<tr><td class="row3" colspan="3" height="10"> </td></tr>
+	<!-- ENDIF -->
 	<!-- IF S_ALLOW_EDIT_MOD_DESC -->
 	<tr>
 		<td class="row1" style="width: 30%"><span class="gen">{L_DL_MOD_LIST}:</span></td>
@@ -176,13 +178,16 @@
 		<td class="row2" style="width: 68%"><textarea name="warning" rows="4" cols="100">{MOD_WARNING}</textarea></td>
 	</tr>
 	<!-- ENDIF -->
+	<!-- IF S_TODO_LINK_ONOFF -->
 	<tr>
 		<td class="row1" style="width: 30%" valign="top"><span class="gen">{L_DL_MOD_TODO}:</span></td>
 		<td class="row1" style="width: 2%" valign="top">&nbsp;[<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_TODO_EXPLAIN}')" class="nav">?</a>]&nbsp;</td>
 		<td class="row2" style="width: 68%"><textarea name="todo" rows="4" cols="100">{MOD_TODO}</textarea></td>
 	</tr>
+	<!-- ENDIF -->
 	<!-- BEGIN download_fields -->
 	<!-- IF download_fields.S_FIRST_ROW -->
+	<tr><td class="row3" colspan="3" height="10"> </td></tr>
 	<!-- ENDIF -->
 	<tr>
 		<td class="row1" style="width: 32%" colspan="2"><label<!-- IF download_fields.FIELD_ID --> for="{download_fields.FIELD_ID}"<!-- ENDIF -->>{download_fields.LANG_NAME}:<!-- IF download_fields.S_REQUIRED --> *<!-- ENDIF --></label>
@@ -201,6 +206,9 @@
 
 	{S_FORM_TOKEN}
 	{S_HIDDEN_FIELDS}
+	<!-- IF not S_TODO_LINK_ONOFF -->
+	<input type="hidden" name="todo" value="{MOD_TODO}" />
+	<!-- ENDIF -->
 
 	</form>
 

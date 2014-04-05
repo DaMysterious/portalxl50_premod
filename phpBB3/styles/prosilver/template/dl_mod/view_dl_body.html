@@ -37,7 +37,7 @@ var active_cat = 0;
 <!-- BEGIN downloads -->
 <h2>{downloads.STATUS} <label>{downloads.DESCRIPTION}{downloads.HACK_VERSION} {downloads.MINI_IMG}</label></h2>
 
-<div><ul class="linklist"><li class="rightside">{U_DL_SEARCH}</li></ul></div>
+<div class="buttons" style="float: right;"><div class="icon-dl-search"><a href="{U_DL_SEARCH}"><span></span>{L_DL_SEARCH_DOWNLOAD}</a></div></div>
 <!-- END downloads -->
 
 <!-- BEGIN category -->
@@ -322,17 +322,15 @@ var active_cat = 0;
 
 			<h3>{L_DL_MOD_FILE_HASH_TABLE}</h3>
 
-			<ul class="topiclist">
-			<li>
+			<table class="table1">
 				<!-- BEGIN hash_row -->
-				<dl class="row bg<!-- IF hash_row.S_ROW_COUNT is even -->1<!-- ELSE -->2<!-- ENDIF -->">
-					<dd class="lastpost"><label>{hash_row.DL_VERSION}</label></dd>
-					<dd class="lastpost">{hash_row.DL_FILE_NAME}</dd>
-					<dd>[{hash_row.DL_HASH_METHOD}] {hash_row.DL_HASH}</dd>
-				</dl>
+				<tr class="row<!-- IF hash_row.S_ROW_COUNT is even -->1<!-- ELSE -->2<!-- ENDIF -->">
+					<td><label>{hash_row.DL_VERSION}</label></td>
+					<td>{hash_row.DL_FILE_NAME}</td>
+					<td>[{hash_row.DL_HASH_METHOD}] {hash_row.DL_HASH}</td>
+				</tr>
 				<!-- END hash_row -->
-			</li>
-			</ul>
+			</table>
 
 		</div>
 
@@ -398,6 +396,15 @@ var active_cat = 0;
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 <!-- ENDIF -->
+
+<!-- BEGIN similar_dl -->
+<!-- IF similar_dl.S_FIRST_ROW -->
+<br /><h3>{L_DL_SIMILAR_DL}</h3>
+<!-- ENDIF -->
+<dl>
+	<dt><a href="{similar_dl.U_DOWNLOAD}">{similar_dl.DOWNLOAD}</a></dt>
+</dl>
+<!-- END similar_dl -->
 
 <br />
 

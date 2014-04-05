@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_admin_config.php 33 2013/01/20 OXPUS
+* @file				dl_admin_config.php 35 2013/06/11 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -392,6 +392,9 @@ $traffic_off_no = ( !$new['dl_traffic_off']) ? 'checked="checked"' : '';
 $todo_link_off_yes = ( $new['dl_todo_link_onoff']) ? 'checked="checked"' : '';
 $todo_link_off_no = ( !$new['dl_todo_link_onoff']) ? 'checked="checked"' : '';
 
+$todo_off_yes = ( $new['dl_todo_onoff']) ? 'checked="checked"' : '';
+$todo_off_no = ( !$new['dl_todo_onoff']) ? 'checked="checked"' : '';
+
 $u_config_off_yes = ( $new['dl_uconf_link_onoff']) ? 'checked="checked"' : '';
 $u_config_off_no = ( !$new['dl_uconf_link_onoff']) ? 'checked="checked"' : '';
 
@@ -666,6 +669,9 @@ $s_dl_hash_algo .= '<option value="sha1">SHA1</option>';
 $s_dl_hash_algo .= '</select>';
 $s_dl_hash_algo = str_replace('value="' . $new['dl_file_hash_algo'] . '">', 'value="' . $new['dl_file_hash_algo'] . '" selected="selected">', $s_dl_hash_algo);
 
+$dl_similar_yes = ($new['dl_similar_dl']) ? 'checked="checked"' : '';
+$dl_similar_no = (!$new['dl_similar_dl']) ? 'checked="checked"' : '';
+
 add_form_key('dl_adm_config');
 
 $template->assign_vars(array(
@@ -717,6 +723,7 @@ $template->assign_vars(array(
 	'L_DL_THUMBSNAIL_DIM_EXPLAIN'			=> 'DL_THUMB_MAX_DIM',
 	'L_DL_THUMBSNAIL_SIZE_EXPLAIN'			=> 'DL_THUMB_MAX_SIZE',
 	'L_DL_TODO_LINK_EXPLAIN'				=> 'DL_TODO_LINK',
+	'L_DL_USE_TODOLIST_EXPLAIN'				=> 'DL_USE_TODOLIST',
 	'L_DL_TOPIC_DETAILS_EXPLAIN'			=> 'DL_TOPIC_DETAILS',
 	'L_DL_TOPIC_FORUM_EXPLAIN'				=> 'DL_TOPIC_FORUM',
 	'L_DL_TOPIC_TEXT_EXPLAIN'				=> 'DL_TOPIC_TEXT',
@@ -752,6 +759,8 @@ $template->assign_vars(array(
 	'L_SHOW_REAL_FILETIME_EXPLAIN'			=> 'DL_SHOW_REAL_FILETIME',
 	'L_SORT_PREFORM_EXPLAIN'				=> 'DL_SORT_PREFORM',
 	'L_USER_TRAFFIC_ONCE_EXPLAIN'			=> 'DL_USER_TRAFFIC_ONCE',
+	'L_SIMILAR_DL_OPTION'					=> 'DL_SIMILAR_DL',
+	'L_SIMILAR_DL_LIMIT'					=> 'DL_SIMILAR_DL_LIMIT',
 
 	'DELAY_AUTO_TRAFFIC'	=> $new['dl_delay_auto_traffic'],
 	'DELAY_POST_TRAFFIC'	=> $new['dl_delay_post_traffic'],
@@ -773,6 +782,7 @@ $template->assign_vars(array(
 	'DL_TOPIC_USER'			=> $new['dl_topic_user'],
 	'LATEST_COMMENTS'		=> $new['dl_latest_comments'],
 	'SHORTEN_EXTERN_LINKS'	=> $new['dl_shorten_extern_links'],
+	'SIMILAR_DL_LIMIT'		=> $new['dl_similar_limit'],
 
 	'DISABLE_EMAIL_NO'					=> $disable_email_no,
 	'DISABLE_EMAIL_YES'					=> $disable_email_yes,
@@ -838,6 +848,9 @@ $template->assign_vars(array(
 	'REPORT_BROCKEN_LOCK_YES'			=> $report_broken_lock_yes,
 	'REPORT_BROCKEN_MESSAGE_NO'			=> $report_broken_message_no,
 	'REPORT_BROCKEN_MESSAGE_YES'		=> $report_broken_message_yes,
+	'SIMILAR_DL_YES'					=> $dl_similar_yes,
+	'SIMILAR_DL_NO'						=> $dl_similar_no,
+	'SHOW_FOOTER_LEGEND_NO'				=> $show_footer_legend_no,
 	'SHOW_FOOTER_LEGEND_NO'				=> $show_footer_legend_no,
 	'SHOW_FOOTER_LEGEND_YES'			=> $show_footer_legend_yes,
 	'SHOW_FOOTER_STATS_NO'				=> $show_footer_stat_no,
@@ -851,6 +864,8 @@ $template->assign_vars(array(
 	'THUMB_YSIZE' 						=> $thumbs_ysize,
 	'TODO_LINK_OFF_NO'					=> $todo_link_off_no,
 	'TODO_LINK_OFF_YES'					=> $todo_link_off_yes,
+	'TODO_OFF_NO'						=> $todo_off_no,
+	'TODO_OFF_YES'						=> $todo_off_yes,
 	'TRAFFIC_OFF_NO'					=> $traffic_off_no,
 	'TRAFFIC_OFF_YES'					=> $traffic_off_yes,
 	'U_CONFIG_OFF_NO'					=> $u_config_off_no,
