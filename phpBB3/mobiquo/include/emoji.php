@@ -730,6 +730,8 @@
 			"\xf0\x9f\x91\x8c" => '[OK HAND SIGN]',
 			"\xf0\x9f\x91\x8e" => '[THUMBS DOWN SIGN]',
 			"\xf0\x9f\x91\x90" => '[OPEN HANDS SIGN]',
+			"\xf0\x9f\x98\xac" => '[GRIMACING FACE]',
+			"\xf0\x9f\x98\xae" => '[FACE WITH OPEN MOUTH]',
 		),		
 	);
 

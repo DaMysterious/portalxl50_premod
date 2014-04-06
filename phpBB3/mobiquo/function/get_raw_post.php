@@ -88,6 +88,7 @@ function get_raw_post_func($xmlrpc_params)
     if (isset($post_data['post_text']))
     {
         $message_parser->message = &$post_data['post_text'];
+        
         unset($post_data['post_text']);
     }
 
@@ -96,17 +97,86 @@ function get_raw_post_func($xmlrpc_params)
     {
         $message_parser->bbcode_uid = $post_data['bbcode_uid'];
     }
-    
+
     // Decode text for message display
     $message_parser->decode_message($post_data['bbcode_uid']);
     $post_data['post_text'] = $message_parser->message;
+    
+	// Always check if the submitted attachment data is valid and belongs to the user.
+	// Further down (especially in submit_post()) we do not check this again.
+	$message_parser->get_submitted_attachment_data($post_data['poster_id']);
+	
+	if ($post_data['post_attachment'])
+	{
+		// Do not change to SELECT *
+		$sql = 'SELECT attach_id, is_orphan, attach_comment, real_filename
+			FROM ' . ATTACHMENTS_TABLE . "
+			WHERE post_msg_id = $post_id
+				AND in_message = 0
+				AND is_orphan = 0
+			ORDER BY filetime DESC";
+		$result = $db->sql_query($sql);
+		$message_parser->attachment_data = array_merge($message_parser->attachment_data, $db->sql_fetchrowset($result));
+		$db->sql_freeresult($result);
+	}
+	// Attachment Preview
+	
+	if (sizeof($message_parser->attachment_data))
+	{
+		$update_count = array();
+		$attachment_data = $attachments = $message_parser->attachment_data;		
+		parse_attachments($forum_id, $post_data['post_text'], $attachment_data, $update_count,true);
+		
+		foreach($attachment_data as $i => $attachment)
+		{
+			$attach_id = $attachments[$i]['attach_id'];
+			$thumbnail_url = '';
+			$new_attachment_data = array();
+			$sql = 'SELECT *
+				FROM ' . ATTACHMENTS_TABLE . '
+				WHERE attach_id = '.$attach_id;
+			$result = $db->sql_query($sql);
+	
+			$row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+			$attachments[$i] = $row;
+			
+			if(preg_match('/<img src=\".*?\/(download\/file\.php\?id=(\d+).*?)\"/is', $attachment, $matches))
+			{
+				$file_url = basic_clean($phpbb_home.$matches[1]);
 
+				if ($config['img_create_thumbnail'] && $attachments[$i]['thumbnail'])
+				{
+					$thumbnail_url = preg_replace('/file\.php\?/is', 'file.php?t=1&', $file_url);
+				}
+				
+				unset($matches);
+			}
+			if (strpos($attachments[$i]['mimetype'], 'image') === 0)
+                $content_type = 'image';
+            else 
+            	$content_type = $attachments[$i]['extension'];
+			$xmlrpc_attachment = new xmlrpcval(array(
+				'filename'      => new xmlrpcval($attachments[$i]['real_filename'], 'base64'),
+				'filesize'      => new xmlrpcval($attachments[$i]['filesize'], 'int'),
+				'content_type'  => new xmlrpcval($content_type),
+				'thumbnail_url' => new xmlrpcval($thumbnail_url),
+				'url'           => new xmlrpcval($file_url),
+				'attachment_id' => new xmlrpcval($attach_id),
+			), 'struct');
+			$attachments_arr[] = $xmlrpc_attachment;
+			unset($xmlrpc_attachment);
+		}    
+	}
+	$group_id = base64_encode(serialize($message_parser->attachment_data));
     return new xmlrpcresp(
         new xmlrpcval(array(
                 'post_id'       => new xmlrpcval($post_id),
                 'post_title'    => new xmlrpcval(html_entity_decode(strip_tags($post_data['post_subject'])), 'base64'),
                 'post_content'  => new xmlrpcval(html_entity_decode($post_data['post_text']), 'base64'),
-            ),
+            	'attachments'   => new xmlrpcval($attachments_arr, 'array'),
+        		'group_id'      => new xmlrpcval($group_id),
+        	),
             'struct'
         )
     );

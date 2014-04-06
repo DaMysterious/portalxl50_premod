@@ -1,9 +1,10 @@
 <?php
 defined('IN_MOBIQUO') or exit;
+$totalAlert = 0;
 $alertData = getAlert();
 function getAlert()
 {
-	global $db,$request_params,$user, $config ,$table_prefix;
+	global $db,$request_params,$user, $config ,$table_prefix,$totalAlert;
 	$push_table = $table_prefix . "tapatalk_push_data";
 	$lang = array(
 		'reply_to_you' => "%s replied to \"%s\"",
@@ -24,12 +25,37 @@ function getAlert()
     $startNum = ($page-1) * $per_page; 
     $sql = 'DELETE FROM ' . $push_table . ' WHERE create_time < ' . $preMonthtime . ' and user_id = ' . $user->data['user_id'];
     $db->sql_query($sql);
-    $sql_select = "SELECT p.*,u.user_id as author_id FROM ". $push_table . " p 
-    LEFT JOIN " . USERS_TABLE . " u ON p.author = u.username WHERE p.user_id = " . $user->data['user_id'] . "
+    $sql_select = "SELECT p.* FROM ". $push_table . " p 
+    WHERE p.user_id = " . $user->data['user_id'] . "
     ORDER BY create_time DESC LIMIT $startNum,$per_page ";
     $query = $db->sql_query($sql_select);
+    
+    $total_sql = "SELECT count(*) as total FROM ". $push_table . " p 
+    WHERE p.user_id = " . $user->data['user_id'];
+    $query_total = $db->sql_query($total_sql);
+    $total_data = $db->sql_fetchrow($query_total);
+    $totalAlert = $total_data['total'];
+    
+    $author_arr = array();
     while($data = $db->sql_fetchrow($query))
-    {
+    {  	
+    	if(!isset($author_arr[$data['user_id']]))
+    	{
+    		$author_clean = $db->sql_escape(utf8_clean_string($data['author']));   		
+    		$sql_author = "SELECT u.user_id as author_id, u.user_avatar, u.user_avatar_type FROM " . USERS_TABLE ." AS u WHERE username_clean = '$author_clean'";
+    		$query_author = $db->sql_query($sql_author);
+    		$author_data = $db->sql_fetchrow($query_author);
+    		if(!empty($author_data))
+    		{
+    			$author_arr[$data['user_id']] = $author_data;
+    		}
+    		else 
+    		{
+    			$totalAlert = $totalAlert-1;
+    			continue;
+    		}
+    	}
+    	$data = array_merge($author_arr[$data['user_id']],$data);
     	switch ($data['data_type'])
 		{
 			case 'sub':
@@ -49,6 +75,7 @@ function getAlert()
 				$data['message'] = sprintf($lang['pm_to_you'],$data['author'],$data['title']);
 				break;
 		}
+		$data['icon_url'] = get_user_avatar_url($data['user_avatar'], $data['user_avatar_type']);
     	$alertData[] = $data; 
     }
     return $alertData;

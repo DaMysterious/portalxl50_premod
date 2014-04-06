@@ -150,12 +150,22 @@ function get_topic_func($xmlrpc_params)
     $store_reverse = false;
     
     $unread_sticky_num = $unread_announce_count = 0;
+    
+    //get subscribe users
+    $user_watch_row = array();
+    $sql = 'SELECT * FROM ' . TOPICS_WATCH_TABLE .' WHERE user_id = ' . $user->data['user_id'];
+    $result = $db->sql_query($sql);
+    while ($row = $db->sql_fetchrow($result))
+    {
+    	$user_watch_row[$row['topic_id']] = $row['notify_status'];
+    }
+    $db->sql_freeresult($result);
+    
     if (!empty($topic_type)) // get top 20 announce/sticky topics only if need
     {
-        $sql = 'SELECT t.*, u.user_avatar, u.user_avatar_type, tw.notify_status, bm.topic_id as bookmarked
+        $sql = 'SELECT t.*, u.user_avatar, u.user_avatar_type,bm.topic_id as bookmarked
                 FROM ' . TOPICS_TABLE . ' t
                     LEFT JOIN ' . USERS_TABLE . ' u ON (t.topic_poster = u.user_id)
-                    LEFT JOIN ' . TOPICS_WATCH_TABLE . ' tw ON (tw.user_id = ' . $user->data['user_id'] . ' AND t.topic_id = tw.topic_id) 
                     LEFT JOIN ' . BOOKMARKS_TABLE . ' bm ON (bm.user_id = ' . $user->data['user_id'] . ' AND t.topic_id = bm.topic_id) 
                 WHERE t.forum_id IN (' . $forum_id . ', 0)
                 AND t.topic_type IN (' . $topic_type . ') ' .
@@ -178,6 +188,10 @@ function get_topic_func($xmlrpc_params)
             $result = $db->sql_query($sql);
             while ($row = $db->sql_fetchrow($result))
             {
+	        if(empty($forum_id) || empty($row['topic_id']))
+	        {
+			continue;
+		}
                 $topic_tracking = get_complete_topic_tracking($forum_id, $row['topic_id']);
                 if (isset($topic_tracking[$row['topic_id']]) && $topic_tracking[$row['topic_id']] < $row['topic_last_post_time'])
                     $unread_sticky_num++;
@@ -194,6 +208,10 @@ function get_topic_func($xmlrpc_params)
             $result = $db->sql_query($sql);
             while ($row = $db->sql_fetchrow($result))
             {
+	    	if(empty($forum_id) || empty($row['topic_id']))
+		{
+	            continue;
+		}
                 $topic_tracking = get_complete_topic_tracking($forum_id, $row['topic_id']);
                 if (isset($topic_tracking[$row['topic_id']]) && $topic_tracking[$row['topic_id']] < $row['topic_last_post_time'])
                     $unread_announce_count++;
@@ -226,10 +244,9 @@ function get_topic_func($xmlrpc_params)
             $start = max(0, $topics_count - $sql_limit - $start);
         }
         
-        $sql = 'SELECT t.*, u.user_avatar, u.user_avatar_type, tw.notify_status, bm.topic_id as bookmarked
+        $sql = 'SELECT t.*, u.user_avatar, u.user_avatar_type,bm.topic_id as bookmarked
                 FROM ' . TOPICS_TABLE . ' t
                     LEFT JOIN ' . USERS_TABLE . ' u ON (t.topic_poster = u.user_id)
-                    LEFT JOIN ' . TOPICS_WATCH_TABLE . ' tw ON (tw.user_id = ' . $user->data['user_id'] . ' AND t.topic_id = tw.topic_id) 
                     LEFT JOIN ' . BOOKMARKS_TABLE . ' bm ON (bm.user_id = ' . $user->data['user_id'] . ' AND t.topic_id = bm.topic_id) 
                 WHERE t.forum_id = ' . $forum_id.'
                 AND t.topic_type = ' . POST_NORMAL . ' ' .
@@ -263,6 +280,10 @@ function get_topic_func($xmlrpc_params)
         $new_post = false;
         if ($user->data['user_id'] != ANONYMOUS)
         {
+	    if(empty($forum_id) || empty($row['topic_id']))
+	    {
+	        continue;
+	    }
             $topic_tracking = get_complete_topic_tracking($forum_id, $row['topic_id']);
             $new_post = $topic_tracking[$row['topic_id']] < $row['topic_last_post_time'] ? true : false;
         }
@@ -274,12 +295,18 @@ function get_topic_func($xmlrpc_params)
 //        foreach($topic_users[$topic_id] as $posterid){
 //            $icon_urls[] = new xmlrpcval($user_avatar[$posterid], 'string');
 //        }
+		$can_rename = ($user->data['is_registered'] && ($auth->acl_get('m_edit', $forum_id) || (
+                $user->data['user_id'] == $row['topic_poster'] &&
+                $auth->acl_get('f_edit', $forum_id) &&
+                //!$item['post_edit_locked'] &&
+                ($row['topic_time'] > time() - ($config['edit_time'] * 60) || !$config['edit_time'])
+            )));
         
         $xmlrpc_topic = new xmlrpcval(array(
             'forum_id'          => new xmlrpcval($forum_id),
             'topic_id'          => new xmlrpcval($row['topic_moved_id'] ? $row['topic_moved_id'] : $row['topic_id']),
             'topic_title'       => new xmlrpcval(html_entity_decode(strip_tags(censor_text($row['topic_title'])), ENT_QUOTES, 'UTF-8'), 'base64'),
-            'topic_author_id'   => new xmlrpcval($row['topic_first_post_id']),
+            'topic_author_id'   => new xmlrpcval($row['topic_first_post_id'],'string'),
             'topic_author_name' => new xmlrpcval(html_entity_decode($row['topic_first_poster_name']), 'base64'),
             'last_reply_time'   => new xmlrpcval(mobiquo_iso8601_encode($row['topic_last_post_time']),'dateTime.iso8601'),
             'timestamp'         => new xmlrpcval($row['topic_last_post_time'], 'string'),
@@ -294,13 +321,15 @@ function get_topic_func($xmlrpc_params)
             'can_delete'        => new xmlrpcval($auth->acl_get('m_delete', $forum_id), 'boolean'),
             'can_move'          => new xmlrpcval($auth->acl_get('m_move', $forum_id), 'boolean'),
             'can_subscribe'     => new xmlrpcval(($config['email_enable'] || $config['jab_enable']) && $config['allow_topic_notify'] && $user->data['is_registered'], 'boolean'), 
-            'is_subscribed'     => new xmlrpcval(!is_null($row['notify_status']) && $row['notify_status'] !== '' ? true : false, 'boolean'),
+            'is_subscribed'     => new xmlrpcval(isset($user_watch_row[$topic_id]) ? true : false, 'boolean'),
             'can_close'         => new xmlrpcval($auth->acl_get('m_lock', $forum_id) || ($auth->acl_get('f_user_lock', $forum_id) && $user->data['is_registered'] && $user->data['user_id'] == $row['topic_poster']), 'boolean'),
             'is_closed'         => new xmlrpcval($row['topic_status'] == ITEM_LOCKED, 'boolean'),
             'can_stick'         => new xmlrpcval($allow_change_type && $auth->acl_get('f_sticky', $forum_id), 'boolean'),
             'is_sticky'         => new xmlrpcval($row['topic_type'] == POST_STICKY, 'boolean'),
             'can_approve'       => new xmlrpcval($auth->acl_get('m_approve', $forum_id) && !$row['topic_approved'], 'boolean'),
             'is_approved'       => new xmlrpcval($row['topic_approved'] ? true : false, 'boolean'),
+        	'can_rename'        => new xmlrpcval($can_rename, 'boolean'),
+			'can_merge'         => new xmlrpcval($auth->acl_get('m_merge', $forum_id),'boolean'),
         ), 'struct');
         
         $topic_list[] = $xmlrpc_topic;

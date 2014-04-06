@@ -1,5 +1,6 @@
 <?php
 defined('IN_MOBIQUO') or exit;
+
 require($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 require('include/mobi_ucp_profile.php');
 $user->session_begin();

@@ -10,7 +10,7 @@ defined('IN_MOBIQUO') or exit;
 function reply_post_func($xmlrpc_params)
 {
     global $db, $auth, $user, $config, $phpbb_root_path, $phpEx, $mobiquo_config, $phpbb_home;
-    require_once 'include/emoji.php';
+    require_once $phpbb_root_path . $config['tapatalkdir'].'/include/emoji.php';
     $user->setup('posting');
     if (!$user->data['is_registered']) trigger_error('LOGIN_EXPLAIN_POST');
     
@@ -21,6 +21,7 @@ function reply_post_func($xmlrpc_params)
     $topic_id   = isset($params[1]) ? intval($params[1]) : '';
     $subject    = isset($params[2]) ? $params[2] : '';
     $text_body  = isset($params[3]) ? $params[3] : '';
+   
     $text_body = emoji_unified_to_names($text_body);
     
     $attach_list = isset($params[4]) ? $params[4] : array();
@@ -329,7 +330,16 @@ function reply_post_func($xmlrpc_params)
     chdir('../');
     $phpbb_root_path_tmp = $phpbb_root_path;
     $phpbb_root_path = './';
-    $redirect_url = submit_post('reply', $post_data['post_subject'], $post_data['username'], $post_data['topic_type'], $poll, $data, $update_message);
+    preg_match_all('/quote=&quot;(.*?)&quot;/is', $data['message'],$quote_matches);
+    if(!empty($quote_matches['1']))
+    {
+    	$mode = 'quote';
+    }
+    else 
+    {
+    	$mode = 'reply';
+    }
+    $redirect_url = submit_post($mode, $post_data['post_subject'], $post_data['username'], $post_data['topic_type'], $poll, $data, $update_message);
     chdir($cwd);
     $phpbb_root_path = $phpbb_root_path_tmp;
     
@@ -350,33 +360,8 @@ function reply_post_func($xmlrpc_params)
         
         // get new post_content
         $message = censor_text($data['message']);
-        $quote_wrote_string = $user->lang['WROTE'];
-        $message = str_replace('[/quote:'.$data['bbcode_uid'].']', '[/quote]', $message);
-        $message = preg_replace('/\[quote(?:=&quot;(.*?)&quot;)?:'.$data['bbcode_uid'].'\]/ise', "'[quote]' . ('$1' ? '$1' . ' $quote_wrote_string:\n' : '\n')", $message);
-        $blocks = preg_split('/(\[\/?quote\])/i', $message, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        $quote_level = 0;
-        $message = '';
-            
-        foreach($blocks as $block)
-        {
-            if ($block == '[quote]') {
-                if ($quote_level == 0) $message .= $block;
-                $quote_level++;
-            } else if ($block == '[/quote]') {
-                if ($quote_level <= 1) $message .= $block;
-                if ($quote_level >= 1) $quote_level--;            
-            } else {
-                if ($quote_level <= 1) $message .= $block;
-            }
-        }
-        
-        $message = preg_replace('/\[(youtube|video|googlevideo|gvideo):'.$data['bbcode_uid'].'\](.*?)\[\/\1:'.$data['bbcode_uid'].'\]/sie', "video_bbcode_format('$1', '$2')", $message);
-        $message = preg_replace('/\[(BBvideo)[\d, ]+:'.$row['bbcode_uid'].'\](.*?)\[\/\1:'.$row['bbcode_uid'].'\]/si', "[url=$2]YouTube Video[/url]", $message);
-        $message = preg_replace('/\[(spoil|spoiler):'.$row['bbcode_uid'].'\](.*?)\[\/\1:'.$row['bbcode_uid'].'\]/si', "[spoiler]$2[/spoiler]", $message);
-        $message = preg_replace('/\[b:'.$data['bbcode_uid'].'\](.*?)\[\/b:'.$data['bbcode_uid'].'\]/si', '[b]$1[/b]', $message);
-        $message = preg_replace('/\[i:'.$data['bbcode_uid'].'\](.*?)\[\/i:'.$data['bbcode_uid'].'\]/si', '[i]$1[/i]', $message);
-        $message = preg_replace('/\[u:'.$data['bbcode_uid'].'\](.*?)\[\/u:'.$data['bbcode_uid'].'\]/si', '[u]$1[/u]', $message);
-        $message = preg_replace('/\[color=#(\w{6}):'.$data['bbcode_uid'].'\](.*?)\[\/color:'.$data['bbcode_uid'].'\]/si', '[color=#$1]$2[/color]', $message);
+        // tapatalk add for bbcode pretreatment
+    	$message = process_bbcode($data['message'], $data['bbcode_uid']);
         
         // Second parse bbcode here
         if ($data['bbcode_bitfield'])

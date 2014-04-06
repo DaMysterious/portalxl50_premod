@@ -7,7 +7,14 @@
 */
 define('IN_PHPBB', true);
 define('IN_MOBIQUO', true);
-define('MOBIQUO_DEBUG', 0);
+if (isset($_SERVER['HTTP_DEBUG']) && $_SERVER['HTTP_DEBUG'] && file_exists('debug.on'))
+{
+    define('MOBIQUO_DEBUG', -1);
+    @ini_set('display_errors', 1);
+}
+else
+    define('MOBIQUO_DEBUG', 0);
+
 error_reporting(MOBIQUO_DEBUG);
 ob_start();
 include('./include/xmlrpc.inc');
@@ -19,12 +26,17 @@ define('PHPBB_MSG_HANDLER', 'xmlrpc_error_handler');
 register_shutdown_function('xmlrpc_shutdown');
 include($phpbb_root_path . 'common.' . $phpEx);
 
+if(isset($_POST['session']) && isset($_POST['api_key']) && isset($_POST['subject']) && isset($_POST['body']) || isset($_POST['email_target']))
+{
+    include("./function/invitation.php");
+}
 error_reporting(MOBIQUO_DEBUG);
 if (MOBIQUO_DEBUG == 0) ob_start();
 
 require('./server_define.php');
 require('./env_setting.php');
 require('./xmlrpcresp.php');
+
 if ($request_file && isset($server_param[$request_method]))
 {
     if (strpos($request_file, 'm_') === 0)

@@ -8,9 +8,9 @@
 
 defined('IN_MOBIQUO') or exit;
 
-include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
-require($phpbb_root_path . 'includes/functions_module.' . $phpEx);
-include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
+require_once($phpbb_root_path . 'includes/functions_module.' . $phpEx);
+require_once($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
 
 
 $user->setup('mcp');
@@ -36,7 +36,7 @@ if (!$user->data['is_registered'])
     trigger_error('LOGIN_EXPLAIN_MCP');
 }
 
-$quickmod = (isset($_REQUEST['quickmod'])) ? true : false;
+$quickmod = (!empty($_REQUEST['quickmod'])) ? true : false;
 $action = request_var('action', '');
 $action_ary = request_var('action', array('' => 0));
 
@@ -166,7 +166,10 @@ if ($forum_id)
 
 // Instantiate module system and generate list of available modules
 $module->list_modules('mcp');
-
+if($action == 'move')
+{
+	$_POST['move_leave_shadow'] = true;
+}
 if ($quickmod)
 {
     $mode = 'quickmod';
@@ -271,6 +274,117 @@ function m_get_moderate_topic_func()
     return new xmlrpcresp($response);
 }
 
+function m_rename_topic_func($xmlrpc_params) 
+{
+	global $db, $auth, $user, $config, $template, $cache, $phpEx, $phpbb_root_path, $phpbb_home;
+    
+    $user->setup('posting');
+    
+    include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+
+    $params = php_xmlrpc_decode($xmlrpc_params);
+
+    $submit     = true;
+    $preview    = false;
+    $refresh    = false;
+    $mode       = 'edit';
+
+    // get topic information from parameters
+    $topic_id        = intval($params[0]);
+    $post_title     = $db->sql_escape(trim($params[1]));
+    //$post_content   = $params[2];
+    $GLOBALS['return_html'] = isset($params[3]) ? $params[3] : false;
+	
+    $sql = 'SELECT * FROM ' . POSTS_TABLE .' WHERE topic_id = ' . $topic_id .' ORDER BY post_time ASC';
+    $result = $db->sql_query_limit($sql, 1);
+    $first_post_data = $db->sql_fetchrow($result);
+    $post_id = $first_post_data['post_id'];
+    if(empty($post_id))
+    {
+    	trigger_error('NO_POST');
+    }
+    $post_data = array();
+
+    $sql = 'SELECT p.*, t.*, f.*, u.username
+            FROM ' . POSTS_TABLE . ' p
+                LEFT JOIN ' . TOPICS_TABLE . ' t ON (p.topic_id = t.topic_id) 
+                LEFT JOIN ' . FORUMS_TABLE . ' f ON (t.forum_id = f.forum_id OR (t.topic_type = ' . POST_GLOBAL . ' AND f.forum_type = ' . FORUM_POST . '))
+                LEFT JOIN ' . USERS_TABLE  . ' u ON (p.poster_id = u.user_id)' . "
+            WHERE p.post_id = $post_id";
+
+    $result = $db->sql_query_limit($sql, 1);
+    $post_data = $db->sql_fetchrow($result);
+    $db->sql_freeresult($result);
+
+    if (!$post_data) trigger_error('NO_POST');
+    
+    // Use post_row values in favor of submitted ones...
+    $forum_id = (int) $post_data['forum_id'];
+    $topic_id = (int) $post_data['topic_id'];
+    $post_id  = (int) $post_id;
+
+    // Need to login to passworded forum first?
+    if ($post_data['forum_password'] && !check_forum_password($forum_id))
+    {
+        trigger_error('LOGIN_FORUM');
+    }
+
+    // Is the user able to read within this forum?
+    if (!$auth->acl_get('f_read', $forum_id))
+    {
+        trigger_error('USER_CANNOT_READ');
+    }
+
+    // Permission to do the action asked?
+    if (!($user->data['is_registered'] && $auth->acl_gets('f_edit', 'm_edit', $forum_id)))
+    {
+        trigger_error('USER_CANNOT_EDIT');
+    }
+
+    // Forum/Topic locked?
+    if (($post_data['forum_status'] == ITEM_LOCKED || (isset($post_data['topic_status']) && $post_data['topic_status'] == ITEM_LOCKED)) && !$auth->acl_get('m_edit', $forum_id))
+    {
+        trigger_error(($post_data['forum_status'] == ITEM_LOCKED) ? 'FORUM_LOCKED' : 'TOPIC_LOCKED');
+    }
+
+    // Can we edit this post ... if we're a moderator with rights then always yes
+    // else it depends on editing times, lock status and if we're the correct user
+    if (!$auth->acl_get('m_edit', $forum_id))
+    {
+        if ($user->data['user_id'] != $post_data['poster_id'])
+        {
+            trigger_error('USER_CANNOT_EDIT');
+        }
+
+        if (!($post_data['post_time'] > time() - ($config['edit_time'] * 60) || !$config['edit_time']))
+        {
+            trigger_error('CANNOT_EDIT_TIME');
+        }
+
+        if ($post_data['post_edit_locked'])
+        {
+            trigger_error('CANNOT_EDIT_POST_LOCKED');
+        }
+    }
+	if(empty($post_title))
+	{
+		trigger_error('EMPTY_SUBJECT');
+	}
+    $sql = "UPDATE " .TOPICS_TABLE ." SET topic_title = '$post_title' WHERE topic_id = '$topic_id' ";
+    $db->sql_query($sql);
+    $sql = "UPDATE " . POSTS_TABLE . " SET post_subject = '$post_title' WHERE post_id = '$post_id'";
+    $db->sql_query($sql);
+
+    
+    $xmlrpc_reply_topic = new xmlrpcval(array(
+        'result'    => new xmlrpcval(true, 'boolean'),
+        'is_login_mod'  => new xmlrpcval(true, 'boolean'),
+        'result_text'   => new xmlrpcval("", 'base64')
+    ), 'struct');
+
+    return new xmlrpcresp($xmlrpc_reply_topic);
+}
+
 function m_get_moderate_post_func()
 {
     global $template, $auth, $user;
@@ -322,7 +436,7 @@ function m_get_moderate_post_func()
 
 function m_get_report_post_func()
 {
-    global $template, $auth, $user;
+    global $template, $auth, $user, $db;
     
     $posts = array();
     foreach($template->_tpldata['postrow'] as $postinfo) {
@@ -336,6 +450,19 @@ function m_get_report_post_func()
     {
         $post = $posts[$postinfo['POST_ID']];
         
+        if(preg_match('/r=(\d)/is', $postinfo['U_VIEW_DETAILS'], $matches))
+        {
+	        $report_id = intval($matches[1]);
+	        $sql = 'SELECT r.report_text, rr.reason_title, rr.reason_description
+						FROM ' . REPORTS_TABLE . ' r, ' . REPORTS_REASONS_TABLE . ' rr
+						WHERE r.report_id = ' . $report_id .'
+							AND rr.reason_id = r.reason_id			
+						ORDER BY report_closed ASC';
+			$result = $db->sql_query_limit($sql, 1);
+			$report = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+        }
+
         if (empty($post['forum_id']))
         {
             $user->setup('viewforum');
@@ -355,6 +482,9 @@ function m_get_report_post_func()
             'post_time'         => new xmlrpcval(mobiquo_iso8601_encode($post['post_time']), 'dateTime.iso8601'),
             'short_content'     => new xmlrpcval(process_short_content($post['post_text']), 'base64'),
             'can_delete'        => new xmlrpcval($auth->acl_get('m_delete', $forum_id), 'boolean'),
+        	'reported_by_id'    => new xmlrpcval($postinfo['REPORT_ID']),
+        	'reported_by_name'  => new xmlrpcval($postinfo['REPORTER'], 'base64'),
+        	'report_reason'     => isset($report['reason_description']) ? new xmlrpcval($report['reason_description'], 'base64') : '',
         ), 'struct');
     }
     

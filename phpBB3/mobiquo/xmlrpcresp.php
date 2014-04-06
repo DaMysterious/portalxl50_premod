@@ -11,7 +11,7 @@ defined('IN_MOBIQUO') or exit;
 function get_thread_func()
 {
     global $template, $user, $auth, $phpbb_home, $config, $attachment_by_id, $forum_id, $topic_id, $support_post_thanks, $topic_data, $total_posts, $can_subscribe;
-    /*
+    
     generate_forum_nav($topic_data);
     $navgation_arr = $template->_tpldata['navlinks'];
 	if(is_array($navgation_arr) && count($navgation_arr) > 0)
@@ -19,22 +19,26 @@ function get_thread_func()
         global $app_version;
         foreach ($navgation_arr as $navigation)
         {
-        	$forum_id = $navigation['FORUM_ID'];
+        	$nav_forum_id = $navigation['FORUM_ID'];
         	$sub_only = false;
         	if($navigation['S_IS_POST'] != FORUM_POST)
         	{
         		$sub_only = true;
         	}
+        	if(empty($nav_forum_id))
+        	{
+        		continue;
+        	}
             $breadcrumb[] = new xmlrpcval(array(
-                'forum_id'    => new xmlrpcval($forum_id, 'string'),
+                'forum_id'    => new xmlrpcval($nav_forum_id, 'string'),
                 'forum_name'  => new xmlrpcval($navigation['FORUM_NAME'], 'base64'),
 				'sub_only' => new xmlrpcval($sub_only, 'boolean'),
                 ), 'struct');
         }
     }
-    */
+    
     $post_list = array();
-    foreach($template->_tpldata['postrow'] as $row)
+    foreach($template->_tpldata['postrow'] as $key => $row)
     {
         $attachments = array();
         if ($row['S_HAS_ATTACHMENTS'])
@@ -99,20 +103,33 @@ function get_thread_func()
             'can_ban'           => new xmlrpcval($can_ban_user, 'boolean'),
             'allow_smilies'     => new xmlrpcval($row['enable_smilies'] ? true : false, 'boolean'),
         );
-
+		
         if ($support_post_thanks)
         {
-            if ((!$row['S_FIRST_POST_ONLY'] || (!$start && $row['S_ROW_COUNT']))
-                && !$row['S_GLOBAL_POST_THANKS']
+            if (
+                !$row['S_GLOBAL_POST_THANKS']
                 && !$row['S_POST_ANONYMOUS']
                 && $auth->acl_get('f_thanks', $forum_id)
                 && $user->data['user_id'] != ANONYMOUS
                 && $user->data['user_id'] != $row['POSTER_ID']
                 && !$row['S_ALREADY_THANKED']
             ) {
-                $xmlrpc_post['can_thank'] = new xmlrpcval(true, 'boolean');
+            	if(!empty($config['thanks_only_first_post']) && $key == 0)
+            	{
+            		
+            		$xmlrpc_post['can_thank'] = new xmlrpcval(true, 'boolean');
+            	}
+            	else if(!empty($config['thanks_only_first_post']))
+            	{
+            		$xmlrpc_post['can_thank'] = new xmlrpcval(false, 'boolean');
+            	}
+            	else 
+            	{
+            		$xmlrpc_post['can_thank'] = new xmlrpcval(true, 'boolean');
+            	}
+            	
+                
             }
-
             if ($row['THANKS'] && $row['THANKS_POSTLIST_VIEW'] && !$row['S_POST_ANONYMOUS'] && empty($user->data['is_bot']))
             {
                 global $thankers;
@@ -130,7 +147,8 @@ function get_thread_func()
                         $thank_list[] = new xmlrpcval(array(
                             'userid'    => new xmlrpcval($thanker['user_id'], 'string'),
                             'username'  => new xmlrpcval(basic_clean($thanker['username']), 'base64'),
-							'user_type' => check_return_user_type($thanker['username']),
+							'user_type' => check_return_user_type($thanker['user_id']),
+							//'tapatalk'  => new xmlrpcval(is_tapatalk_user($row['user_id']), 'string'),
                         ), 'struct');
 
                         $count++;
@@ -157,7 +175,13 @@ function get_thread_func()
     $max_attachment = ($auth->acl_get('a_') || $auth->acl_get('m_', $forum_id)) ? 99 : ($allowed ? $config['max_attachments'] : 0);
     $max_png_size = ($auth->acl_get('a_') || $auth->acl_get('m_', $forum_id)) ? 10485760 : ($allowed ? ($config['max_filesize'] === '0' ? 10485760 : $config['max_filesize']) : 0);
     $max_jpg_size = ($auth->acl_get('a_') || $auth->acl_get('m_', $forum_id)) ? 10485760 : ($allowed ? ($config['max_filesize'] === '0' ? 10485760 : $config['max_filesize']) : 0);
-    
+    $can_rename = ($user->data['is_registered'] && ($auth->acl_get('m_edit', $forum_id) || (
+                $user->data['user_id'] == $row['topic_poster'] &&
+                $auth->acl_get('f_edit', $forum_id) &&
+                //!$item['post_edit_locked'] &&
+                ($topic_data['topic_time'] > time() - ($config['edit_time'] * 60) || !$config['edit_time'])
+            )));
+    $is_poll = !empty($topic_data['poll_title']) ? true : false;
     $result = array(
         'total_post_num' => new xmlrpcval($total_posts, 'int'),
         'forum_id'       => new xmlrpcval($forum_id),
@@ -167,10 +191,13 @@ function get_thread_func()
         'position'       => new xmlrpcval($topic_data['prev_posts'] + 1, 'int'),
 
         'can_reply'      => new xmlrpcval($auth->acl_get('f_reply', $forum_id) && $topic_data['forum_status'] != ITEM_LOCKED && $topic_data['topic_status'] != ITEM_LOCKED, 'boolean'),
+    	'can_report'     => new xmlrpcval(true,'boolean'),
         'can_upload'     => new xmlrpcval($allowed, 'boolean'),
         'can_delete'     => new xmlrpcval($auth->acl_get('m_delete', $forum_id), 'boolean'),
         'can_move'       => new xmlrpcval($auth->acl_get('m_move', $forum_id), 'boolean'),
         'can_subscribe'  => new xmlrpcval($can_subscribe, 'boolean'),
+        'can_rename'     => new xmlrpcval($can_rename, 'boolean'),
+		'can_merge'      => new xmlrpcval($auth->acl_get('m_merge', $forum_id),'boolean'),
         'is_subscribed'  => new xmlrpcval(isset($topic_data['notify_status']) && !is_null($topic_data['notify_status']) && $topic_data['notify_status'] !== '' ? true : false, 'boolean'),
         'can_stick'      => new xmlrpcval($allow_change_type && $auth->acl_get('f_sticky', $forum_id), 'boolean'),
         'is_sticky'      => new xmlrpcval($topic_data['topic_type'] == POST_STICKY, 'boolean'),
@@ -178,7 +205,8 @@ function get_thread_func()
         'is_closed'      => new xmlrpcval($topic_data['topic_status'] == ITEM_LOCKED, 'boolean'),
         'can_approve'    => new xmlrpcval($auth->acl_get('m_approve', $forum_id) && !$topic_data['topic_approved'], 'boolean'),
         'is_approved'    => new xmlrpcval($topic_data['topic_approved'] ? true : false, 'boolean'),
-
+		'is_poll'    => new xmlrpcval($is_poll, 'boolean'),
+    
         'max_attachment' => new xmlrpcval($max_attachment, 'int'),
         'max_png_size'   => new xmlrpcval($max_png_size, 'int'),
         'max_jpg_size'   => new xmlrpcval($max_jpg_size, 'int'),
@@ -223,11 +251,11 @@ function search_func()
         {
             $lastpost = $item['lastpost'];
             $isbanned = $lastpost['isbanned'];
-            
             $return_item = array(
                 'forum_id'              => new xmlrpcval($item['FORUM_ID'], 'string'),
                 'forum_name'            => new xmlrpcval(basic_clean($item['FORUM_TITLE']), 'base64'),
                 'topic_id'              => new xmlrpcval($item['TOPIC_ID'], 'string'),
+            	//'post_id'               => new xmlrpcval($item['LAST_POST_ID'], 'string'),
                 'topic_title'           => new xmlrpcval(basic_clean($item['TOPIC_TITLE']), 'base64'),
                 
                 'post_author_id'        => new xmlrpcval($item['LAST_POSTER_ID'], 'string'),
@@ -239,7 +267,7 @@ function search_func()
                 
                 // compatibility data
                 'last_reply_author_id'  => new xmlrpcval($item['LAST_POSTER_ID'], 'string'),
-              'last_reply_author_name'  => new xmlrpcval(basic_clean($item['LAST_POST_AUTHOR']), 'base64'),
+              	'last_reply_author_name'  => new xmlrpcval(basic_clean($item['LAST_POST_AUTHOR']), 'base64'),
                 'last_reply_time'       => new xmlrpcval($item['LAST_POST_TIME'], 'dateTime.iso8601'),
                 
                 'reply_number'          => new xmlrpcval($item['TOPIC_REPLIES'], 'int'),
@@ -262,9 +290,10 @@ function search_func()
                 ($item['FIRST_POST_TIMESTAMP'] > time() - ($config['edit_time'] * 60) || !$config['edit_time'])
             )));
             
+			$can_merge = $auth->acl_get('m_merge', $forum_id);
+
             $can_subscribe = ($config['email_enable'] || $config['jab_enable']) && $config['allow_topic_notify'] && $user->data['is_registered'];
             $is_subscribed = in_array($item['TOPIC_ID'], $subscribed_tids);
-            
             if ($can_close)     $return_item['can_close']     = new xmlrpcval(true, 'boolean');
             if ($can_delete)    $return_item['can_delete']    = new xmlrpcval(true, 'boolean');
             if ($can_stick)     $return_item['can_stick']     = new xmlrpcval(true, 'boolean');
@@ -273,6 +302,7 @@ function search_func()
             if ($can_rename)    $return_item['can_rename']    = new xmlrpcval(true, 'boolean');
             if ($can_ban)       $return_item['can_ban']       = new xmlrpcval(true, 'boolean');
           //if ($is_ban)        $return_item['is_ban']        = new xmlrpcval(true, 'boolean');
+			if ($can_merge)     $return_item['can_merge']     = new xmlrpcval(true, 'boolean');
             if ($can_subscribe) $return_item['can_subscribe'] = new xmlrpcval(true, 'boolean');
             if ($is_subscribed) $return_item['is_subscribed'] = new xmlrpcval(true, 'boolean');
             if ($item['S_UNREAD_TOPIC'])    $return_item['new_post']  = new xmlrpcval(true, 'boolean');
@@ -341,26 +371,29 @@ function search_func()
 }
 function get_alert_func()
 {
-	global $alertData;
+	global $alertData,$totalAlert;
 	$return_array = array();
 	foreach ($alertData as $data)
 	{
-		$return_array[] =new xmlrpcval(array(
+		$xmlrpc_row = array(
 			'user_id' => new xmlrpcval($data['author_id'],'string'),
 			'username' => new xmlrpcval($data['author'],'base64'),
-			'user_type' => check_return_user_type($data['author']),
+			//'tapatalk'      => new xmlrpcval(is_tapatalk_user($data['author_id']), 'string'),
+			'user_type' => check_return_user_type($data['author_id']),
 			'icon_url' => new xmlrpcval($data['icon_url'],'string'),
 			'message' => new xmlrpcval($data['message'],'base64'),
 			'timestamp' => new xmlrpcval($data['create_time'],'string'),
 			'content_type' => new xmlrpcval($data['data_type'],'string'),
 			'content_id' => new xmlrpcval($data['data_id'],'string'),
-			)
-			,'struct'
 		);
+		if(!empty($data['topic_id']))
+		{
+			$xmlrpc_row['topic_id'] = new xmlrpcval($data['topic_id'],'string');
+		}
+		$return_array[] =new xmlrpcval($xmlrpc_row,'struct');
 	}
-	
 	$result = new xmlrpcval(array(
-		'total' => new xmlrpcval(count($alertData),'int'),
+		'total' => new xmlrpcval($totalAlert,'int'),
 		'items' => new xmlrpcval($return_array,'array'),
 	),'struct');
 	return $result;
@@ -400,6 +433,16 @@ function xmlresptrue()
 {
     $result = new xmlrpcval(array(
         'result'        => new xmlrpcval(true, 'boolean'),
+        'result_text'   => new xmlrpcval('', 'base64')
+    ), 'struct');
+    
+    return new xmlrpcresp($result);
+}
+
+function xmlrespfalse()
+{
+    $result = new xmlrpcval(array(
+        'result'        => new xmlrpcval(false, 'boolean'),
         'result_text'   => new xmlrpcval('', 'base64')
     ), 'struct');
     

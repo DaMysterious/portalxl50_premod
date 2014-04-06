@@ -7,7 +7,7 @@ class mobi_ucp_register
 	
 	public function main()
 	{	
-		global $config, $db, $user, $auth, $template, $phpbb_root_path, $phpEx;
+		global $config, $db, $user, $auth, $template, $phpbb_root_path, $phpEx,$mobiquo_config;
 		//
 		if ($config['require_activation'] == USER_ACTIVATION_DISABLE)
 		{
@@ -20,17 +20,29 @@ class mobi_ucp_register
 
 		
 		$cp = new custom_profile();
-
+		$verify_result = false;
 		$error = $cp_data = $cp_error = array();
 		$is_dst = $config['board_dst'];
 		$timezone = $config['board_timezone'];
-		$email = tt_register_verify($_POST['tt_token'], $_POST['tt_code']);
-		if(empty($email))
+		$email = request_var('email', '');
+		if(isset($_POST['tt_token']) && isset($_POST['tt_code']))
 		{
-			$this->result = false;
-			$this->result_text = 'Verify false , please confirm that you have registered Tapatalk ID or this forum has enable register function in tapatalk. ';
-			return ;
+			if($mobiquo_config['sso_register'] == 0 )
+			{
+				trigger_error('UCP_REGISTER_DISABLE');
+			}
+			$result = tt_register_verify($_POST['tt_token'], $_POST['tt_code']);   	
+			if($result->result && !empty($result->email) && (empty($email) || strtolower($email == strtolower($result->email))))
+			{
+				$verify_result = $result->result;
+				$email = $result->email;
+			}
+			else if(!$result->result && empty($email) && !empty($result->email))
+			{
+				$email = $result->email;
+			}						
 		}
+		
 		$data = array(
 			'username'			=> utf8_normalize_nfc(request_var('username', '', true)),
 			'new_password'		=> request_var('new_password', '', true),
@@ -66,7 +78,14 @@ class mobi_ucp_register
 				$error[] = sprintf($user->lang['IP_BLACKLISTED'], $user->ip, $dnsbl[1]);
 			}
 		}
-
+		
+		if(!$verify_result)
+	    {
+	    	if(isset($config['tapatalk_spam_status']) && ($config['tapatalk_spam_status'] === '1' || $config['tapatalk_spam_status'] === '3') && tt_is_spam($email,$user->ip))
+	    	{
+				trigger_error("Your email address matches that of a known spammer and therefore you cannot register here. If you feel this is an error, please contact the administrator or try again later.");
+	    	}
+	    }
 		// validate custom profile fields
 		$cp->submit_cp_field('register', $user->get_iso_lang_id(), $cp_data, $error);
 
@@ -103,16 +122,24 @@ class mobi_ucp_register
 			}
 
 			$group_id = $row['group_id'];
-			if (($config['require_activation'] == USER_ACTIVATION_SELF ||
-					$config['require_activation'] == USER_ACTIVATION_ADMIN) && $config['email_enable'])
+			if($config['require_activation'] == USER_ACTIVATION_NONE)
+			{
+				$group_id = isset($config['tapatalk_register_group']) ? $config['tapatalk_register_group'] : $row['group_id'];
+				$user_type = USER_NORMAL;
+				$user_actkey = '';
+				$user_inactive_reason = 0;
+				$user_inactive_time = 0;
+			}
+			if (($config['require_activation'] != USER_ACTIVATION_NONE) && !$verify_result)
 			{
 				$user_actkey = gen_rand_string(mt_rand(6, 10));
 				$user_type = USER_INACTIVE;
 				$user_inactive_reason = INACTIVE_REGISTER;
 				$user_inactive_time = time();
 			}
-			else 
+			if($verify_result && ($config['require_activation'] != USER_ACTIVATION_ADMIN))
 			{
+				$group_id = isset($config['tapatalk_register_group']) ? $config['tapatalk_register_group'] : $row['group_id'];
 				$user_type = USER_NORMAL;
 				$user_actkey = '';
 				$user_inactive_reason = 0;
@@ -147,6 +174,20 @@ class mobi_ucp_register
 			if ($user_id === false)
 			{
 				trigger_error('NO_USER', E_USER_ERROR);
+			}
+			if(!$verify_result)
+			{
+				$this->sendEmail($data, $user_id, $user_actkey);
+				switch ($config['require_activation'])
+				{
+					case USER_ACTIVATION_SELF:
+						$this->result_text = $user->lang['UCP_EMAIL_ACTIVATE'];
+					break;
+		
+					case USER_ACTIVATION_ADMIN:
+						$this->result_text = $user->lang['UCP_ADMIN_ACTIVATE'];
+					break;
+				}
 			}
 			$this->result = true;
 		}
@@ -188,9 +229,19 @@ class mobi_ucp_register
 			$messenger->template($email_template, $data['lang']);
 
 			$messenger->to($data['email'], $data['username']);
-
-			$messenger->anti_abuse_headers($config, $user);
-
+			
+			if(!method_exists($messenger, 'anti_abuse_headers'))
+			{
+				$messenger->headers('X-AntiAbuse: Board servername - ' . $config['server_name']);
+				$messenger->headers('X-AntiAbuse: User_id - ' . $user->data['user_id']);
+				$messenger->headers('X-AntiAbuse: Username - ' . $user->data['username']);
+				$messenger->headers('X-AntiAbuse: User IP - ' . $user->ip);
+			}
+			else 
+			{
+				$messenger->anti_abuse_headers($config, $user);
+			}
+			
 			$messenger->assign_vars(array(
 				'WELCOME_MSG'	=> htmlspecialchars_decode(sprintf($user->lang['WELCOME_SUBJECT'], $config['sitename'])),
 				'USERNAME'		=> htmlspecialchars_decode($data['username']),

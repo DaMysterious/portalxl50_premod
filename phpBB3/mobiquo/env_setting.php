@@ -1,11 +1,13 @@
 <?php
 
 defined('IN_MOBIQUO') or exit;
-$mobiquo_config['guest_okay'] = isset($config['mobiquo_guest_okay']) ? $config['mobiquo_guest_okay'] : $mobiquo_config['guest_okay'];
-$mobiquo_config['reg_url'] = isset($config['mobiquo_reg_url']) ? $config['mobiquo_reg_url'] : $mobiquo_config['reg_url'];
+if (isset($_SERVER['HTTP_APP_VAR'] ) && $_SERVER['HTTP_APP_VAR'])
+    @header('App-Var: '.$_SERVER['HTTP_APP_VAR']);
+$mobiquo_config['reg_url'] = !empty($config['mobiquo_reg_url']) ? $config['mobiquo_reg_url'] : $mobiquo_config['reg_url'];
 $mobiquo_config['hide_forum_id'] = !empty($config['mobiquo_hide_forum_id']) ? explode(',', $config['mobiquo_hide_forum_id']) : $mobiquo_config['hide_forum_id'];
-$mobiquo_config['push'] = isset($config['mobiquo_push']) ? $config['mobiquo_push'] : $mobiquo_config['push'];
-if(!isset($config['tapatalkdir'])) $config['tapatalkdir'] = 'mobiquo';
+
+if(empty($config['tapatalkdir'])) $config['tapatalkdir'] = 'mobiquo';
+
 mobi_parse_requrest();
 
 if (in_array($request_method, array('logout_user', 'get_config')))
@@ -13,6 +15,7 @@ if (in_array($request_method, array('logout_user', 'get_config')))
     define('IN_CHECK_BAN', 1);
 }
 
+$_SERVER['QUERY_STRING'] = 'method='.$request_method.'&amp;params='.intval($request_params[0]);
 include('./include/user.class.php');
 $user = new tapa_user;
 $user->session_begin();
@@ -28,7 +31,6 @@ if ($user->data['user_new_privmsg'])
     include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
     place_pm_into_folder($global_privmsgs_rules);
 }
-
 $request_file = $request_method;
 switch ($request_method)
 {
@@ -76,14 +78,14 @@ switch ($request_method)
         isset($search_filter['userid']) && $_GET['author_id'] = $search_filter['userid'];
         isset($search_filter['forumid']) && $_GET['fid'] = array($search_filter['forumid']);
         
-        if (isset($search_filter['threadid']))
+        if (!empty($search_filter['threadid']))
         {
             $_GET['t'] = $search_filter['threadid'];
             $_GET['sf'] = 'msgonly';
             $_GET['showresults'] = 'posts';
         }
         
-        if (isset($search_filter['searchtime']) && is_numeric($search_filter['searchtime']))
+        if (!empty($search_filter['searchtime']) && is_numeric($search_filter['searchtime']))
         {
             $_GET['st'] = $search_filter['searchtime']/86400;
         }
@@ -95,7 +97,15 @@ switch ($request_method)
         
         if (isset($search_filter['not_in']) && is_array($search_filter['not_in']))
         {
-            $_GET['exclude'] = array_map('intval', $search_filter['not_in']);
+        	//add for tapatalk
+			foreach ($search_filter['not_in'] as $key=>$value)
+			{
+				if($value != 0)
+				{
+					$ex_fid_ary[]=$search_filter['not_in'][$key];
+				}
+			}
+            $_GET['exclude'] = array_map('intval', $ex_fid_ary);
         }
         break;
     case 'search_topic':
@@ -260,11 +270,26 @@ switch ($request_method)
         $_GET['p'] = $request_params[0];
         break;
     case 'm_move_topic':
-        $_GET['t'] = $request_params[0];
-        $_GET['quickmod'] = 1;
+    	$_GET['quickmod'] = 1;
+    	$topic_ids = explode(',', $request_params[0]);
+    	if(count($topic_ids) > 1)
+    	{
+    		$_POST['topic_id_list'] = $topic_ids;
+    		$_GET['t'] = $topic_ids[0];
+    		$_GET['quickmod'] = 0;
+    	}
+    	else 
+    	{
+    		$_GET['t'] = $request_params[0];
+    		$_POST['topic_id_list'] = array($request_params[0]);
+    	}              
         $_GET['confirm_key'] = $user->data['user_last_confirm_key'] = $user->session_id;
         $_POST['to_forum_id'] = $request_params[1];
-        $_POST['topic_id_list'] = array($request_params[0]);
+        if(isset($request_params[2]))
+        {
+        	$_POST['move_leave_shadow'] = $request_params[2];
+        }
+        //$_POST['topic_id_list'] = array($request_params[0]);
         $_POST['action'] = 'move';
         $_POST['user_id'] = $user->data['user_id'];
         $_POST['confirm_uid'] = $user->data['user_id'];
@@ -280,22 +305,44 @@ switch ($request_method)
             $_POST['action'] = 'merge_posts';
             $_POST['to_topic_id'] = $request_params[1];
         }
-        $_GET['p'] = $request_params[0];
+        $post_ids = explode(',', $request_params[0]);
+    	if(count($post_ids) > 1)
+    	{
+    		$_POST['post_id_list'] = $post_ids;
+    		$_GET['p'] = $post_ids[0];
+    	}
+    	else 
+    	{
+    		$_GET['p'] = $request_params[0];
+    		$_POST['post_id_list'] = array($request_params[0]);
+    	}  
+        //$_GET['p'] = $request_params[0];
         $_GET['confirm_key'] = $user->data['user_last_confirm_key'] = $user->session_id;
         $_POST['i'] = 'main';
         $_POST['mode'] = 'topic_view';
-        $_POST['post_id_list'] = array($request_params[0]);
+        //$_POST['post_id_list'] = array($request_params[0]);
         $_POST['user_id'] = $user->data['user_id'];
         $_POST['confirm_uid'] = $user->data['user_id'];
         $_POST['sess'] = $user->session_id;
         $_POST['confirm'] = $user->lang['YES'];
         break;
     case 'm_merge_topic':
-        $_GET['t'] = $request_params[0];
+    	$topic_ids = explode(',', $request_params[0]);
+    	if(count($topic_ids) > 1)
+    	{
+    		$_POST['topic_id_list'] = $topic_ids;
+    		$_GET['t'] = $topic_ids[0];
+    	}
+    	else 
+    	{
+    		$_GET['t'] = $request_params[0];
+    		$_POST['topic_id_list'] = array($request_params[0]);
+    	}  
+        //$_GET['t'] = $request_params[0];
         $_GET['confirm_key'] = $user->data['user_last_confirm_key'] = $user->session_id;
         $_POST['i'] = 'main';
         $_POST['mode'] = 'forum_view';
-        $_POST['topic_id_list'] = array($request_params[0]);
+        //$_POST['topic_id_list'] = array($request_params[0]);
         $_POST['action'] = 'merge_topics';
         $_POST['to_topic_id'] = $request_params[1];
         $_POST['user_id'] = $user->data['user_id'];
@@ -377,11 +424,15 @@ switch ($request_method)
         break;
     case 'register':
     	$_POST['creation_time'] = time();
-    	$_POST['tt_token'] = $request_params[2];
-    	$_POST['tt_code'] = $request_params[3];
     	$_POST['username'] = $request_params[0];
     	$_POST['new_password'] = $request_params[1];
     	$_POST['password_confirm'] = $request_params[1];
+    	$_POST['email'] = $request_params[2];
+    	if(count($request_params) == 5)
+    	{
+    		$_POST['tt_token'] = $request_params[3];
+    		$_POST['tt_code'] = $request_params[4];
+    	}
     	$_POST['submit'] = 'Submit';
     	break;
     case 'update_password':
@@ -411,6 +462,40 @@ switch ($request_method)
     	$_POST['username'] = $request_params[0];
     	$_POST['tt_token'] = $request_params[1];
     	$_POST['tt_code'] = $request_params[2];
+    	break;
+    case 'sign_in':
+    	$_POST['token'] = $request_params[0];
+    	$_POST['code'] = $request_params[1];
+    	$_POST['email'] = $request_params[2];
+    	$_POST['username'] = $request_params[3];
+    	$_POST['password'] = $request_params[4];
+    	break;
+    case 'prefetch_account':
+    	$_POST['email'] = $request_params[0];
+    	break;
+    case 'search_user':
+    	$_POST['username'] = $request_params[0];
+    	$_POST['email'] = $request_params[0];
+    	$_POST['page'] = $request_params[1];
+    	$_POST['perpage'] = $request_params[2];
+    	break;
+    case 'ignore_user':
+    	if(!isset($request_params[1]) || $request_params[1] == 1)
+    	{
+    		$_POST['add'] = $request_params[0];
+    		$_POST['mode'] = 'foes';
+    		$_POST['submit'] = 1;
+    	}
+    	else 
+    	{
+    		$_POST['usernames'] = explode(',', $request_params[0]);
+    		$_POST['submit'] = 'Submit';
+    	}
+    	break;
+    case 'get_recommended_user':
+    	$_POST['page'] = !empty($request_params[0]) ? $request_params [0] : '1';
+    	$_POST['perpage'] = isset($request_params[1]) ? $request_params[1] : '20';
+    	$_POST['mode'] = isset($request_params[2]) ? $request_params[2] : 1;
     	break;
 }
 

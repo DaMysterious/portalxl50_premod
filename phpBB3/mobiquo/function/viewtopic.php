@@ -81,8 +81,15 @@ if ($view && !$post_id)
 
 	if ($view == 'unread')
 	{
-		// Get topic tracking info
-		$topic_tracking_info = get_complete_topic_tracking($forum_id, $topic_id);
+		if(!empty($forum_id) && !empty($topic_id))
+		{
+			// Get topic tracking info
+			$topic_tracking_info = get_complete_topic_tracking($forum_id, $topic_id);
+		}
+		else 
+		{
+			$topic_tracking_info = array();
+		}
 
 		$topic_last_read = (isset($topic_tracking_info[$topic_id])) ? $topic_tracking_info[$topic_id] : 0;
 
@@ -422,7 +429,15 @@ if (!isset($topic_tracking_info))
 	if ($config['load_db_lastread'] && $user->data['is_registered'])
 	{
 		$tmp_topic_data = array($topic_id => $topic_data);
-		$topic_tracking_info = get_topic_tracking($forum_id, $topic_id, $tmp_topic_data, array($forum_id => $topic_data['forum_mark_time']));
+		if(!empty($forum_id) && !empty($topic_id))
+		{
+			// Get topic tracking info
+			$topic_tracking_info = get_topic_tracking($forum_id, $topic_id, $tmp_topic_data, array($forum_id => $topic_data['forum_mark_time']));
+		}
+		else 
+		{
+			$topic_tracking_info = array();
+		}
 		unset($tmp_topic_data);
 	}
 	else if ($config['load_anon_lastread'] || $user->data['is_registered'])
@@ -512,7 +527,7 @@ $s_watching_topic = array(
 if (($config['email_enable'] || $config['jab_enable']) && $config['allow_topic_notify'])
 {
 	$notify_status = (isset($topic_data['notify_status'])) ? $topic_data['notify_status'] : null;
-	if($config['version'] < '3.0.1') 
+	if(version_compare($config['version'], '3.0.1', '<')) 
 	{
 		$s_watching_topic_img = array();
 		watch_topic_forum('topic', $s_watching_topic, $s_watching_topic_img, $user->data['user_id'], $forum_id, $topic_id, $topic_data['notify_status'], $start);
@@ -524,7 +539,7 @@ if (($config['email_enable'] || $config['jab_enable']) && $config['allow_topic_n
 	
 
 	// Reset forum notification if forum notify is set
-	if($config['version'] >= '3.0.1')
+	if(version_compare($config['version'], '3.0.1', '>='))
 	{
 		if ($config['allow_forum_notify'] && $auth->acl_get('f_subscribe', $forum_id))
 		{

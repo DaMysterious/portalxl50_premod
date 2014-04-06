@@ -64,7 +64,9 @@ $server_param = array(
     'save_raw_post' => array(
         'function'  => 'save_raw_post_func',
         'signature' => array(array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64),
-                             array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcBoolean)),
+                             array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcBoolean),
+                             array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcBoolean, $xmlrpcArray,$xmlrpcString),
+                       ),
         'docstring' => 'parameter should be array(string, base64, base64)',
     ),
 
@@ -354,7 +356,9 @@ $server_param = array(
     ),
     'm_move_topic' => array(
         'function'  => 'xmlresptrue',
-        'signature' => array(array($xmlrpcArray, $xmlrpcString, $xmlrpcString)),
+        'signature' => array(array($xmlrpcArray, $xmlrpcString, $xmlrpcString),
+    						 array($xmlrpcArray, $xmlrpcString, $xmlrpcString, $xmlrpcBoolean),
+    				   ),
         'docstring' => '',
     ),
     'm_move_post' => array(
@@ -411,6 +415,14 @@ $server_param = array(
         'signature' => array(array($xmlrpcArray, $xmlrpcBase64, $xmlrpcInt, $xmlrpcBase64)),
         'docstring' => '',
     ),
+    'm_rename_topic' => array(
+        'function'  => 'm_rename_topic_func',
+        'signature' => array(
+    						array($xmlrpcArray,$xmlrpcString,$xmlrpcBase64),
+    						array($xmlrpcArray,$xmlrpcString,$xmlrpcBase64,$xmlrpcString),
+    						),
+        'docstring' => '',
+    ),
     'update_push_status' => array(
         'function' => 'update_push_status_func',
         'signature' => array(array($xmlrpcStruct,$xmlrpcStruct),
@@ -426,7 +438,8 @@ $server_param = array(
     'register' => array (
     	'function' => 'register_func',
     	'signature' => array(array($xmlrpcStruct),
-    						 array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcBase64,$xmlrpcString,$xmlrpcString),
+                             array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcBase64,$xmlrpcBase64),
+    						 array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcBase64,$xmlrpcBase64,$xmlrpcString,$xmlrpcString),
     						 ),
     ),
     
@@ -448,7 +461,55 @@ $server_param = array(
     'forget_password' => array (
     	'function' => 'forget_password_func',
     	'signature' => array(array($xmlrpcStruct),
+    						 array($xmlrpcStruct,$xmlrpcBase64),
     						 array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcString ,$xmlrpcString),
+    						 ),
+    ),
+    
+    'sign_in' => array (
+    	'function' => 'sign_in_func',
+    	'signature' => array(
+                             array($xmlrpcStruct, $xmlrpcString,$xmlrpcString),
+    						 array($xmlrpcStruct, $xmlrpcString,$xmlrpcString,$xmlrpcBase64),
+    						 array($xmlrpcStruct, $xmlrpcString,$xmlrpcString,$xmlrpcBase64,$xmlrpcBase64),
+    						 array($xmlrpcStruct, $xmlrpcString,$xmlrpcString,$xmlrpcBase64,$xmlrpcBase64,$xmlrpcBase64),
+    						 ),
+    ), 
+    
+    'prefetch_account' => array(
+    	'function' => 'prefetch_account_func',
+    	'signature' => array(
+                             array($xmlrpcStruct, $xmlrpcBase64),
+    						 ),
+    ),
+    
+    'mark_pm_unread' => array(
+        'function'  => 'mark_pm_unread_func',
+        'signature' => array(array($xmlrpcArray),
+                             array($xmlrpcStruct, $xmlrpcString)),
+        'docstring' => 'message id',
+    ),
+    
+    'search_user' => array(
+    	'function' => 'search_user_func',
+    	'signature' => array(array($xmlrpcStruct),
+    						 array($xmlrpcStruct, $xmlrpcBase64 ),
+    						 array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcInt ,$xmlrpcInt),
+    						 ),
+    ),
+    
+    'get_recommended_user' => array(
+    	'function' => 'get_recommended_user_func',
+    	'signature' => array(array($xmlrpcStruct),
+    						 array($xmlrpcStruct,$xmlrpcInt ,$xmlrpcInt),
+    						 array($xmlrpcStruct,$xmlrpcInt ,$xmlrpcInt,$xmlrpcInt),
+    						 ),
+    ),
+    
+    'ignore_user' => array(
+    	'function' => 'ignore_user_func',
+    	'signature' => array(
+    						 array($xmlrpcStruct,$xmlrpcString ,$xmlrpcInt),
     						 ),
     ),
 );

@@ -318,35 +318,7 @@ function get_user_info_func($xmlrpc_params)
             'value' => new xmlrpcval(basic_clean($member['user_sig']), 'base64')
         ), 'struct');
     
-    if(($member['user_id'] == $user->data['user_id']) && push_table_exists())
-    {
-	    $sql =  "SELECT * FROM " . $table_prefix . "tapatalk_users WHERE userid = '".$member['user_id']."'";
-	    $result = $db->sql_query($sql);
-	    $row = $db->sql_fetchrow($result);
-	    if(!empty($row))
-	    {
-	    	array_push($custom_fields_list, new xmlrpcval(array(
-            'name'  => new xmlrpcval('Notification - Message', 'base64'),
-            'value' => new xmlrpcval($row['pm'] ? 'On' : 'Off', 'base64')
-        	), 'struct'));
-        	array_push($custom_fields_list, new xmlrpcval(array(
-            'name'  => new xmlrpcval('Notification - Quoted', 'base64'),
-            'value' => new xmlrpcval($row['quote'] ? 'On' : 'Off', 'base64')
-        	), 'struct'));
-        	array_push($custom_fields_list, new xmlrpcval(array(
-            'name'  => new xmlrpcval('Notification - Mentioned', 'base64'),
-            'value' => new xmlrpcval($row['tag'] ? 'On' : 'Off', 'base64')
-        	), 'struct'));
-        	array_push($custom_fields_list, new xmlrpcval(array(
-            'name'  => new xmlrpcval('Notification - New Topic', 'base64'),
-            'value' => new xmlrpcval($row['newtopic'] ? 'On' : 'Off', 'base64')
-        	), 'struct'));
-        	array_push($custom_fields_list, new xmlrpcval(array(
-            'name'  => new xmlrpcval('Notification - Replies', 'base64'),
-            'value' => new xmlrpcval($row['subscribe'] ? 'On' : 'Off', 'base64')
-        	), 'struct'));
-	    }
-    }
+    
     
     $user_avatar_url = get_user_avatar_url($member['user_avatar'], $member['user_avatar_type']);
     
@@ -491,8 +463,9 @@ function get_user_info_func($xmlrpc_params)
     }
     $user_info = array(
         'user_id'            => new xmlrpcval($member['user_id']),
-        'username'           => new xmlrpcval($member['username'], 'base64'),
-		'user_type' => check_return_user_type($member['username']),
+        'username'           => new xmlrpcval(basic_clean($member['username']), 'base64'),
+		'user_type'          => check_return_user_type($member['user_id']),
+		//'tapatalk'           => new xmlrpcval(is_tapatalk_user($member['user_id']), 'string'),
         'post_count'         => new xmlrpcval($member['user_posts'], 'int'),
         'reg_time'           => new xmlrpcval(mobiquo_iso8601_encode($member['user_regdate']), 'dateTime.iso8601'),
         'timestamp_reg'      => new xmlrpcval($member['user_regdate'], 'string'),
@@ -528,7 +501,7 @@ function show_profile($data, $user_notes_enabled = false, $warn_user_enabled = f
 
     if (!empty($data['user_allow_viewemail']) || $auth->acl_get('a_user'))
     {
-        $email = ($config['board_email_form'] && $config['email_enable']) ? '' : (($config['board_hide_emails'] && !$auth->acl_get('a_user')) ? '' : $data['user_email']);
+        $email = ($config['board_email_form'] && $config['email_enable']) ? (($config['board_hide_emails'] && !$auth->acl_get('a_user')) ? '' : $data['user_email']) : '';
     }
     else
     {

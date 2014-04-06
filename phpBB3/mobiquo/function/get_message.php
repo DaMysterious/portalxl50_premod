@@ -11,7 +11,10 @@ defined('IN_MOBIQUO') or exit;
 function get_message_func($xmlrpc_params)
 {
     global $db, $auth, $user, $config, $template, $phpbb_root_path, $phpEx;
-    
+    if(file_exists($phpbb_root_path . 'includes/functions_profile_control.' . $phpEx))
+    {
+    	require_once ($phpbb_root_path . 'includes/functions_profile_control.' . $phpEx);
+    }
     $user->setup('ucp');
     
     $params = php_xmlrpc_decode($xmlrpc_params);
@@ -58,7 +61,8 @@ function get_message_func($xmlrpc_params)
         $msg_to[] = new xmlrpcval(array(
             'user_id'  => new xmlrpcval($address_row['UG_ID'], 'string'),
             'username' => new xmlrpcval($address_row['NAME'], 'base64'),
-			'user_type' => check_return_user_type($address_row['NAME']),
+			'user_type' => check_return_user_type($address_row['UG_ID']),
+			//'tapatalk'  => new xmlrpcval(is_tapatalk_user($address_row['UG_ID']), 'string'),
         ), 'struct');
     }
 

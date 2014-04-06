@@ -1229,6 +1229,16 @@ class install_upgrade_premod extends module
 					'module_class'      => 'acp');
 				$this->add_module($tapatalk_rebranding, $db);
 				
+				$tapatalk_register = array(
+					'module_basename'   => 'mobiquo',
+					'module_mode'      	=> 'register',
+					'module_auth'      	=> 'acl_a_mobiquo',
+					'module_enabled'   	=> 1,
+					'module_display'   	=> 1, 
+					'parent_id'         => $acp_module_id,
+					'module_langname'   => 'ACP_MOBIQUO_REGISTER_SETTINGS',
+					'module_class'      => 'acp');
+				$this->add_module($tapatalk_register, $db);
 
 				// Database Optimize & Repair Tool 1.0.2
 				$database_or = array(
@@ -1468,7 +1478,7 @@ class install_upgrade_premod extends module
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (101, 'Default Random No Avatar', '1.0.4', 'a', 'Random Avatars are displayed by default for users who have not selected an Avatar.', 'http://www.boardtalk.net/', 'Boardtalk.net', 'http://www.boardtalk.net/')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (102, 'Post links', '1.0.1', '', 'This MOD will add links to all your posts. You can choose to display link, bb code and html format of post. Those links are hidden by default and user can show them by single click, so they do not make posts huge showing each 3 links after each post on page.', 'http://phpbb3hacks.com/', 'Senky', 'http://phpbb3hacks.com/')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (103, 'Collapse categories', '1.1.1', '', 'This MOD allows users to collapse categories on index.', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=doktornotor', 'doktornotor', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=doktornotor')";
-				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (104, 'Tapatalk', '3.6.1', '', 'Tapatalk for the forum index and seperate page.', 'http://www.tapatalk.com', 'tapatalk', 'http://www.tapatalk.com')";
+				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (104, 'Tapatalk', '4.4.0', '', 'Tapatalk for the forum index and seperate page.', 'http://www.tapatalk.com', 'tapatalk', 'http://www.tapatalk.com')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (105, 'Database Optimize and Repair Tool', '1.0.2', '', 'This MOD will allow you to check, optimize and repair phpBB''s database tables from a phpMyAdmin-like interface in the ACP. Requirements: Your phpBB database must be using MySQL with MyISAM, InnoDB or Archive table types. Note: InnoDB table types do not support Repair.', 'http://www.phpbb.com/customise/db/mod/database_optimize_repair_tool/', 'VSE', 'http://www.phpbb.com/customise/db/mod/database_optimize_repair_tool/')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (106, 'Auto Backup', '1.0.3', '', 'Automatically backup your database using the phpBB3 Cron.', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=Pico88', 'Pico88', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=Pico88')";
 
@@ -1945,7 +1955,7 @@ class install_upgrade_premod extends module
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalkdir', 'mobiquo', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('mobiquo_is_chrome', '1', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_push_key', '', 0)";
-				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('mobiquo_version', '3.6.1', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('mobiquo_version', '4.4.0', 0)";
 				
 				// Tapatalk 3.6.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_msg', 'This forum has an app for Android! Click OK to learn more about Tapatalk.', 0)";
@@ -1957,6 +1967,35 @@ class install_upgrade_premod extends module
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_msg', 'This forum has an app for Kindle Fire! Click OK to learn more about Tapatalk.', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_url', 'http://www.amazon.com/gp/mas/dl/android?p=com.quoord.tapatalkpro.activity', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_forum_read_only', '', 0)";
+				
+				// Tapatalk 3.7.0
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_allow_register', '', 1)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_iphone_app_id', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_hd_msg', 'This forum has an app for Kindle Fire HD! Click OK to learn more about Tapatalk.', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_hd_url', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_hd_msg', 'This forum has an app for Android HD! Click OK to learn more about Tapatalk.', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_hd_url', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_icon_url','mobiquo/smartbanner/tapatalk2.png', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_custom_replace', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_desc', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_name', '', 0)";
+
+				// Tapatalk 3.8.0
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_banner_msg', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_ios_id', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_url', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_url', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_push_slug'', '', 0)";
+
+				// Tapatalk 4.1.0
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_ads_enable', '', 1)";
+
+				// Tapatalk 4.3.0
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_register_status', '', 2)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_register_group', 'get_group_id('REGISTERED')', 0)";
+
+				// Tapatalk 4.4.0
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_spam_status', '', 1)";
 				
 				$sql[] = "INSERT INTO " . ACL_OPTIONS_TABLE . " (auth_option_id, auth_option, is_global, is_local, founder_only) VALUES (NULL, 'a_mobiquo', 1, 0, 0)";
 				

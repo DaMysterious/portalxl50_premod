@@ -16,14 +16,29 @@ function login_func($xmlrpc_params)
     
     $user->setup('ucp');
     
-    $username = $params[0];
+    $username = $username_orgin = $params[0];
     $password = $params[1];
     $viewonline = isset($params[2]) ? !$params[2] : 1;
+    $push = isset($params[3]) ? intval($params[3]) : 1;
+
     set_var($username, $username, 'string', true);
     set_var($password, $password, 'string', true);
     header('Set-Cookie: mobiquo_a=0');
     header('Set-Cookie: mobiquo_b=0');
     header('Set-Cookie: mobiquo_c=0');
+    
+    if(!get_user_id_by_name($username_orgin))
+    {
+        $status = 2;
+    	$response = new xmlrpcval(array(
+	        'result'          => new xmlrpcval(0, 'boolean'),
+	        'result_text'     => new xmlrpcval('username is not exist', 'base64'),
+		 	'status'          => new xmlrpcval($status, 'string'),
+	    ), 'struct');
+        return new xmlrpcresp($response);
+    }
+    $config['max_login_attempts'] = 20;
+    $config['ip_login_limit_max'] = 50;
     $login_result = $auth->login($username, $password, true, $viewonline);
     
     $usergroup_id = array();
@@ -55,11 +70,18 @@ function login_func($xmlrpc_params)
 				$db->sql_build_array('INSERT', $sql_data[$table_prefix . "tapatalk_users"]['sql']);
 				$db->sql_query($sql);    	
 	        }
-	        else
+	        
+	        if($push == 1)
 	        {
-	        	$sql = "UPDATE " . $table_prefix . "tapatalk_users 
-	        	SET updated= '".time()."' WHERE userid='".$user->data['user_id']."'";
-	        	$db->sql_query($sql);
+	        	$sql = 'UPDATE '. $table_prefix . "tapatalk_users SET announcement = '1',pm='1',
+				subscribe = '1',quote = '1',tag = '1',newtopic='1' ,updated= '".time()."'
+				WHERE userid = '".$user->data['user_id']."'";
+	        }
+	        else 
+	        {
+	        	$sql = 'UPDATE '. $table_prefix . "tapatalk_users SET announcement = '0',pm='0',
+				subscribe = '0',quote = '0',tag = '0',newtopic='0' ,updated= '".time()."'
+				WHERE userid = '".$user->data['user_id']."'";
 	        }
         }
         
@@ -91,26 +113,27 @@ function login_func($xmlrpc_params)
     $can_search = $auth->acl_get('u_search') && $auth->acl_getf_global('f_search') && $config['load_search'];
     $can_whosonline = $auth->acl_gets('u_viewprofile', 'a_user', 'a_useradd', 'a_userdel');
     $max_filesize   = ($config['max_filesize'] === '0' || $config['max_filesize'] > 10485760) ? 10485760 : $config['max_filesize'];
-    $userPushType = array();
+    
+    $userPushType = array('pm' => 1,'newtopic' => 1,'sub' => 1,'tag' => 1,'quote' => 1);
     $push_type = array();
-    if(file_exists("push_hook.php"))
-    {
-    	require_once 'push_hook.php';
-    	$userPushType = tt_get_user_push_type($user->data['user_id']);
-    }
+    
  	foreach ($userPushType as $name=>$value)
     {
     	$push_type[] = new xmlrpcval(array(
             'name'  => new xmlrpcval($name,'string'),
-    		'value' => new xmlrpcval($value,'string'),                    
+    		'value' => new xmlrpcval($value,'boolean'),                    
             ), 'struct');
-    }
+    }   
+    
     $response = new xmlrpcval(array(
         'result'        => new xmlrpcval(true, 'boolean'),
         'user_id'       => new xmlrpcval($user->data['user_id'], 'string'),
-        'username'      => new xmlrpcval($user->data['username'], 'base64'),
-		'user_type' => check_return_user_type($user->data['username']),
+        'username'      => new xmlrpcval(basic_clean($user->data['username']), 'base64'),
+    	'email'         => new xmlrpcval($user->data['user_email'], 'base64'),
+		'user_type' 	=> check_return_user_type($user->data['user_id']),
+		//'tapatalk'      => new xmlrpcval(is_tapatalk_user($user->data['user_id']), 'string'),
         'usergroup_id'  => new xmlrpcval($usergroup_id, 'array'),
+    	'ignored_uids'  => new xmlrpcval(implode(',', tt_get_ignore_users($user->data['user_id'])),'string'),
         'icon_url'      => new xmlrpcval(get_user_avatar_url($user->data['user_avatar'], $user->data['user_avatar_type']), 'string'),
         'post_count'    => new xmlrpcval($user->data['user_posts'], 'int'),
         'can_pm'        => new xmlrpcval($can_readpm, 'boolean'),
@@ -122,7 +145,8 @@ function login_func($xmlrpc_params)
         'can_search'    => new xmlrpcval($can_search, 'boolean'),
         'can_whosonline'    => new xmlrpcval($can_whosonline, 'boolean'),
         'can_upload_avatar' => new xmlrpcval($can_upload, 'boolean'),
-    	'push_type'         => new xmlrpcval($push_type, 'array'),
+    	'push_type'         => new xmlrpcval($push_type, 'array'),  
+    	
     ), 'struct');
     
     return new xmlrpcresp($response);

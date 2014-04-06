@@ -28,6 +28,8 @@ function save_raw_post_func($xmlrpc_params)
     $post_title     = $params[1];
     $post_content   = $params[2];
     $GLOBALS['return_html'] = isset($params[3]) ? $params[3] : false;
+    $attach_list = isset($params[4]) ? $params[4] : array();
+    $_POST['attachment_data'] = (isset($params[5]) && $params[5]) ? unserialize(base64_decode($params[5])) : array();
 
     $post_data = array();
 
@@ -183,7 +185,7 @@ function save_raw_post_func($xmlrpc_params)
     $check_value = (($post_data['enable_bbcode']+1) << 8) + (($post_data['enable_smilies']+1) << 4) + (($post_data['enable_urls']+1) << 2) + (($post_data['enable_sig']+1) << 1);
 
     // Check if user is watching this topic
-    if ($mode != 'post' && $config['allow_topic_notify'] && $user->data['is_registered'])
+    /*if ($mode != 'post' && $config['allow_topic_notify'] && $user->data['is_registered'])
     {
         $sql = 'SELECT topic_id
             FROM ' . TOPICS_WATCH_TABLE . '
@@ -192,7 +194,7 @@ function save_raw_post_func($xmlrpc_params)
         $result = $db->sql_query($sql);
         $post_data['notify_set'] = (int) $db->sql_fetchfield('topic_id');
         $db->sql_freeresult($result);
-    }
+    }*/
 
     // Do we want to edit our post ?
     if ($post_data['bbcode_uid'])
@@ -236,8 +238,8 @@ function save_raw_post_func($xmlrpc_params)
         $notify = false;
     }
 
-    $topic_lock     = (isset($_POST['lock_topic'])) ? true : false;
-    $post_lock      = (isset($_POST['lock_post'])) ? true : false;
+    $topic_lock     = (isset($_POST['lock_topic'])) ? true : $post_data['topic_status'];
+    $post_lock      = (isset($_POST['lock_post'])) ? true : $post_data['post_edit_locked'];
     $poll_delete    = (isset($_POST['poll_delete'])) ? true : false;
 
     $status_switch = (($post_data['enable_bbcode']+1) << 8) + (($post_data['enable_smilies']+1) << 4) + (($post_data['enable_urls']+1) << 2) + (($post_data['enable_sig']+1) << 1);
@@ -472,7 +474,7 @@ function save_raw_post_func($xmlrpc_params)
         'forum_parents'            => $post_data['forum_parents'],
         'forum_name'            => $post_data['forum_name'],
         'notify'                => $notify,
-        'notify_set'            => $post_data['notify_set'],
+        //'notify_set'            => $post_data['notify_set'],
         'poster_ip'                => (isset($post_data['poster_ip'])) ? $post_data['poster_ip'] : $user->ip,
         'post_edit_locked'        => (int) $post_data['post_edit_locked'],
         'bbcode_bitfield'        => $message_parser->bbcode_bitfield,

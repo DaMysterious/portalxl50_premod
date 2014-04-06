@@ -10,7 +10,7 @@ defined('IN_MOBIQUO') or exit;
 
 function get_online_users_func() 
 {    
-    global $db, $auth, $config, $user;
+    global $db, $auth, $config, $user,$phpbb_root_path;
     
     $user->setup('memberlist');
 
@@ -139,7 +139,10 @@ function get_online_users_func()
         {
             $on_page[1] = '';
         }
-    
+    	if(file_exists($phpbb_root_path.$config['tapatalkdir'].'/include/online_hook.php'))
+    	{
+    		include $phpbb_root_path.$config['tapatalkdir'].'/include/online_hook.php';
+    	}
         switch ($on_page[1])
         {
             case 'index':
@@ -262,9 +265,6 @@ function get_online_users_func()
                 $location_url = append_sid("{$phpbb_root_path}index.$phpEx");
             break;
             
-            case 'mobiquo/mobiquo':
-                $location = 'via Tapatalk';
-            break;
     
             default:
                 $location = $user->lang['INDEX'];
@@ -274,10 +274,29 @@ function get_online_users_func()
         
         $user_avatar_url = get_user_avatar_url($row['user_avatar'], $row['user_avatar_type']);
         
+	    $row['from'] = 'broswer';
+   		if(!empty($row['is_tapatalk']))
+		{
+			$row['from'] = 'tapatalk';
+		}
+		else if(!empty($row['is_byo']))
+		{
+			$row['from'] = 'byo';
+		}
+		else if(strpos($row['session_browser'],'Android') !== false || strpos($row['session_browser'],'iPhone') !== false || 
+		strpos($row['session_browser'],'BlackBerry') !== false)
+		{
+			$row['from'] = 'mobile';
+		}
+		
+		
+		
         $user_list[] = new xmlrpcval(array(
             'user_id'       => new xmlrpcval($row['user_id'], 'string'),
-            'username'      => new xmlrpcval($row['username'], 'base64'),
-			'user_type' => check_return_user_type($row['username']),
+            'username'      => new xmlrpcval(basic_clean($row['username']), 'base64'),
+        	'from'          => new xmlrpcval($row['from'], 'string'),
+			'user_type'     => check_return_user_type($row['user_id']),
+			//'tapatalk'      => new xmlrpcval(is_tapatalk_user($row['user_id']), 'string'),
             'user_name'     => new xmlrpcval($row['username'], 'base64'),
             'icon_url'      => new xmlrpcval($user_avatar_url),
             'display_text'  => new xmlrpcval($location, 'base64')
@@ -289,7 +308,7 @@ function get_online_users_func()
     unset($prev_id, $prev_ip);
     
     $online_users = array(
-        'member_count' => new xmlrpcval($logged_visible_online + $logged_hidden_online, 'int'),
+        'member_count' => new xmlrpcval($logged_visible_online, 'int'),
         'guest_count'  => new xmlrpcval($guest_counter, 'int'),
         'list'         => new xmlrpcval($user_list, 'array')
     );

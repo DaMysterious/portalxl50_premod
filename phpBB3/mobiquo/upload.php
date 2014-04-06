@@ -40,7 +40,7 @@ if ($_POST['method_name'] == 'upload_attach')
     if (!$user->data['is_registered']) trigger_error('LOGIN_EXPLAIN_POST');
     
     $forum_id = request_var('forum_id', 0);
-    $_POST['attachment_data'] = $_POST['group_id'] ? unserialize(base64_decode($_POST['group_id'])) : array();
+    $_POST['attachment_data'] = !empty($_POST['group_id']) ? unserialize(base64_decode($_POST['group_id'])) : array();
     $new_attach_position = count($_POST['attachment_data']);
     
     // Forum does not exist

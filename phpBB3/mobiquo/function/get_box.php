@@ -169,9 +169,10 @@ function get_box_func($xmlrpc_params)
         foreach ($msg_to_list as $address)
         {
             $msg_to[] = new xmlrpcval(array(
-                'user_id'  => new xmlrpcval($address['id'], 'string'),
-                'username' => new xmlrpcval(basic_clean($address['name']), 'base64'),
-				'user_type' => check_return_user_type($address['name']),
+                'user_id'   => new xmlrpcval($address['id'], 'string'),
+                'username'  => new xmlrpcval(basic_clean($address['name']), 'base64'),
+				'user_type' => check_return_user_type($address['id']),
+				//'tapatalk'  => new xmlrpcval(is_tapatalk_user($address['id']), 'string'),
             ), 'struct');
         }
 

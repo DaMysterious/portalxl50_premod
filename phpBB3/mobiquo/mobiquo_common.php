@@ -59,13 +59,16 @@ function xmlresperror($error_message)
 function xmlrpc_error_handler($errno, $msg_text, $errfile, $errline)
 {
     global $auth, $user, $msg_long_text;
-
+	
     // Do not display notices if we suppress them via @
     if (MOBIQUO_DEBUG == 0 && $errno != E_USER_ERROR && $errno != E_USER_WARNING && $errno != E_USER_NOTICE)
     {
         return;
     }
-
+    /*if(strpos($errfile, 'session.php') !== false)
+    {
+        return ;
+    }*/
     if ($msg_text == 'NO_SEARCH_RESULTS')
     {
         $response = search_func();
@@ -114,7 +117,6 @@ function xmlrpc_error_handler($errno, $msg_text, $errfile, $errline)
             {
                 $msg_text = (!empty($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
             }
-
             garbage_collection();
         break;
 
@@ -218,7 +220,7 @@ function mobi_parse_requrest()
             }
         }
     }
-    
+    if(empty($data)) return false;
     $parsers = php_xmlrpc_decode_xml($data);
     $request_method = $parsers->methodname;
     $request_params = php_xmlrpc_decode(new xmlrpcval($parsers->params, 'array'));
@@ -245,24 +247,51 @@ function get_short_content($post_id, $length = 200)
 function process_short_content($post_text, $length = 200)
 {
     $post_text = censor_text($post_text);
-    $post_text = preg_replace('/\[url.*?\].*?\[\/url.*?\]/', '[url]', $post_text);
-    $post_text = preg_replace('/\[img.*?\].*?\[\/img.*?\]/', '[img]', $post_text);
-    $post_text = preg_replace('/[\n\r\t]+/', ' ', $post_text);
+    $array_reg = array(
+        array('reg' => '/\[quote(.*?)\](.*?)\[\/quote(.*?)\]/si','replace' => '[quote]'),
+        array('reg' => '/\[code(.*?)\](.*?)\[\/code(.*?)\]/si','replace' => ''),
+        array('reg' => '/\[url=(.*?):(.*?)\](.*?)\[\/url(.*?)\]/sei','replace' => "mobi_url_convert('$1','$3')"),
+        array('reg' => '/\[video(.*?)\](.*?)\[\/video(.*?)\]/si','replace' => '[V]'),
+        array('reg' => '/\[attachment(.*?)\](.*?)\[\/attachment(.*?)\]/si','replace' => '[attach]'),
+        array('reg' => '/\[url.*?\].*?\[\/url.*?\]/','replace' => '[url]'),
+        array('reg' => '/\[img.*?\].*?\[\/img.*?\]/','replace' => '[img]'),
+        array('reg' => '/[\n\r\t]+/','replace' => ' '),
+        array('reg' => '/\[flash(.*?)\](.*?)\[\/flash(.*?)\]/si','replace' => '[V]'),
+    );
+    //echo $post_text;die();
+    foreach ($array_reg as $arr)
+    {
+        $post_text = preg_replace($arr['reg'], $arr['replace'], $post_text);
+    }
     strip_bbcode($post_text);
     $post_text = html_entity_decode($post_text, ENT_QUOTES, 'UTF-8');
     $post_text = function_exists('mb_substr') ? mb_substr($post_text, 0, $length) : substr($post_text, 0, $length);
-    return strip_tags($post_text);
+    $post_text = trim(strip_tags($post_text));
+    $post_text = preg_replace('/\\s+|\\r|\\n/', ' ', $post_text);
+    return $post_text;
 }
 
+function mobi_url_convert($a,$b)
+{
+    if(html_entity_decode(trim($a)) == trim($b))
+    {
+        return '[url]';
+    }
+    else 
+    {
+        return $b;
+    }
+}
 function post_html_clean($str)
 {
-	
-    global $phpbb_root_path, $phpbb_home, $mobiquo_config;
+    
+    global $phpbb_root_path, $phpbb_home, $mobiquo_config,$config;
     
     $search = array(
         "/<strong>(.*?)<\/strong>/si",
+        "/<em>(.*?)<\/em>/si",
         "/<img .*?src=\"(.*?)\".*?\/?>/si",
-        "/<a .*?href=\"(.*?)\".*?>(.*?)<\/a>/sei",
+        "/<a .*?href=\"(.*?)\"(.*?)?>(.*?)<\/a>/sei",
         "/<br\s*\/?>|<\/cite>|<\/dt>|<\/dd>/si",
         "/<object .*?data=\"(http:\/\/www\.youtube\.com\/.*?)\" .*?>.*?<\/object>/si",
         "/<object .*?data=\"(http:\/\/video\.google\.com\/.*?)\" .*?>.*?<\/object>/si",
@@ -273,8 +302,9 @@ function post_html_clean($str)
     
     $replace = array(
         '[b]$1[/b]',
+        '[i]$1[/i]',
         '[img]$1[/img]',
-        "'[url='.url_encode('$1').']$2[/url]'",
+        "'[url='.url_encode('$1').']$3[/url]'",
         "\n",
         '[url=$1]YouTube Video[/url]',
         '[url=$1]Google Video[/url]',
@@ -288,10 +318,14 @@ function post_html_clean($str)
     // remove smile
     $str = preg_replace('/<img [^>]*?src=\"[^"]*?images\/smilies\/[^"]*?\"[^>]*?alt=\"([^"]*?)\"[^>]*?\/?>/', '$1', $str);
     $str = preg_replace('/<img [^>]*?alt=\"([^"]*?)\"[^>]*?src=\"[^"]*?images\/smilies\/[^"]*?\"[^>]*?\/?>/', '$1', $str);
-    
+
     $str = preg_replace('/<null.*?\/>/', '', $str);
+   
     $str = preg_replace($search, $replace, $str);
+   
     $str = strip_tags($str);
+   
+    $str = preg_replace('/\[code\](.*?)\[\/code\]/sie', "'[code]'.base64_encode('$1').'[/code]'", $str);
     $str = html_entity_decode($str, ENT_QUOTES, 'UTF-8');
     
     // remove attach icon image
@@ -301,10 +335,11 @@ function post_html_clean($str)
     $str = preg_replace('/\[img\](.*?)\[\/img\]/sei', "'[img]'.url_encode('$1').'[/img]'", $str);
     
     $str = preg_replace('/\[\/img\]\s*/si', "[/img]\n", $str);
+    
     $str = preg_replace('/\[\/img\]\s+\[img\]/si', '[/img][img]', $str);
     
     // remove link on img
-    $str = preg_replace('/\[url=[^\]]*?\]\s*(\[img\].*?\[\/img\])\s*\[\/url\]/si', '$1', $str);
+    //$str = preg_replace('/\[url=[^\]]*?\]\s*(\[img\].*?\[\/img\])\s*\[\/url\]/si', '$1', $str);
     
     // change url to image resource to img bbcode
     $str = preg_replace('/\[url\](http[^\[\]]+\.(jpg|png|bmp|gif))\[\/url\]/si', '[img]$1[/img]', $str);
@@ -321,6 +356,7 @@ function post_html_clean($str)
 
 function parse_bbcode($str)
 {
+    global $config;
     $search = array(
         '#\[(b)\](.*?)\[/b\]#si',
         '#\[(u)\](.*?)\[/u\]#si',
@@ -341,7 +377,9 @@ function parse_bbcode($str)
         $replace = array('$2', '$2', '$2', "'$2'");
     }
     
-    return preg_replace($search, $replace, $str);
+    $str = preg_replace($search, $replace, $str);
+    $str = preg_replace('/\[code\](.*?)\[\/code\]/sie', "'[code]'.html_entity_decode(base64_decode('$1'), ENT_QUOTES, 'UTF-8').'[/code]'", $str);
+    return $str;
 }
 
 function mobi_color_convert($color, $str)
@@ -431,16 +469,48 @@ function parse_quote($str)
 
 function process_bbcode($message, $uid)
 {
-    global $user;
+    global $user,$config;
     
+    //add custom replace
+	if(!empty($config['tapatalk_custom_replace']))
+    {
+        $replace_arr = explode("\n", $config['tapatalk_custom_replace']);
+        foreach ($replace_arr as $replace)
+        {
+            preg_match('/^\s*(\'|")((\#|\/|\!).+\3[ismexuADUX]*?)\1\s*,\s*(\'|")(.*?)\4\s*$/', $replace,$matches);
+            if(count($matches) == 6)
+            {
+                $temp_str = $message;
+                $message = @preg_replace($matches[2], $matches[5], $message);
+                if(empty($message))
+                {
+                    $message = $temp_str;
+                }
+            }   
+        }
+    }
     // process bbcode: code
-    $message = str_replace('[code:'.$uid.']', '[quote]', $message);
-    $message = str_replace('[/code:'.$uid.']', '[/quote]', $message);
+    $message = str_replace('[code:'.$uid.']', '[code]', $message);
+    $message = str_replace('[/code:'.$uid.']', '[/code]', $message);
     
     // process bbcode: quote
     $quote_wrote_string = $user->lang['WROTE'];
     $message = str_replace('[/quote:'.$uid.']', '[/quote]', $message);
-    $message = preg_replace('/\[quote(?:=&quot;(.*?)&quot;)?:'.$uid.'\]/ise', "'[quote]' . ('$1' ? '$1' . ' $quote_wrote_string:\n' : '\n')", $message);
+   	$message =  preg_replace_callback(
+   		'/\[quote(?:=&quot;(.*?)&quot;)?:'.$uid.'\]/is', 
+   		create_function('$matches','
+   			$userid = get_user_id_by_name($matches[1]);
+   			if(!empty($userid))
+   			{
+   				return "[quote uid=".$userid." name=\"".$matches[1]."\" ]";
+   			}
+   			return "[quote]";
+   			'
+   			
+   		), 
+   		$message
+   	);
+    //$message = preg_replace('/\[quote(?:=&quot;(.*?)&quot;)?:'.$uid.'\]/ise', "'[quote uid=$uid name=\"$1\"]' . ('$1' ? '$1' . ' $quote_wrote_string:\n' : '\n')", $message);
     $blocks = preg_split('/(\[\/?quote\])/i', $message, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
     $quote_level = 0;
@@ -475,36 +545,36 @@ function process_bbcode($message, $uid)
     $message = preg_replace('/\[u:'.$uid.'\](.*?)\[\/u:'.$uid.'\]/si', '[u]$1[/u]', $message);
     $message = preg_replace('/\[color=(\#[\da-fA-F]{3}|\#[\da-fA-F]{6}|[A-Za-z]{1,20}|rgb\(\d{1,3}, ?\d{1,3}, ?\d{1,3}\)):'.$uid.'\](.*?)\[\/color:'.$uid.'\]/si', '[color=$1]$2[/color]', $message);
     $message = preg_replace('/\[mp3preview:'.$uid.'\](.*?)\[\/mp3preview:'.$uid.'\]/si', '[url=$1]MP3 Preview[/url]', $message);
-	 
+    
     return $message;
 }
 function tt_covert_list($message,$preg,$type,$uid)
 {
-	while(preg_match($preg, $message, $blocks))
+    while(preg_match($preg, $message, $blocks))
     {
-    	$list_str = "";
-    	$list_arr = explode('[*]', $blocks[1]);
-    	foreach ($list_arr as $key => $value)
-    	{
-    		$value = trim($value);
-    		if(!empty($value) && $key != 0)
-    		{
-    			if($type == '1')
-    			{
-    				$key = ' * ';
-    			}
-    			else 
-    			{
-    				$key = $key.'.';
-    			}
-    			$list_str .= $key.$value ."\n";
-    		}
-    		else if(!empty($value))
-    		{
-    			$list_str .= $value ."\n";
-    		}    		
-    	}
-    	$message = str_replace($blocks[0], $list_str, $message);
+        $list_str = "";
+        $list_arr = explode('[*]', $blocks[1]);
+        foreach ($list_arr as $key => $value)
+        {
+            $value = trim($value);
+            if(!empty($value) && $key != 0)
+            {
+                if($type == '1')
+                {
+                    $key = ' * ';
+                }
+                else 
+                {
+                    $key = $key.'.';
+                }
+                $list_str .= $key.$value ."\n";
+            }
+            else if(!empty($value))
+            {
+                $list_str .= $value ."\n";
+            }           
+        }
+        $message = str_replace($blocks[0], $list_str, $message);
     }
     return $message;
 }
@@ -512,25 +582,38 @@ function url_encode($url)
 {
     global $phpbb_home, $phpbb_root_path;
     
+	//check is domain
+    $is_domain = false;
+    if(preg_match('/^\//', $url) && !preg_match('/download\/file\.php/', $url))
+    {
+    	$is_domain = true;
+    	$server_url = $_SERVER['HTTP_HOST'];
+    }
     $url = rawurlencode($url);
+    
     $from = array('/%3A/', '/%2F/', '/%3F/', '/%2C/', '/%3D/', '/%26/', '/%25/', '/%23/', '/%2B/', '/%3B/', '/%5C/', '/%20/');
     $to   = array(':',     '/',     '?',     ',',     '=',     '&',     '%',     '#',     '+',     ';',     '\\',    ' ');
     $url = preg_replace($from, $to, $url);
     $root_path = preg_replace('/^\//', '', $phpbb_root_path);
     if($root_path == '/')
     {
-    	$url = preg_replace('#^\.\./|^/#si', '', $url);
+        $url = preg_replace('#^\.\./|^/#si', '', $url);
     }
     else 
     {
-    	$url = preg_replace('#^\.\./|^/|'.addslashes($root_path).'#si', '', $url);
+        $url = preg_replace('#^\.\./|^/|'.addslashes($root_path).'#si', '', $url);
     }
     
     $url = preg_replace('#^.*?(?=download/file\.php)#si', '', $url);
+ 	
     
-    if (strpos($url, 'http') !== 0)
+    
+    if (strpos($url, 'http') !== 0 && strpos($url, 'https') !== 0 && strpos($url, 'mailto') !== 0)
     {
-        $url = $phpbb_home.$url;
+    	if(!$is_domain)
+        	$url = $phpbb_home.$url;
+        else 
+        	$url = "http://".$server_url.'/'.$url;
     }
     
     return htmlspecialchars_decode($url);
@@ -540,7 +623,7 @@ function get_user_avatar_url($avatar, $avatar_type, $ignore_config = false)
 {
     global $config, $phpbb_home, $phpEx;
 
-    if (empty($avatar) || !$avatar_type || (isset($config['allow_avatar']) && !$config['allow_avatar'] && !$ignore_config))
+    if (empty($avatar) || (isset($config['allow_avatar']) && !$config['allow_avatar'] && !$ignore_config))
     {
         return '';
     }
@@ -571,6 +654,9 @@ function get_user_avatar_url($avatar, $avatar_type, $ignore_config = false)
                 return '';
             }
         break;
+        default:
+        	return $avatar;
+        	break;
     }
 
     $avatar_img .= $avatar;
@@ -798,7 +884,13 @@ function check_error_status(&$str)
             } elseif (strpos($str, $user->lang['INCORRECT_THANKS']) !== false) {
                 $str = $user->lang['INCORRECT_THANKS'];
                 return false;
-            } else {
+            } 
+            else if(strpos($str, 'Tried to redirect to potentially insecure url')  !== false )
+            {
+                $str = '';
+                return true;
+            }
+            else {
                 return false;
             }
             
@@ -837,7 +929,7 @@ function check_error_status(&$str)
                 return true;
             }
         case 'm_move_topic':
-            if (strpos($str, $user->lang['TOPIC_MOVED_SUCCESS']) === false)
+            if (strpos($str, $user->lang['TOPIC_MOVED_SUCCESS']) === false && strpos($str, $user->lang['TOPICS_MOVED_SUCCESS']) === false)
                 return false;
             else {
                 $str = $user->lang['TOPIC_MOVED_SUCCESS'];
@@ -1002,142 +1094,139 @@ function tt_get_unread_topics($user_id = false, $sql_extra = '', $sql_sort = '',
 
     return $unread_topics;
 }
-function get_forum_icon($id, $type = 'forum', $lock = false, $new = false)
+
+function tp_get_forum_icon($id, $type = 'forum', $lock = false, $new = false)
 {
-    if (!in_array($type, array('link', 'category', 'forum')))
-        $type = 'forum';
-    
-    $icon_name = $type;
-    if ($type != 'link')
+    if ($type == 'link')
     {
-        if ($lock) $icon_name .= '_lock';
-        if ($new) $icon_name .= '_new';
+        if ($filename = tp_get_forum_icon_by_name('link'))
+            return $filename;
+    }
+    else
+    {
+        if ($lock && $new && $filename = tp_get_forum_icon_by_name('lock_new_'.$id))
+            return $filename;
+        if ($lock && $filename = tp_get_forum_icon_by_name('lock_'.$id))
+            return $filename;
+        if ($new && $filename = tp_get_forum_icon_by_name('new_'.$id))
+            return $filename;
+        if ($filename = tp_get_forum_icon_by_name($id))
+            return $filename;
+        
+        if ($type == 'category')
+        {
+            if ($lock && $new && $filename = tp_get_forum_icon_by_name('category_lock_new'))
+                return $filename;
+            if ($lock && $filename = tp_get_forum_icon_by_name('category_lock'))
+                return $filename;
+            if ($new && $filename = tp_get_forum_icon_by_name('category_new'))
+                return $filename;
+            if ($filename = tp_get_forum_icon_by_name('category'))
+                return $filename;
+        }
+        else
+        {
+            if ($lock && $new && $filename = tp_get_forum_icon_by_name('forum_lock_new'))
+                return $filename;
+            if ($lock && $filename = tp_get_forum_icon_by_name('forum_lock'))
+                return $filename;
+            if ($new && $filename = tp_get_forum_icon_by_name('forum_new'))
+                return $filename;
+            if ($filename = tp_get_forum_icon_by_name('forum'))
+                return $filename;
+        }
+        
+        if ($lock && $new && $filename = tp_get_forum_icon_by_name('lock_new'))
+            return $filename;
+        if ($lock && $filename = tp_get_forum_icon_by_name('lock'))
+            return $filename;
+        if ($new && $filename = tp_get_forum_icon_by_name('new'))
+            return $filename;
     }
     
-    $icon_map = array(
-        'category_lock_new' => array('category_lock', 'category_new', 'lock_new', 'category', 'lock', 'new'),
-        'category_lock'     => array('category', 'lock'),
-        'category_new'      => array('category', 'new'),
-        'lock_new'          => array('lock', 'new'),
-        'forum_lock_new'    => array('forum_lock', 'forum_new', 'lock_new', 'forum', 'lock', 'new'),
-        'forum_lock'        => array('forum', 'lock'),
-        'forum_new'         => array('forum', 'new'),
-        'category'          => array(),
-        'forum'             => array(),
-        'lock'              => array(),
-        'new'               => array(),
-        'link'              => array(),
-    );
+    return tp_get_forum_icon_by_name('default');
+}
+
+function tp_get_forum_icon_by_name($icon_name)
+{
+    $tapatalk_forum_icon_dir = './forum_icons/';
     
-    $final = empty($icon_map[$icon_name]);
+    if (file_exists($tapatalk_forum_icon_dir.$icon_name.'.png'))
+        return $icon_name.'.png';
     
-    if ($url = get_forum_icon_by_name($id, $icon_name, $final))
-        return $url;
-    
-    foreach ($icon_map[$icon_name] as $sub_name)
-    {
-        $final = empty($icon_map[$sub_name]);
-        if ($url = get_forum_icon_by_name($id, $sub_name, $final))
-            return $url;
-    }
+    if (file_exists($tapatalk_forum_icon_dir.$icon_name.'.jpg'))
+        return $icon_name.'.jpg';
     
     return '';
 }
 
-function get_forum_icon_by_name($id, $name, $final)
+function check_return_user_type($user_id)
 {
-    global $tapatalk_forum_icon_dir, $tapatalk_forum_icon_url;
-    
-    $filename_array = array(
-        $name.'_'.$id.'.png',
-        $name.'_'.$id.'.jpg',
-        $id.'.png', $id.'.jpg',
-        $name.'.png',
-        $name.'.jpg',
-    );
-    
-    foreach ($filename_array as $filename)
+    global $db, $user, $config;
+    //$session = new user();
+    $user_id = intval($user_id);
+    $user_row = tt_get_user_by_id($user_id);
+    $sql = "SELECT group_name FROM " . USER_GROUP_TABLE . " AS ug LEFT JOIN " .GROUPS_TABLE. " AS g ON ug.group_id = g.group_id WHERE user_id = " . $user_id;
+    $query = $db->sql_query($sql);
+    $is_ban = $user->check_ban($user_id,false,false,true);
+    $user_groups = array();
+    while($row = $db->sql_fetchrow($query))
     {
-        if (file_exists($tapatalk_forum_icon_dir.$filename))
-        {
-            return $tapatalk_forum_icon_url.$filename;
-        }
+        $user_groups[] = $row['group_name'];
     }
-    
-    if ($final) {
-        if (file_exists($tapatalk_forum_icon_dir.'default.png'))
-            return $tapatalk_forum_icon_url.'default.png';
-        else if (file_exists($tapatalk_forum_icon_dir.'default.jpg'))
-            return $tapatalk_forum_icon_url.'default.jpg';
-    }
-    
-    return false;
-}
-
-function check_return_user_type($username)
-{
-	global $db;
-	$session = new session();
-	$user_id = get_user_id_by_name($username);
-	if(empty($user_id))
-	{
-		$user_id = 0;
-	}
-	$sql = "SELECT group_id FROM " . USER_GROUP_TABLE . " WHERE user_id = " . $user_id;
-	$query = $db->sql_query($sql);
-	$is_ban = $session->check_ban($user_id);
-	$user_groups = array();
-	while($row = $db->sql_fetchrow($query))
-	{
-		$user_groups[] = $row['group_id'];
-	}
-	if(!empty($is_ban ) || in_array(6, $user_groups))
-	{
-		$user_type = 'banned';
-	}
-	else if(in_array(5, $user_groups))
-	{
-		$user_type = 'admin';
-	}
-	else if(in_array(4, $user_groups))
-	{
-		$user_type = 'mod';
-	}
-	else
+    if(!empty($is_ban ))
     {
-		$user_type = 'normal';
-	}
-	return new xmlrpcval(basic_clean($user_type), 'base64');
+        $user_type = 'banned';
+    }
+    else if(in_array('ADMINISTRATORS', $user_groups))
+    {
+        $user_type = 'admin';
+    }
+    else if(in_array('GLOBAL_MODERATORS', $user_groups))
+    {
+        $user_type = 'mod';
+    }
+    else if($user_row['user_type'] == USER_INACTIVE && $config['require_activation'] == USER_ACTIVATION_ADMIN)
+    {
+    	$user_type = 'unapproved';
+    }
+    else if($user_row['user_type'] == USER_INACTIVE)
+    {
+    	$user_type = 'inactive';
+    }
+    else
+    {
+        $user_type = 'normal';
+    }
+    return new xmlrpcval(basic_clean($user_type), 'base64');
 }
 
 function tt_register_verify($tt_token,$tt_code)
 {
-	global $config;
-	if(empty($config['tapatalk_push_key']))
-	{
-		return false;
-	}
-	$url = "http://directory.tapatalk.com/au_reg_verify.php?token=".$tt_token."&code=".$tt_code."&key=" . $config['tapatalk_push_key'];
-	$error_msg = '';
-	$response = getContentFromRemoteServer($url, 10 , $error_msg);
-	if(!empty($error_msg))
-	{
-		trigger_error($error_msg);
-	}
-	if(empty($response))
-	{
-		trigger_error("Contect timeout , please try again");
-	}
-	$result = json_decode($response);
-	if($result->result === false)
-	{
-		return false;
-	}
-	if(!empty($result->email))
-	{
-		return $result->email;
-	}
-	return false;
+    global $config;
+    $key = isset($config['tapatalk_push_key']) ? $config['tapatalk_push_key'] : '';
+    $board_url = generate_board_url();
+
+    $url = "http://directory.tapatalk.com/au_reg_verify.php";
+    $data = array(
+        'token' => $tt_token,
+        'code' => $tt_code,
+        'key' => $key,
+        'url' => $board_url
+    );
+    $error_msg = '';
+    $response = getContentFromRemoteServer($url, 10, $error_msg, 'POST', $data);
+    
+    if(!empty($error_msg))
+    {
+        $response = '{"result":false,"result_text":"' . $error_msg . '"}';
+    }
+    if(empty($response))
+    {
+        $response = '{"result":false,"result_text":"Contect timeout , please try again"}';
+    }
+    $result = json_decode($response);
+    return $result;
 }
 
 /**
@@ -1156,7 +1245,7 @@ function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 
 {
     //Validate input.
     $vurl = parse_url($url);
-    if ($vurl['scheme'] != 'http')
+    if ($vurl['scheme'] != 'http' && $vurl['scheme'] != 'https')
     {
         $error_msg = 'Error: invalid url given: '.$url;
         return false;
@@ -1174,7 +1263,15 @@ function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 
 
     if(!empty($holdTime) && function_exists('file_get_contents') && $method == 'GET')
     {
-        $response = file_get_contents($url);
+        $opts = array(
+            $vurl['scheme'] => array(
+                'method' => "GET",
+                'timeout' => $holdTime,
+            )
+        );
+
+        $context = stream_context_create($opts);
+        $response = file_get_contents($url,false,$context);
     }
     else if (@ini_get('allow_url_fopen'))
     {
@@ -1186,7 +1283,7 @@ function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 
 
             if($method == 'POST')
             {
-                $fp = fsockopen($host, 80, $errno, $errstr, 5);
+                $fp = @fsockopen($host, 80, $errno, $errstr, 5);
 
                 if(!$fp)
                 {
@@ -1203,6 +1300,7 @@ function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 
                 fputs($fp, "Connection: close\r\n\r\n");
                 fputs($fp, $data);
                 fclose($fp);
+                return 1;
             }
             else
             {
@@ -1214,10 +1312,13 @@ function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 
         {
             if($method == 'POST')
             {
-                $params = array('http' => array(
-                    'method' => 'POST',
-                    'content' => http_build_query($data, '', '&'),
-                ));
+                $params = array(
+                    $vurl['scheme'] => array(
+                        'method' => 'POST',
+                        'content' => http_build_query($data, '', '&'),
+                    )
+                );
+               
                 $ctx = stream_context_create($params);
                 $old = ini_set('default_socket_timeout', $holdTime);
                 $fp = @fopen($url, 'rb', false, $ctx);
@@ -1261,5 +1362,95 @@ function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 
         $error_msg = 'CURL is disabled and PHP option "allow_url_fopen" is OFF. You can enable CURL or turn on "allow_url_fopen" in php.ini to fix this problem.';
         return false;
     }
+    if(!empty($error_msg))
+    {
+        return $error_msg;
+    }
     return $response;
+}
+
+function tt_get_user_by_email($email)
+{
+    global $db;
+    $sql = 'SELECT *
+        FROM ' . USERS_TABLE . "
+        WHERE user_email = '" . $db->sql_escape($email) . "'";
+    $result = $db->sql_query($sql);
+    $row = $db->sql_fetchrow($result);
+    $db->sql_freeresult($result);
+    return $row;
+}
+
+function tt_get_user_by_id($uid)
+{
+    global $db;
+    $sql = 'SELECT *
+        FROM ' . USERS_TABLE . "
+        WHERE user_id = '" . $db->sql_escape($uid) . "'";
+    $result = $db->sql_query($sql);
+    $row = $db->sql_fetchrow($result);
+    $db->sql_freeresult($result);
+    return $row;
+}
+
+function tt_get_ignore_users($user_id)
+{
+	global $db;
+	
+	$sql_and = 'z.foe = 1';
+	$sql = 'SELECT z.*
+		FROM ' . ZEBRA_TABLE . ' z
+		WHERE z.user_id = ' . $user_id . "
+			AND $sql_and ";
+	$result = $db->sql_query($sql);
+	
+	$ignore_users = array();
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$ignore_users[] = $row['zebra_id'];
+	}
+	$db->sql_freeresult($result);
+	return $ignore_users;
+}
+
+function is_tapatalk_user($user_id)
+{
+	global $db,$table_prefix;
+	if(!push_table_exists())
+	{
+		return false;
+	}
+	$sql = "SELECT userid FROM " . $table_prefix . "tapatalk_users WHERE userid = '".$user_id."'";
+    $result = $db->sql_query($sql);
+    $row = $db->sql_fetchrow($result);
+    if(empty($row))
+    {
+    	return false;
+    }
+    return true;
+}
+
+function tt_is_spam($email,$ip='')
+{
+    if($email || $ip)
+    {
+        $email = @urlencode($email);
+        $params = '';
+        if($email)
+        {         
+            $params = "&email=$email";
+        }
+        if($ip)
+        {
+        	$params .= "&ip=$ip";
+        }
+        $resp = @getContentFromRemoteServer("http://www.stopforumspam.com/api?f=serial".$params, 10);
+        $resp = @unserialize($resp);
+        if((isset($resp['email']['confidence']) && $resp['email']['confidence'] > 50) ||
+           (isset($resp['ip']['confidence']) && $resp['ip']['confidence'] > 60))
+        {
+            return true;
+        }
+    }
+    return false;
 }
