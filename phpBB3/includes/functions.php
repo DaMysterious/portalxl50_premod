@@ -5105,7 +5105,7 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 
 	$db->return_on_error = false;
 	// End Download MOD 6
-	
+		
 	// Which timezone?
 	$tz = ($user->data['user_id'] != ANONYMOUS) ? strval(doubleval($user->data['user_timezone'])) : strval(doubleval($config['board_timezone']));
 
