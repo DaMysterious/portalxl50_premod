@@ -1649,9 +1649,6 @@ switch ($mode)
 		}
 		$sort_params[] = "mode=$mode";
 
-		$pagination_url = append_sid("{$phpbb_root_path}memberlist.$phpEx", implode('&amp;', $params));
-		$sort_url = append_sid("{$phpbb_root_path}memberlist.$phpEx", implode('&amp;', $sort_params));
-
 		// www.phpBB-SEO.com SEO TOOLKIT BEGIN - Zero dupe
 		if ($mode == 'group') {
 			$phpbb_seo->prepare_url('group', $group_row['group_name'], $group_row['group_id']);
@@ -1663,6 +1660,8 @@ switch ($mode)
 			}
 		}
 		// www.phpBB-SEO.com SEO TOOLKIT END - Zero dupe
+		$pagination_url = append_sid("{$phpbb_root_path}memberlist.$phpEx", implode('&amp;', $params));
+		$sort_url = append_sid("{$phpbb_root_path}memberlist.$phpEx", implode('&amp;', $sort_params));
 
 		unset($search_params, $sort_params);
 

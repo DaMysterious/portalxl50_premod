@@ -2,8 +2,8 @@
 /**
 *
 * @package phpBB SEO GYM Sitemaps
-* @version $Id: gym_install.php 308 2011-06-16 07:20:24Z dcz $
-* @copyright (c) 2006 - 2010 www.phpbb-seo.com
+* @version $Id: gym_install.php 404 2013-01-29 07:30:30Z dcz $
+* @copyright (c) 2006 - 2013 www.phpbb-seo.com
 * @license http://opensource.org/osi3.0/licenses/lgpl-license.php GNU Lesser General Public License
 *
 */
@@ -14,7 +14,7 @@ define('IN_PHPBB', true);
 define('IN_INSTALL', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
-@define('GYM_VERSION', '2.0.3');
+@define('GYM_VERSION', '2.0.4');
 // Try to override some limits - maybe it helps some...
 @set_time_limit(0);
 $mem_limit = @ini_get('memory_limit');
@@ -39,7 +39,7 @@ require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 // Start session management
 $user->session_begin();
 $auth->acl($user->data);
-$user->setup('gym_sitemaps/install');
+$user->setup(array('gym_sitemaps/install', 'mods/info_acp_gym_sitemaps'));
 // Security check
 // Circumvent a potential phpbb bug with paths
 $redirect = append_sid(generate_board_url() . "/gym_sitemaps/gym_install.$phpEx");
@@ -170,7 +170,7 @@ class module {
 				$this->mode = $mode;
 			}
 			$module = $this->filename;
-			if (!class_exists($module)) {
+			if (!class_exists($module/*, false*/)) {
 				$this->error('Module "' . htmlspecialchars($module) . '" not accessible.', __LINE__, __FILE__);
 			}
 			$this->module = new $module($this);
@@ -415,10 +415,12 @@ class install_gym_sitemaps extends module {
 		global $user, $phpbb_seo, $config, $phpbb_root_path, $phpEx, $_action_types;
 		$this->p_master = &$p_master;
 		$this->version = GYM_VERSION;
-		require_once($phpbb_root_path . 'gym_sitemaps/includes/gym_common.' . $phpEx);
+		require($phpbb_root_path . 'gym_sitemaps/includes/gym_common.' . $phpEx);
 		// For Compatibility with the phpBB SEO mod rewrites
 		if (empty($phpbb_seo)) {
-			require_once($phpbb_root_path . 'gym_sitemaps/includes/phpbb_seo_class_light.' . $phpEx);
+			if (!class_exists('phpbb_seo'/*, false*/)) {
+				require($phpbb_root_path . 'gym_sitemaps/includes/phpbb_seo_class_light.' . $phpEx);
+			}
 			$phpbb_seo = new phpbb_seo();
 			define('STARTED_LIGHT', true);
 		}
@@ -479,8 +481,10 @@ class install_gym_sitemaps extends module {
 							$module_file = $phpbb_root_path . 'gym_sitemaps/acp/' . $type_module . '.' . $phpEx;
 
 							if ( file_exists($module_file) ) {
-								include_once($module_file);
-								if (class_exists($type_module)) {
+								if (!class_exists($type_module/*, false*/)) {
+									require($module_file);
+								}
+								if (class_exists($type_module/*, false*/)) {
 									$gym_module = new $type_module($this);
 									if ( method_exists($gym_module, 'acp_module')) { // Looks like we match
 										$gym_modules_acp[$otype][$_module] = $gym_module->acp_module();
@@ -520,7 +524,9 @@ class install_gym_sitemaps extends module {
 	*/
 	function add_modules($mode, $sub) {
 		global $db, $user, $phpbb_root_path, $phpEx;
-		include_once($phpbb_root_path . 'includes/acp/acp_modules.' . $phpEx);
+		if (!class_exists('acp_modules'/*, false*/)) {
+			require($phpbb_root_path . 'includes/acp/acp_modules.' . $phpEx);
+		}
 		$_module = new acp_modules();
 		if ( $this->get_module_id('ACP_GYM_SITEMAPS')  > 0 ) {
 			$url_mod = !empty($sub) ? '?mode=' . $mode : '';
@@ -615,7 +621,9 @@ class install_gym_sitemaps extends module {
 	*/
 	function remove_modules($mode, $sub) {
 		global $db, $user, $phpbb_root_path, $phpEx;
-		include_once($phpbb_root_path . 'includes/acp/acp_modules.' . $phpEx);
+		if (!class_exists('acp_modules'/*, false*/)) {
+			require($phpbb_root_path . 'includes/acp/acp_modules.' . $phpEx);
+		}
 		$_module = new acp_modules();
 		// Set the module class
 		$module_classes = array_keys($this->module_categories);

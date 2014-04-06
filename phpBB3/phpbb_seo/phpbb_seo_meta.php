@@ -2,8 +2,8 @@
 /**
 *
 * @package phpBB SEO Dynamic Meta tags
-* @version $Id: phpbb_seo_meta.php 335 2011-12-08 14:55:48Z dcz $
-* @copyright (c) 2006 - 2011 www.phpbb-seo.com
+* @version $Id: phpbb_seo_meta.php 407 2013-05-19 06:49:10Z dcz $
+* @copyright (c) 2006 - 2013 www.phpbb-seo.com
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License v2
 *
 */
@@ -129,7 +129,7 @@ class seo_meta {
 			}
 			// Do we allow indexing based on physical script file name
 			if (empty($this->meta['robots'])) {
-				if (strpos($this->mconfig['file_filter'], str_replace(".$phpEx", '', $user->page['page_name'])) !== false) {
+				if (!empty($user->page['page_name']) && strpos($this->mconfig['file_filter'], str_replace(".$phpEx", '', $user->page['page_name'])) !== false) {
 					$this->meta['robots'] = 'noindex,follow';
 				}
 			}

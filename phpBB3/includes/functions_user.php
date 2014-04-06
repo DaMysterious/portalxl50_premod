@@ -115,21 +115,25 @@ function user_update_name($old_name, $new_name)
 {
 	global $config, $db, $cache;
 
+	// Knowledgebase
 	if(!defined('KB_TABLE'))
 	{
 		global $phpbb_root_path, $phpEx, $table_prefix;
 		include($phpbb_root_path . 'includes/constants_kb.' . $phpEx);
 	}
+	// Knowledgebase
 	
 	$update_ary = array(
 		FORUMS_TABLE			=> array('forum_last_poster_name'),
 		MODERATOR_CACHE_TABLE	=> array('username'),
 		POSTS_TABLE				=> array('post_username'),
 		TOPICS_TABLE			=> array('topic_first_poster_name', 'topic_last_poster_name'),
+	// Knowledgebase
 		KB_TABLE				=> array('article_user_name'),
 		KB_COMMENTS_TABLE		=> array('comment_user_name', 'comment_edit_name'),
 		KB_EDITS_TABLE			=> array('edit_user_name'),
 		KB_REQ_TABLE			=> array('request_user_name'),		
+	// Knowledgebase
 	);
 
 	$update_ary = array_merge($update_ary, array(
@@ -257,7 +261,9 @@ function user_add($user_row, $cp_data = false)
 		'user_sig_bbcode_bitfield'	=> '',
 
 		'user_form_salt'			=> unique_id(),
+	// Knowledgebase
 		'user_kb_permissions'		=> '',
+	// Knowledgebase
 	);
 
 	// Now fill the sql array with not required variables
@@ -599,11 +605,13 @@ function user_delete($mode, $user_id, $post_username = false)
 	}
 	phpbb_delete_user_pms($user_id);
 
+	// Knowledgebase
 	if(!function_exists('kb_user_delete'))
 	{
 		include($phpbb_root_path . 'includes/functions_kb.' . $phpEx);
 	}
 	kb_user_delete($mode, $user_id, $post_username);
+	// Knowledgebase
 
 	$db->sql_transaction('commit');
 
@@ -1317,8 +1325,9 @@ function validate_data($data, $val_ary)
 		{
 			$function = array_shift($validate);
 			array_unshift($validate, $data[$var]);
+			$function_prefix = (function_exists('phpbb_validate_' . $function)) ? 'phpbb_validate_' : 'validate_';
 
-			if ($result = call_user_func_array('validate_' . $function, $validate))
+			if ($result = call_user_func_array($function_prefix . $function, $validate))
 			{
 				// Since errors are checked later for their language file existence, we need to make sure custom errors are not adjusted.
 				$error[] = (empty($user->lang[$result . '_' . strtoupper($var)])) ? $result : $result . '_' . strtoupper($var);
@@ -1977,6 +1986,30 @@ function validate_jabber($jid)
 }
 
 /**
+* Validate hex colour value
+*
+* @param string $colour The hex colour value
+* @param bool $optional Whether the colour value is optional. True if an empty
+*			string will be accepted as correct input, false if not.
+* @return bool|string Error message if colour value is incorrect, false if it
+*			fits the hex colour code
+*/
+function phpbb_validate_hex_colour($colour, $optional = false)
+{
+	if ($colour === '')
+	{
+		return (($optional) ? false : 'WRONG_DATA');
+	}
+
+	if (!preg_match('/^([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/', $colour))
+	{
+		return 'WRONG_DATA';
+	}
+
+	return false;
+}
+
+/**
 * Verifies whether a style ID corresponds to an active style.
 *
 * @param int $style_id The style_id of a style which should be checked if activated or not.
@@ -2508,7 +2541,10 @@ function group_create(&$group_id, $type, $name, $desc, $group_attributes, $allow
 	$error = array();
 
 	// Attributes which also affect the users table
+	// $user_attribute_ary = array('group_colour', 'group_rank', 'group_avatar', 'group_avatar_type', 'group_avatar_width', 'group_avatar_height');
+	// Autogroup
 	$user_attribute_ary = array('group_colour', 'group_rank', 'group_avatar', 'group_avatar_type', 'group_avatar_width', 'group_avatar_height', 'group_auto_default');
+	// Autogroup
 
 	// Check data. Limit group name length.
 	if (!utf8_strlen($name) || utf8_strlen($name) > 60)
@@ -2813,7 +2849,10 @@ function group_delete($group_id, $group_name = false)
 *
 * @return mixed false if no errors occurred, else the user lang string for the relevant error, for example 'NO_USER'
 */
+// function group_user_add($group_id, $user_id_ary = false, $username_ary = false, $group_name = false, $default = false, $leader = 0, $pending = 0, $group_attributes = false)
+// Autogroup
 function group_user_add($group_id, $user_id_ary = false, $username_ary = false, $group_name = false, $default = false, $leader = 0, $pending = 0, $group_attributes = false, $auto_group = 0, $scheduled = 0)
+// Autogroup
 {
 	global $db, $auth;
 
@@ -2900,7 +2939,9 @@ function group_user_add($group_id, $user_id_ary = false, $username_ary = false, 
 				'group_id'		=> (int) $group_id,
 				'group_leader'	=> (int) $leader,
 				'user_pending'	=> (int) $pending,
+				//Autogroup
 				'auto_group'	=> (int) $auto_group,				
+				//Autogroup
 			);
 		}
 
@@ -2955,7 +2996,10 @@ function group_user_add($group_id, $user_id_ary = false, $username_ary = false, 
 *
 * @return false if no errors occurred, else the user lang string for the relevant error, for example 'NO_USER'
 */
+// function group_user_del($group_id, $user_id_ary = false, $username_ary = false, $group_name = false)
+//Autogroup
 function group_user_del($group_id, $user_id_ary = false, $username_ary = false, $group_name = false, $auto_group = 0)
+//Autogroup
 {
 	global $db, $auth, $config;
 

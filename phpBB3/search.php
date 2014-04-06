@@ -730,7 +730,7 @@ if ($keywords || $author || $author_id || $search_id || $submit)
 	if ( $phpbb_seo->seo_opt['rewrite_usermsg'] && (!empty($author) || !empty($author_id)) ) {
 		$author_name = '';
 		if (!empty($author_id)) {
-			$sql = $sql = 'SELECT username
+			$sql = 'SELECT username
 				FROM ' . USERS_TABLE . "
 				WHERE user_id = $author_id
 				AND user_type IN (" . USER_NORMAL . ', ' . USER_FOUNDER . ')';
@@ -741,7 +741,7 @@ if ($keywords || $author || $author_id || $search_id || $submit)
 			}
 		}
 		if (!empty($author) && (strpos($author, '*') === false) ) {
-			$sql = $sql = 'SELECT user_id
+			$sql = 'SELECT user_id
 				FROM ' . USERS_TABLE . "
 				WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($author)) . "'
 				AND user_type IN (" . USER_NORMAL . ', ' . USER_FOUNDER . ')';
@@ -773,7 +773,8 @@ if ($keywords || $author || $author_id || $search_id || $submit)
 	$template->assign_vars(array(
 		'SEARCH_TITLE'		=> $l_search_title,
 		'SEARCH_MATCHES'	=> $l_search_matches,
-		'SEARCH_WORDS'		=> $search->search_query,
+		'SEARCH_WORDS'		=> $keywords,
+		'SEARCHED_QUERY'	=> $search->search_query,
 		'IGNORED_WORDS'		=> (sizeof($search->common_words)) ? implode(' ', $search->common_words) : '',
 		'PAGINATION'		=> generate_pagination($u_search, $total_match_count, $per_page, $start),
 		'PAGE_NUMBER'		=> on_page($total_match_count, $per_page, $start),
