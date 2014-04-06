@@ -6,7 +6,7 @@
 * @package language
 * @version $Id$
 * @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License 2.0
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -135,9 +135,9 @@ $lang = array_merge($lang, array(
 	'LOGVIEW_VIEWTOPIC'			=> 'View topic',
 	'LOGVIEW_VIEWLOGS'			=> 'View topic log',
 	'LOGVIEW_VIEWFORUM'			=> 'View forum',
-// AdvancedBlockMOD 1.0.3						
+// AdvancedBlockMOD 1.0.6						
 	'LOGVIEW_DNSBLLOOKUP'		=> 'Lookup blacklist',
-// AdvancedBlockMOD 1.0.3						
+// AdvancedBlockMOD 1.0.6						
 	'LOOKUP_ALL'				=> 'Look up all IPs',
 	'LOOKUP_IP'					=> 'Look up IP',
 

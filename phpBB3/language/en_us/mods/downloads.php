@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				downloads.php 59 2013/01/20 OXPUS
+* @file				downloads.php 63 2014/03/07 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -87,6 +87,7 @@ $lang = array_merge($lang, array(
 	'DL_ADD_EXTENTION'					=> 'Add File extention',
 	'DL_ADD_USER'						=> 'This download was added <strong>%s</strong> by <strong>%s</strong>',
 	'DL_ALL'							=> 'All',
+	'DL_ALL_STAT_DELETE'				=> 'Delete all statistical data',
 	'DL_ANNOUNCEMENT_TOPIC'				=> 'Release Announcement',
 	'DL_ANTISPAM'						=> 'Antispam',
 	'DL_ANTISPAM_HOURS'					=> 'last hours',
@@ -154,7 +155,7 @@ $lang = array_merge($lang, array(
 	'DL_CAPTCHA_PERM_2'					=> 'Guests and Standardusers',
 	'DL_CAPTCHA_PERM_3'					=> 'Guests, Standardusers and DL-Moderators',
 	'DL_CAPTCHA_PERM_4'					=> 'Guests, Standardusers, DL-Moderators and Administrators',
-	'DL_CAPTCHA_PERM_4'					=> 'Guests and all Users incl. Founders',
+	'DL_CAPTCHA_PERM_5'					=> 'Guests and all Users incl. Founders',
 	'DL_CAPTCHA_PERM_DOWNLOAD'			=> 'Activate Captcha to download for',
 	'DL_CAPTCHA_PERM_REPORT'			=> 'Activate Captcha to report for',
 	'DL_CAT_DESCRIPTION'				=> 'Description',
@@ -391,6 +392,7 @@ $lang = array_merge($lang, array(
 	'DL_LOG_FOLDER_DROP'	=> '<strong>Download Folder deleted</strong><br />» %s',
 	'DL_LOG_GRP_TR_ADD'		=> '<strong>Download Traffic added</strong><br />» Usergroup: %1$s<br /> » Traffic: %2$s %3$s',
 	'DL_LOG_GRP_TR_SET'		=> '<strong>Download Traffic set</strong><br />» Usergroup: %1$s<br /> » Traffic: %2$s %3$s',
+	'DL_LOG_STATS_ALL'		=> '<strong>All Download statistical data deleted</strong>',
 	'DL_LOG_STATS_ANONYM'	=> '<strong>Download Statistics from guest accounts deleted</strong>',
 	'DL_LOG_STATS_SOME'		=> '<strong>Choosen Download Statistics deleted</strong>',
 	'DL_LOG_THUMBS_DEL'		=> '<strong>Not assigned download thumbnails deleted</strong>',
@@ -511,7 +513,7 @@ $lang = array_merge($lang, array(
 	'DL_REPORT_BROKEN_VC'				=> 'Visual confirmation to report a broken download',
 	'DL_REPORT_BROKEN_VC_MISMATCH'		=> 'The confirmation code for this report was wrong. Please go back and retry.',
 	'DL_REPORT_CONFIRM_CODE'			=> 'Please enter the confirmation code here to report this download as broken:',
-	'DL_REPORT_NOTIFY_TEXT'				=> '---------------------------\n\nThe user have entered the following message about this:\n\n%s\n\n',
+	'DL_REPORT_NOTIFY_TEXT'				=> "---------------------------\n\nThe user have entered the following message about this:\n\n%s\n\n",
 	'DL_REPORT_REASON'					=> 'Reason for your report',
 
 	'DL_RSS_ACTION_D_TXT'			=> 'Display the following message',
@@ -550,6 +552,9 @@ $lang = array_merge($lang, array(
 	'DL_SHOW_FOOTER_LEGEND'		=> 'Show legend on download footer',
 	'DL_SHOW_FOOTER_STAT'		=> 'Show statistics on download footer',
 	'DL_SHOW_REAL_FILETIME'		=> 'Show the time of the last file modification on download details',
+	'DL_SIMILAR_DL'				=> 'Similar Downloads',
+	'DL_SIMILAR_DL_LIMIT'		=> 'Number of similar downloads',
+	'DL_SIMILAR_DL_OPTION'		=> 'Enable similar downloads',
 	'DL_SORT_ACP'				=> 'Preset',
 	'DL_SORT_PREFORM'			=> 'Perform sorting',
 	'DL_SORT_USER'				=> 'User',
@@ -633,6 +638,7 @@ $lang = array_merge($lang, array(
 	'DL_UPLOADS_TRAFFIC'		=> 'Overall upload traffic',
 	'DL_USE_EXT_BLACKLIST'		=> 'Enable blacklist for filetypes',
 	'DL_USE_HACKLIST'			=> 'Activate hackslist',
+	'DL_USE_TODOLIST'			=> 'Activate ToDo list',
 	'DL_USER_AGENT_TITLE'		=> 'Browser Title',
 	'DL_USER_AGENT_EXPLAIN'		=> '(used in banlist)',
 	'DL_USER_AGENTS'			=> 'User Agents',
@@ -710,6 +716,9 @@ $lang = array_merge($lang, array(
 	'IMG_DL_RED'			=> 'Red',
 	'IMG_DL_WHITE'			=> 'White',
 	'IMG_DL_YELLOW'			=> 'Yellow',
+
+	'IMG_BUTTON_DOWNLOAD_UPLOAD'		=> 'Search download',
+	'IMG_BUTTON_DOWNLOAD_SEARCH'		=> 'Upload a file',
 
 	'MUST_SELECT_DOWNLOAD'	=> 'Choose a download.',
 

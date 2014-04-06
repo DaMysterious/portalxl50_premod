@@ -6,7 +6,7 @@
 * @package language
 * @version $Id$
 * @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License 2.0
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -52,7 +52,7 @@ $lang = array_merge($lang, array(
 	'SEND_TO_GROUP'			=> 'Send to group',
 	'SEND_TO_USERS'			=> 'Send to users',
 	'SEND_TO_USERS_EXPLAIN'	=> 'Entering names here will override any group selected above. Enter each username on a new line.',
-	
+
 	'MAIL_BANNED'			=> 'Mail banned users',
 	'MAIL_BANNED_EXPLAIN'	=> 'When sending a mass e-mail to a group you can select here whether banned users will also receive the e-mail.',
 	'MAIL_HIGH_PRIORITY'	=> 'High',
@@ -61,7 +61,7 @@ $lang = array_merge($lang, array(
 	'MAIL_PRIORITY'			=> 'Mail priority',
 	'MASS_MESSAGE'			=> 'Your message',
 	'MASS_MESSAGE_EXPLAIN'	=> 'Please note that you may enter only plain text. All markup will be removed before sending.',
-	
+
 	'NO_EMAIL_MESSAGE'		=> 'You must enter a message.',
 	'NO_EMAIL_SUBJECT'		=> 'You must specify a subject for your message.',
 ));

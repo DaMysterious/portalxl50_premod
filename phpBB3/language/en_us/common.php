@@ -6,7 +6,7 @@
 * @package language
 * @version $Id$
 * @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License 2.0
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -160,6 +160,7 @@ $lang = array_merge($lang, array(
 	'EDIT_POST'							=> 'Edit post',
 	'EMAIL'								=> 'E-mail', // Short form for EMAIL_ADDRESS
 	'EMAIL_ADDRESS'						=> 'E-mail address',
+	'EMAIL_INVALID_EMAIL'				=> 'The e-mail address you entered is invalid.',
 	'EMAIL_SMTP_ERROR_RESPONSE'			=> 'Ran into problems sending e-mail at <strong>Line %1$s</strong>. Response: %2$s.',
 	'EMPTY_SUBJECT'						=> 'You must specify a subject when posting a new topic.',
 	'EMPTY_MESSAGE_SUBJECT'				=> 'You must specify a subject when composing a new message.',
@@ -568,9 +569,11 @@ $lang = array_merge($lang, array(
 	'SUBJECT'					=> 'Subject',
 	'SUBMIT'					=> 'Submit',
 
+	'TB'				=> 'TB',
 	'TERMS_USE'			=> 'Terms of use',
 	'TEST_CONNECTION'	=> 'Test connection',
 	'THE_TEAM'			=> 'The team',
+	'TIB'				=> 'TiB',
 	'TIME'				=> 'Time',
 	
 	'TOO_LARGE'						=> 'The value you entered is too large.',
@@ -718,6 +721,7 @@ $lang = array_merge($lang, array(
 	'WHO_IS_ONLINE'		=> 'Who is online',
 	'WRONG_PASSWORD'	=> 'You entered an incorrect password.',
 
+	'WRONG_DATA_COLOUR'			=> 'The colour value you entered is invalid.',
 	'WRONG_DATA_ICQ'			=> 'The number you entered is not a valid ICQ number.',
 	'WRONG_DATA_JABBER'			=> 'The name you entered is not a valid Jabber account name.',
 	'WRONG_DATA_LANG'			=> 'The language you specified is not valid.',

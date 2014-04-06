@@ -6,7 +6,7 @@
 * @package language
 * @version $Id$
 * @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License 2.0
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -85,7 +85,7 @@ $lang = array_merge($lang, array(
 	'DISPLAY_INLINED_EXPLAIN'		=> 'If set to No image attachments will show as a link.',
 	'DISPLAY_ORDER'					=> 'Attachment display order',
 	'DISPLAY_ORDER_EXPLAIN'			=> 'Display attachments ordered by time.',
-	
+
 	'EDIT_EXTENSION_GROUP'			=> 'Edit extension group',
 	'EXCLUDE_ENTERED_IP'			=> 'Enable this to exclude the entered IP/hostname.',
 	'EXCLUDE_FROM_ALLOWED_IP'		=> 'Exclude IP from allowed IPs/hostnames',

@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_help.php 19 2013/01/20 OXPUS
+* @file				dl_help.php 21 2013/06/11 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -133,7 +133,7 @@ $lang = array_merge($lang, array(
 	'HELP_DL_RSS_OFF_TEXT'				=> 'This message will be displayed in the RSS feed instead the download entried if the function is disabled and the last option is set to display the text.<br />If the last option is set to redirect the text will still be enabled but just not be displayed.',
 	'HELP_DL_RSS_CATS'					=> 'The entries in the RSS feed will be taken from all or selected categories like the list in this option.<br />To select more than one category hold the CRTL key down while you click on the category names.<br />You can choose to include the selected or not selected categories in the feed.',
 	'HELP_DL_RSS_PERMS'					=> 'Against the selection from which categories the feed should be build it can be usefull to regard the user permissions in the download categories or for gests/bots to avoid displaying downloads which must not be displayed for the current account.<br />The setting "for guests" will select only categories which can be viewed by guests and bots.<br />If a user or guest/bot will not get at least one entry in the feed the script will work like it is disabled.',
-	'DL_RSS_NEW_UPDATE'					=> 'This option displayes the marks for new or updated downloads like the mini icon in the category view',
+	'HELP_DL_RSS_NEW_UPDATE'			=> 'This option displayes the marks for new or updated downloads like the mini icon in the category view',
 	'HELP_DL_RSS_NUMBER'				=> 'Number of downloads the feed will be display at maximum.',
 	'HELP_DL_RSS_SELECT'				=> 'This option defines to display the latest or random download title in the feed based on the selected categories the permissions and the maximum number.',
 	'HELP_DL_RSS_DESC_LENGTH'			=> 'With this option the descriptions of the downloads can be displayed. You can select between the full description or the short one like you can use on the download index.<br /><br /><strong>Attention:</strong><br />Because not all RSS reader can use and display HTML-Codes, the download description can be displayed incorrect or the reader will simply display no entry. In this case the user can use an other reader or you must disable the download descriptions.',
@@ -144,6 +144,8 @@ $lang = array_merge($lang, array(
 	'HELP_DL_SHOW_FOOTER_LEGEND'	=> 'This option will turn the legend with the download status icons on the download footer on and off.<br />The icons which you can find beside the downloads will not be changed by this option.',
 	'HELP_DL_SHOW_FOOTER_STAT'		=> 'This option will turn the statistic lines on the download footer on and off.<br />The statistic will still earn data, if you switch it off.',
 	'HELP_DL_SHOW_REAL_FILETIME'	=> 'With this you can display the real last edit time of the download files in the download details.<br />This is the exactest timecode even files will be uploaded with a ftp client or not updated while editing the downloads.',
+	'HELP_DL_SIMILAR_DL'			=> 'Shows on detail view similar downloads from the same category.<br /><br />Regard: On bigger download databases this option can increade the loading time of the detail view, so this option should be disabled.',
+	'HELP_DL_SIMILAR_DL_LIMIT'		=> 'Number of similar downloads.',
 	'HELP_DL_SORT_PREFORM'			=> 'The option "Preset" will sort all downloads in all categories for all users like they are sorted in the ACP.<br />With the option "User" each user can choose, how downloads will be sorted for him/her and if this sorting will be fix or extended with other sort criteria.',
 	'HELP_DL_STAT_PERM'				=> 'Select here from which userlevel upsides user can view the download statistic page.<br />E. g. if you will enable it for Download Moderators each board administrator and download moderator (NOT forum moderator!) can open and view this page.<br />Note that this page can produce a heavy load, so we recommended to do not open it for the masses if you have a bigger board and/or manage many downloads.',
 	'HELP_DL_STATISTICS'			=> 'Enables detailed statistics about the files.<br />Note that this statistics will produces additional database queries and datasets in a seperate table.',
@@ -155,6 +157,7 @@ $lang = array_merge($lang, array(
 	'HELP_DL_THUMB_MAX_DIM'				=> 'This values will limit the possible image size of uploaded files for thumbnails.<br />The thumbnails itselfs are at max 150 x 100 pixel and you can view the uploaded images in a popup if you click on a thumbnail.<br /><br />Enter 0 here to disable thumbnails (not recommended, if the thumbnail filesize will be set).<br />Existing thumbnails will be displayed until the thumbs filesize was not changed to 0, too.',
 	'HELP_DL_THUMB_MAX_SIZE'			=> 'Enter 0 as filesize to disable thumbnails in all categories.<br />If you allow thumbsnails, then enter the maximim image sizes for the uploaded imagefiles to create new thumbnails from.<br />If you disable thumbnails you can not see existing thumbnails in the download details, too.',
 	'HELP_DL_TODO_LINK'					=> 'Switch the link for the todolist in the download footer on or off. >The todo entries the management about them are not affected while changing this option.',
+	'HELP_DL_USE_TODOLIST'				=> 'Acticate or disable the todo list.',
 	'HELP_DL_TOPIC_DETAILS'				=> 'Shows the download description, the filename, file size or on external downloads the url in the forum topic.<br />The text can be placed over or after the previous entered text.<br />If the topic will be created over the download categories the option in the general configuration will be ignored.',
 	'HELP_DL_TOPIC_FORUM'				=> 'The forum which will display the new topics about the downloads.<br />If you select instead a forum the option "Category select" the topic will be inserted in the forum you select in the categories.',
 	'HELP_DL_TOPIC_FORUM_C'				=> 'The forum which will display the new topics about the downloads from this category.',

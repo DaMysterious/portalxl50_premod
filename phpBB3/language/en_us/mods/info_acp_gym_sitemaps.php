@@ -4,8 +4,8 @@
 * info_acp_gym_sitemaps [English]
 *
 * @package phpBB SEO GYM Sitemaps
-* @version $Id: info_acp_gym_sitemaps.php 131 2009-10-25 12:03:44Z dcz $
-* @copyright (c) 2006 - 2009 www.phpbb-seo.com
+* @version $Id: info_acp_gym_sitemaps.php 404 2013-01-29 07:30:30Z dcz $
+* @copyright (c) 2006 - 2013 www.phpbb-seo.com
 * @license http://opensource.org/osi3.0/licenses/lgpl-license.php GNU Lesser General Public License
 *
 */
@@ -34,6 +34,7 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+	'ACP_CAT_PHPBB_SEO' => 'phpBB SEO',
 	'ACP_GYM_SITEMAPS' => 'GYM Sitemaps &amp; RSS',
 	'ACP_GYM_MAIN' => 'Main configuration',
 	'ACP_GYM_GOOGLE_MAIN' => 'Google Sitemaps',
