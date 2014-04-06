@@ -136,11 +136,13 @@ function user_update_name($old_name, $new_name)
 	// Knowledgebase
 	);
 
+	// Download MOD 6
 	$update_ary = array_merge($update_ary, array(
 		DL_BANLIST_TABLE		=> array('username'),
 		DL_COMMENTS_TABLE		=> array('username'),
 		DL_STATS_TABLE			=> array('username'),
 	));
+	// Download MOD 6
 
 	foreach ($update_ary as $table => $field_ary)
 	{

@@ -1589,7 +1589,7 @@ function delete_post($forum_id, $topic_id, $post_id, &$data)
 		$db->sql_query($sql);
 	}
 	// Download MOD 6 - Drop Traffic on Topic/Post delete
-		
+			
 	// Collect the necessary information for updating the tables
 	$sql_data[FORUMS_TABLE] = '';
 	switch ($post_mode)
@@ -2434,8 +2434,8 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll, &$data, $u
 			}
 		}
 	}
-	// Download MOD 6	
-	
+	// Download MOD 6
+		
 	// we need to update the last forum information
 	// only applicable if the topic is not global and it is approved
 	// we also check to make sure we are not dealing with globaling the latest topic (pretty rare but still needs to be checked)
