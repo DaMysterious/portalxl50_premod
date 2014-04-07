@@ -1814,13 +1814,12 @@ function submit_pm($mode, $subject, &$data, $put_in_outbox = true)
 	// Send Notifications
 	
 	// BEGIN mobiquo Mod push service
-	if(!empty($data['msg_id']) && isset($config['mobiquo_push']) && ($mode != 'edit'))
-	{
-		require_once($phpbb_root_path . $config['tapatalkdir'].'/push_hook.' . $phpEx);
-		tapatalk_push_pm($user_id, $data['msg_id'], $subject);
-	}
+	if(file_exists($phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/functions_privmsgs_hook.php'))
+    {
+        include  $phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/functions_privmsgs_hook.php';
+    }
 	// END mobiquo Mod
-	
+		
 	if ($mode != 'edit')
 	{
 		//-- mod: Prime Notify ------------------------------------------------------//

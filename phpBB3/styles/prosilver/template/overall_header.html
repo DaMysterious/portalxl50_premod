@@ -23,22 +23,7 @@
 {META_TAG}
 {META}
 <title>{SITENAME} &bull; <!-- IF S_IN_MCP -->{L_MCP} &bull; <!-- ELSEIF S_IN_UCP -->{L_UCP} &bull; <!-- ENDIF -->{PAGE_TITLE}</title>
-
-<!--BEGIN mobiquo Mod push service-->
-<script type="text/javascript">
-var tapatalkdir="{MOBIQUO_NAME}";
-var tapatalk_ipad_msg = '{TAPATALK_IPAD_MSG}';
-var tapatalk_ipad_url  = '{TAPATALK_IPAD_URL}';
-var tapatalk_iphone_msg = '{TAPATALK_IPHONE_MSG}';
-var tapatalk_iphone_url  = '{TAPATALK_IPHONE_URL}';
-var tapatalk_android_msg = '{TAPATALK_ANDROID_MSG}';
-var tapatalk_android_url  = '{TAPATALK_ANDROID_URL}';
-var tapatalk_kindle_msg = '{TAPATALK_KINDLE_MSG}';
-var tapatalk_kindle_url  = '{TAPATALK_KINDLE_URL}';
-var tapatalk_chrome_enable = '{TAPATALK_CHROME_ENABLE}';
-</script>
-<script type="text/javascript" src="{TAPATALKDETECT_JS}"></script>
-<!--END mobiquo Mod push service-->
+{TAPATALK_HEAD}
 
 <!-- BEGIN gym_rsslinks -->
 <link rel="alternate" type="application/rss+xml" title="{gym_rsslinks.TITLE}" href="{gym_rsslinks.URL}" />
@@ -258,6 +243,14 @@ return false;
 <!-- End DM Music Charts -->
 
 <body id="phpbb" class="section-{SCRIPT_NAME} {S_CONTENT_DIRECTION}">
+
+<!-- Tapatalk Detect body start --> 
+<script type="text/javascript">
+if(typeof(app_ios_id) != "undefined") {
+	tapatalkDetect();
+}
+</script>
+<!-- Tapatalk Detect banner body end -->
 
 <!-- IF not S_IS_BOT and (ACTIVE_PANEL and not S_DISPLAY_SHOUTBOX) or (S_DISPLAY_SHOUTBOX and PANEL_ALL) -->
 <script type="text/javascript">

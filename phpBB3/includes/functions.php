@@ -4958,8 +4958,12 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 	// Send a proper content-language to the output
 	$user_lang = $user->lang['USER_LANG'];
 	
-	// BEGIN mobiquo Mod push service
-	$user->add_lang('mods/info_acp_mobiquo');	
+	// BEGIN mobiquo Mod
+	$tapatalk_dir = !empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo';
+	if(file_exists($phpbb_root_path.$tapatalk_dir.'/hook/head_output_hook.php'))
+	{
+		include $phpbb_root_path.$tapatalk_dir.'/hook/head_output_hook.php';
+	}
 	// END mobiquo Mod
 	
 	if (strpos($user_lang, '-x-') !== false)
@@ -5254,17 +5258,7 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'BOARD_URL'			=> $board_url,
 
 // BEGIN mobiquo Mod push service
-		'MOBIQUO_NAME'      => isset($config['tapatalkdir']) ? $phpbb_root_path . $config['tapatalkdir'] : '',
-		'TAPATALKDETECT_JS' => $phpbb_root_path . (isset($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo' ).'/tapatalkdetect.js' ,
-		'TAPATALK_CHROME_ENABLE' => isset($config['mobiquo_is_chrome']) ? $config['mobiquo_is_chrome'] : true,
-		'TAPATALK_IPAD_MSG' => isset($config['tapatalk_ipad_msg']) ? $config['tapatalk_ipad_msg'] : '' ,
-		'TAPATALK_IPAD_URL' => isset($config['tapatalk_ipad_url']) ? $config['tapatalk_ipad_url'] : '' ,
-		'TAPATALK_IPHONE_MSG' => isset($config['tapatalk_iphone_msg']) ? $config['tapatalk_iphone_msg'] : '' ,
-		'TAPATALK_IPHONE_URL' => isset($config['tapatalk_iphone_url']) ? $config['tapatalk_iphone_url'] : '' ,
-		'TAPATALK_ANDROID_MSG' => isset($config['tapatalk_android_msg']) ? $config['tapatalk_android_msg'] : '' ,
-		'TAPATALK_ANDROID_URL' => isset($config['tapatalk_android_url']) ? $config['tapatalk_android_url'] : '' ,
-		'TAPATALK_KINDLE_MSG' => isset($config['tapatalk_kindle_msg']) ? $config['tapatalk_kindle_msg'] : '' ,
-		'TAPATALK_KINDLE_URL' => isset($config['tapatalk_kindle_url']) ? $config['tapatalk_kindle_url'] : '' ,
+		'TAPATALK_HEAD'     => $app_head_include,
 // END mobiquo Mod push service
 
 		'L_LOGIN_LOGOUT'	=> $l_login_logout,

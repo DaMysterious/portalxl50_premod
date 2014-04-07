@@ -2853,32 +2853,12 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll, &$data, $u
 	$url = append_sid($url, 'f=' . $data['forum_id'] . $params) . $add_anchor;
 	
 	// BEGIN mobiquo Mod push service
-	if ($url && isset($config['mobiquo_push']))
+	if(file_exists($phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/functions_posting_hook.php'))
     {
-        require_once($phpbb_root_path . $config['tapatalkdir'].'/push_hook.' . $phpEx);
-        $user_name_tag_arr = tt_get_tag_list($data['message']);
-        switch ($mode)
-        {
-        	case 'reply':
-        		tapatalk_push_reply($data);
-        		tapatalk_push_quote($data,$user_name_tag_arr,'tag');
-        		break;
-        	case 'post':
-        		tapatalk_push_newtopic($data);
-        		tapatalk_push_quote($data,$user_name_tag_arr,'tag');
-        		break;
-        	case 'quote':
-        		preg_match_all('/quote=&quot;(.*?)&quot;/is', $data['message'],$matches);
-        		$user_name_arr = array_unique($matches[1]);
-        		unset($matches);		        		
-        		tapatalk_push_reply($data);
-        		tapatalk_push_quote($data,$user_name_arr,'quote');
-        		tapatalk_push_quote($data,$user_name_tag_arr,'tag');
-        		break;
-        }		   
+        include  $phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/functions_posting_hook.php';
     }
-	// END mobiquo Mod	
-
+	// END mobiquo Mod
+	
 	// Start Breizh Shoutbox
 	$data['hide_robot'] = (isset($data['hide_robot'])) ? (($auth->acl_get('u_shout_hide')) ? $data['hide_robot'] : true) : true;
 	if (($config['shout_post_robot'] || $config['shout_post_robot_priv']) && $data['hide_robot'])

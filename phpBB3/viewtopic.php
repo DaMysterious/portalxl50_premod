@@ -1849,6 +1849,13 @@ for ($i = 0, $end = sizeof($post_list); $i < $end; ++$i)
 	// Parse the message and subject
 	$message = censor_text($row['post_text']);
 	
+	//tapatalk mod
+	if(file_exists($phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/viewtopic_hook.php'))
+    {
+        include  $phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/viewtopic_hook.php';
+    }	
+	//tapatalk mod
+	
 	// No Code Content 4 Guests / 4seven / 2009
 	if ($user->data['user_id'] == ANONYMOUS){
 	$message = preg_replace("/\[code:(.*?)\](.*?)\[\/code:(.*?)\]/s", '[code:$1]' . $user->lang['NO_CODE_FOR_GUESTS_1'] . '<a href="ucp.php?mode=login">' . $user->lang['NO_CODE_FOR_GUESTS_2'] . '</a>' . $user->lang['NO_CODE_FOR_GUESTS_3'] . '<a href="ucp.php?mode=register">' . $user->lang['NO_CODE_FOR_GUESTS_4'] . '</a>' . $user->lang['NO_CODE_FOR_GUESTS_5'] . '[/code:$3]', $message);}

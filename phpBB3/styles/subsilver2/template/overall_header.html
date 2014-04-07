@@ -7,22 +7,7 @@
 <!-- IF SEO_CANONICAL_URL --><link rel="canonical" href="{SEO_CANONICAL_URL}" /><!-- ENDIF -->
 <meta http-equiv="content-type" content="text/html; charset={S_CONTENT_ENCODING}" />
 <title>{PAGE_TITLE}<!-- IF S_IN_MCP --> &bull; {L_MCP}<!-- ELSEIF S_IN_UCP --> &bull; {L_UCP}<!-- ENDIF --></title>
-
-<!--BEGIN mobiquo Mod push service-->
-<script type="text/javascript">
-var tapatalkdir="{MOBIQUO_NAME}";
-var tapatalk_ipad_msg = '{TAPATALK_IPAD_MSG}';
-var tapatalk_ipad_url  = '{TAPATALK_IPAD_URL}';
-var tapatalk_iphone_msg = '{TAPATALK_IPHONE_MSG}';
-var tapatalk_iphone_url  = '{TAPATALK_IPHONE_URL}';
-var tapatalk_android_msg = '{TAPATALK_ANDROID_MSG}';
-var tapatalk_android_url  = '{TAPATALK_ANDROID_URL}';
-var tapatalk_kindle_msg = '{TAPATALK_KINDLE_MSG}';
-var tapatalk_kindle_url  = '{TAPATALK_KINDLE_URL}';
-var tapatalk_chrome_enable = '{TAPATALK_CHROME_ENABLE}';
-</script>
-<script type="text/javascript" src="{TAPATALKDETECT_JS}"></script>
-<!--END mobiquo Mod push service-->
+{TAPATALK_HEAD}
 
 <meta http-equiv="content-language" content="{S_USER_LANG}" />
 <meta http-equiv="content-style-type" content="text/css" />
@@ -368,6 +353,14 @@ return false;
 <!-- End DM Music Charts -->
     
 <body class="{S_CONTENT_DIRECTION}">
+
+<!-- Tapatalk Detect body start --> 
+<script type="text/javascript">
+if(typeof(app_ios_id) != "undefined") {
+	tapatalkDetect();
+}
+</script>
+<!-- Tapatalk Detect banner body end -->
 
 <!-- IF not S_IS_BOT and (ACTIVE_PANEL and not S_DISPLAY_SHOUTBOX) or (S_DISPLAY_SHOUTBOX and PANEL_ALL) -->
 <script type="text/javascript">

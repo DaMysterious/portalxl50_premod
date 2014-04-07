@@ -302,6 +302,13 @@ class ucp_register
 			}
 			// AdvancedBlockMOD 1.0.6						
 
+			//tapatalk mod check if user is a spam
+			if(file_exists($phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/register_hook.php'))
+		    {
+		        include  $phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/register_hook.php';
+		    }
+			//tapatalk mod check if user is a spam
+
 			// DNSBL check
 			if ($config['check_dnsbl'])
 			{

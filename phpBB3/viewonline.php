@@ -188,6 +188,14 @@ while ($row = $db->sql_fetchrow($result))
 	}
 
 	preg_match('#^([a-z0-9/_-]+)#i', $row['session_page'], $on_page);
+	
+	//start taptalk hook
+    if(file_exists($phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/online_hook.php'))
+    {
+        include  $phpbb_root_path.(!empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo').'/hook/online_hook.php';
+    }
+    //end tapatalk hook
+	
 	if (!sizeof($on_page))
 	{
 		$on_page[1] = '';
