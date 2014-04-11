@@ -8,14 +8,16 @@
 			<ul class="topiclist">
 				<li class="header">
 					<dl class="icon">
-						<dt><!-- IF forumrow.S_IS_CAT --><!-- IF S_USER_LOGGED_IN --><a href="{forumrow.U_COLLAPSEFORUM}" style="color: #666666; font-size: 11px;"><!-- IF forumrow.S_IS_CAT_HIDDEN -->[+]<!-- ELSE -->[-]<!-- ENDIF --></a>&nbsp;<!-- ENDIF --><a href="{forumrow.U_VIEWFORUM}" style="color: #666666; font-size: 11px;">{forumrow.FORUM_NAME}</a><!-- ELSE -->{L_FORUM}<!-- ENDIF --></dt>
-						<dd class="topics" style="<!-- IF forumrow.S_IS_CAT_HIDDEN -->display:none;<!-- ENDIF --> color: #666666; font-size: 11px;">{L_TOPICS}</dd>
-						<dd class="posts" style="<!-- IF forumrow.S_IS_CAT_HIDDEN -->display:none;<!-- ENDIF --> color: #666666; font-size: 11px;">{L_POSTS}</dd>
-						<dd class="lastpost" style="<!-- IF forumrow.S_IS_CAT_HIDDEN -->display:none;<!-- ENDIF --> color: #666666; font-size: 11px;"><span>{L_LAST_POST}</span></dd>
+						<dt><!-- IF forumrow.S_IS_CAT --><a href="#" onclick="return doCollapseExpand('box{forumrow.FORUM_ID}','btn{forumrow.FORUM_ID}')"> 
+                        <img src="{T_THEME_PATH}/images/arrow_user_down.gif" alt="{forumrow.FORUM_NAME}" title="{forumrow.FORUM_NAME}" height="11" width="11" name="btn{forumrow.FORUM_ID}" /></a>&nbsp;
+                        <a href="{forumrow.U_VIEWFORUM}" style="color: #666666; font-size: 11px;" class="text-shadow">{forumrow.FORUM_NAME}</a><!-- ELSE -->{L_FORUM}<!-- ENDIF --></dt>
+						<dd class="topics" style="color: #666666; font-size: 11px;">{L_TOPICS}</dd>
+						<dd class="posts" style="color: #666666; font-size: 11px;">{L_POSTS}</dd>
+						<dd class="lastpost" style="color: #666666; font-size: 11px;"><span>{L_LAST_POST}</span></dd>
 					</dl>
 				</li>
 			</ul>
-			<ul <!-- IF forumrow.S_IS_CAT_HIDDEN -->style="display:none"<!-- ENDIF --> class="topiclist forums">
+			<ul class="topiclist forums" id="box{forumrow.FORUM_ID}">
 	<!-- ENDIF -->
 
 	<!-- IF not forumrow.S_IS_CAT -->
@@ -25,7 +27,7 @@
 				<!-- IF S_ENABLE_FEEDS and forumrow.S_FEED_ENABLED --><!-- <a class="feed-icon-forum" title="{L_FEED} - {forumrow.FORUM_NAME}" href="{U_FEED}?f={forumrow.FORUM_ID}"><img src="{T_THEME_PATH}/images/feed.gif" alt="{L_FEED} - {forumrow.FORUM_NAME}" /></a> --><!-- ENDIF -->
 
 					<!-- IF forumrow.FORUM_IMAGE --><span class="forum-image">{forumrow.FORUM_IMAGE}</span><!-- ENDIF -->
-					<a href="{forumrow.U_VIEWFORUM}" class="forumtitle"<!-- IF COLOR_UNREAD_LINKS and forumrow.S_UNREAD_FORUM --> style="color: {COLOR_UNREAD_LINKS};"<!-- ENDIF --> {forumrow.EXTERNAL_LINK_TARGET}>{forumrow.FORUM_NAME}</a><!-- IF not forumrow.S_IS_LINK --> ({forumrow.L_FORUM_VISIT})<!-- ENDIF --><br />
+					<a href="{forumrow.U_VIEWFORUM}" class="forumtitle text-shadow"<!-- IF COLOR_UNREAD_LINKS and forumrow.S_UNREAD_FORUM --> style="color: {COLOR_UNREAD_LINKS};"<!-- ENDIF --> {forumrow.EXTERNAL_LINK_TARGET}>{forumrow.FORUM_NAME}</a><!-- IF not forumrow.S_IS_LINK --> ({forumrow.L_FORUM_VISIT})<!-- ENDIF --><br />
 					{forumrow.FORUM_DESC}
 					<!-- IF forumrow.MODERATORS -->
 						<br /><strong>{forumrow.L_MODERATOR_STR}:</strong> {forumrow.MODERATORS}

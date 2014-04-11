@@ -3,7 +3,7 @@
 
 <!-- IF S_TOPIC_HOVER_PREVIEW_ENABLED --> 
 <!-- INCLUDE portal/portal_topic_hover_preview.html -->
-<!-- ENDIF -->        
+<!-- ENDIF -->      
   
 <!-- Require basic Easy Widgets -->
 <script type="text/javascript">
@@ -137,8 +137,8 @@ $(function(){
 <!-- [-] top block area -->
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<!-- IF SI_DISPLAY_INDEX_LEFT -->
 <tr>
+<!-- IF SI_DISPLAY_INDEX_LEFT -->
 <!-- [+] left block area -->
 	<td width="{PORTAL_INDEX_LEFT_COLLUMN_WIDTH}" valign="top">
     
@@ -179,7 +179,7 @@ $(function(){
             <dl class="icon">
               <dt style="width: {$PORTALXL_DD-DT-WIDTH};">
                 <div class="widget-header">
-                     <a href="#" title="#{left_block_files.LEFT_BLOCK_ID}">{left_block_files.LEFT_BLOCKS_IMG}</a> <span style="color:{$PORTALXL_FONTCOLOUR-HEADER};">{left_block_files.LEFT_BLOCKS_ALIAS}</span>
+                 <a href="#" title="#{left_block_files.LEFT_BLOCK_ID}">{left_block_files.LEFT_BLOCKS_IMG}</a> <span style="color:{$PORTALXL_FONTCOLOUR-HEADER};">{left_block_files.LEFT_BLOCKS_ALIAS}</span>
                 </div>
               </dt>
             </dl>
@@ -460,9 +460,9 @@ $(function(){
 <!-- END right_block_files -->
 <!-- ENDIF -->	
     
-	<!-- ENDIF -->	
 	</td>
 <!-- [-] right block area -->
+<!-- ENDIF -->	
 </tr>
 </table>
 
@@ -531,10 +531,11 @@ $(function(){
 </div>
 <!-- END bottom_block_files -->
 <!-- ENDIF -->
+<!-- ENDIF -->	
+
     </td>
   </tr>
 </table>
-<!-- ENDIF -->
 <!-- [-] bottom block area -->
 
 <!-- IF S_DISPLAY_SHOUTBOX and INDEX_SHOUT and INDEX_SHOUT_END -->
