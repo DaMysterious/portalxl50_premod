@@ -17,6 +17,7 @@
 			$api_key = isset($config['tapatalk_push_key']) ? $config['tapatalk_push_key'] : '';
 	    	$app_ads_enable = isset($config['tapatalk_app_ads_enable']) ? $config['tapatalk_app_ads_enable'] : 1;
 	    	
+			$board_url = $phpbb_root_path ;
 			$app_forum_name = $config['sitename'];
 		    $tapatalk_dir_url = $board_url . $tapatalk_dir;
 		    $is_mobile_skin = 0;
