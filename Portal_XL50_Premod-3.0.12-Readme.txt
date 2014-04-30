@@ -1,6 +1,6 @@
-Portal_XL50_Premod-3.0.11.rar
+Portal_XL50_Premod-3.0.12.rar
 
-This archive contains Portal XL 5.0 Premod 0.3 along phpBB 3.0.11.
+This archive contains Portal XL 5.0 Premod 0.4 along phpBB 3.0.12.
 
 However the package is tested, no guaranty is given on proper working.
 
@@ -10,5 +10,5 @@ in directory \phpbb3\docs\PORTAL_XL_INSTALL.html of this archive.
 
 Have fun with another fine release of Portal XL 5.0 Premod!
 
-Attention! If your phpBB 3.0.11 is changed by custom modifications don't 
+Attention! If your phpBB 3.0.12 is changed by custom modifications don't 
 use this package as you will loose all the changes made.
