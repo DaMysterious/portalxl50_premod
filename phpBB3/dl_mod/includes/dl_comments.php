@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_comments.php 20 2014/03/07 OXPUS
+* @file				dl_comments.php 21 2014/04/13 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -79,8 +79,8 @@ $row_user = $db->sql_fetchfield('user_id');
 $db->sql_freeresult($result);
 
 $allow_manage = 0;
-if ($row_user == $user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || ($auth->acl_get('a_') && $user->data['is_registered']))
-{
+    if (($row_user == $user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $auth->acl_get('a_')) && $user->data['is_registered'])
+	{
 	$allow_manage = true;
 }
 
@@ -554,7 +554,7 @@ if ($action)
 					'U_EDIT_COMMENT'	=> ($deny_post) ? '' : $u_edit_comment)
 				);
 	
-				if (($poster_id == $user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || ($auth->acl_get('a_') && $user->data['is_registered'])) && !$deny_post)
+                if (($poster_id == $user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $auth->acl_get('a_')) && $user->data['is_registered'] && !$deny_post)
 				{
 					$template->assign_block_vars('comment_row.action_button', array());
 				}

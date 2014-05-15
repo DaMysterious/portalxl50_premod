@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_admin_files.php 36 2014/03/15 OXPUS
+* @file				dl_admin_files.php 37 2014/04/30 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -200,7 +200,7 @@ if($action == 'edit' || $action == 'add')
 		$s_file_traffic_range	= str_replace('value="KB">', 'value="KB" selected="selected">', $s_select_datasize);
 	}
 
-	if (isset($index[$cat_id]['allow_thumbs']) && $config['dl_thumb_fsize'])
+	if (isset($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $config['dl_thumb_fsize'])
 	{
 		$template->assign_var('S_ALLOW_THUMB', true);
 

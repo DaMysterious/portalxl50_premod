@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				class_dl_physical.php 1 2012/03/23 OXPUS
+* @file				class_dl_physical.php 2 2014/05/01 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -192,6 +192,27 @@ class dl_physical extends dl_mod
 		}
 
 		return $status;
+	}
+
+	public static function dl_max_upload_size()
+	{
+		$post_max	= ini_get('post_max_size');
+		$upload_max	= ini_get('upload_max_filesize');
+
+		$post_max_unit		= substr($post_max, -1, 1);
+		$upload_max_unit	= substr($upload_max, -1, 1);
+
+		$post_max_value		= intval(substr($post_max, 0, strlen($post_max) - 1));
+		$upload_max_value	= intval(substr($upload_max, 0, strlen($upload_max) - 1));
+
+		$unit_factor = array('K' => 1024, 'M' => 1024*1024, 'G' => 1024*1024*1024);
+
+		$post_max_size		= $post_max_value * $unit_factor[$post_max_unit];
+		$upload_max_size	= $upload_max_value * $unit_factor[$upload_max_unit];
+		
+		$max_upload_size = min($post_max_size, $upload_max_size);
+
+		return dl_format::dl_size($max_upload_size, 0, 'combine');
 	}
 }
 

@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_modcp.php 53 2014/03/07 OXPUS
+* @file				dl_modcp.php 54 2014/05/01 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -1287,7 +1287,7 @@ else
 				'HACKLIST_BG'	=> ($hacklist_on) ? ' bg2' : '',
 				'MOD_BLOCK_BG'	=> ($mod_block_bg) ? ' bg2' : '',
 		
-				'MAX_UPLOAD_SIZE' => sprintf($user->lang['DL_UPLOAD_MAX_FILESIZE'], ini_get('upload_max_filesize')),
+				'MAX_UPLOAD_SIZE' => sprintf($user->lang['DL_UPLOAD_MAX_FILESIZE'], dl_physical::dl_max_upload_size()),
 		
 				'ENCTYPE' => 'enctype="multipart/form-data"',
 		
