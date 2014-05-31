@@ -1,4 +1,5 @@
 <?php
+if(!defined('IN_PHPBB') && !defined("IN_MOBIQUO")) exit;
 if(!isset($tapatalk_hook_run)) $tapatalk_hook_run = true;
 if(isset($config['tapatalk_spam_status']) && ($config['tapatalk_spam_status'] >= 2) && $tapatalk_hook_run)
 {

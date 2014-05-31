@@ -470,16 +470,16 @@ function parse_quote($str)
 function process_bbcode($message, $uid)
 {
     global $user,$config;
-    
+
     //add custom replace
 	if(!empty($config['tapatalk_custom_replace']))
     {
         $replace_arr = explode("\n", $config['tapatalk_custom_replace']);
         foreach ($replace_arr as $replace)
         {
-            preg_match('/^\s*(\'|")((\#|\/|\!).+\3[ismexuADUX]*?)\1\s*,\s*(\'|")(.*?)\4\s*$/', $replace,$matches);
+            preg_match('/^\s*(\'|")((\#|\/|\!).+\3[ismexuADUX]*?)\1\s*,\s*(\'|")(.*?)\4\s*$/', $replace,$matches);         
             if(count($matches) == 6)
-            {
+            {         
                 $temp_str = $message;
                 $message = @preg_replace($matches[2], $matches[5], $message);
                 if(empty($message))
@@ -758,8 +758,9 @@ function video_bbcode_format($type, $url)
     switch (strtolower($type)) {
         case 'yt':
         case 'youtube':
-            if (preg_match('#^(http://)?((www|m)\.)?(youtube\.com/(watch\?.*?v=|v/)|youtu\.be/)([-\w]+)#', $url, $matches)) {
-                $message = '[url='.$url.']YouTube Video[/url]';
+            if (preg_match('#^(http(s|)://)?((www|m)\.)?(youtube\.com/(watch\?.*?v=|v/)|youtu\.be/)([-\w]+)#', $url, $matches)) {
+                $url = preg_replace("/^https:/i", "http:", $url);
+            	$message = '[url='.$url.']YouTube Video[/url]';
             } else if (preg_match('/^[-\w]+$/', $url)) {
                 $url = 'http://www.youtube.com/watch?v='.$url;
                 $message = '[url='.$url.']YouTube Video[/url]';

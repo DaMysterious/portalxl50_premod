@@ -527,7 +527,7 @@ $s_watching_topic = array(
 if (($config['email_enable'] || $config['jab_enable']) && $config['allow_topic_notify'])
 {
 	$notify_status = (isset($topic_data['notify_status'])) ? $topic_data['notify_status'] : null;
-	if(version_compare($config['version'], '3.0.1', '<')) 
+	if(version_compare($config['version'], '3.0.5', '<')) 
 	{
 		$s_watching_topic_img = array();
 		watch_topic_forum('topic', $s_watching_topic, $s_watching_topic_img, $user->data['user_id'], $forum_id, $topic_id, $topic_data['notify_status'], $start);

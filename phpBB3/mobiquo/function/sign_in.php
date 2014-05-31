@@ -1,6 +1,6 @@
 <?php
 defined('IN_MOBIQUO') or exit;
-require($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+require_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 $_COOKIE = array();
 $user->session_begin();
 $auth->acl($user->data);
@@ -19,7 +19,7 @@ function sign_in_func()
 		trigger_error('UCP_REGISTER_DISABLE');
 	}
 	
-	include($phpbb_root_path . 'includes/functions_profile_fields.' . $phpEx);
+	include_once($phpbb_root_path . 'includes/functions_profile_fields.' . $phpEx);
 
 	$user_lang		= request_var('lang', $user->lang_name);
 
@@ -259,10 +259,10 @@ function sign_in_func()
 										$messenger->send($row['user_notify_type']);
 									}
 									$db->sql_freeresult($result);
-								}
-								trigger_error('UCP_ADMIN_ACTIVATE');
+								}				
 							}
 							$user_info['user_id'] = $user_id;
+							$user_info = array_merge($user_info,$user_row);
 							$register = 1;
 							return tt_login_success();
 						}
@@ -317,6 +317,7 @@ function tt_login_success()
     header('Set-Cookie: mobiquo_b=0');
     header('Set-Cookie: mobiquo_c=0');
 	$result = $user->session_create($user_info['user_id'], 0, true, 1);
+	
 	if($result)
 	{
 		$usergroup_id = array();
@@ -381,10 +382,11 @@ function tt_login_success()
 	    
 	    $response = new xmlrpcval(array(
 	        'result'        => new xmlrpcval(true, 'boolean'),
-	        'user_id'       => new xmlrpcval($user->data['user_id'], 'string'),
-	        'username'      => new xmlrpcval(basic_clean($user->data['username']), 'base64'),
-	    	'email'         => new xmlrpcval($user->data['user_email'], 'base64'),
-			'user_type'     => check_return_user_type($user->data['user_id']),
+	        'user_id'       => new xmlrpcval($user_info['user_id'], 'string'),
+	        'username'      => new xmlrpcval(basic_clean($user_info['username']), 'base64'),
+	        'login_name'    => new xmlrpcval(basic_clean($user_info['username']), 'base64'),
+	    	'email'         => new xmlrpcval($user_info['user_email'], 'base64'),
+			'user_type'     => check_return_user_type($user_info['user_id']),
 			//'tapatalk'      => new xmlrpcval(is_tapatalk_user($user->data['user_id']), 'string'),
 	        'usergroup_id'  => new xmlrpcval($usergroup_id, 'array'),
 	        'ignored_uids'  => new xmlrpcval(implode(',', tt_get_ignore_users($user->data['user_id'])),'string'),

@@ -1,4 +1,5 @@
 <?php
+if (!defined('IN_PHPBB')) exit;
 function get_tapatlk_location()
 {
 	global $user,$phpbb_root_path;

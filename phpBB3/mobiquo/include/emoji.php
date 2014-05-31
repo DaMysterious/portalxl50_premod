@@ -1,5 +1,5 @@
 <?php
-
+	if(!defined('IN_PHPBB')) exit;
 	#
 	# WARNING:
 	# This code is auto-generated. Do not modify it manually.

@@ -396,7 +396,7 @@ function get_alert_func()
 		'total' => new xmlrpcval($totalAlert,'int'),
 		'items' => new xmlrpcval($return_array,'array'),
 	),'struct');
-	return $result;
+	return new xmlrpcresp($result);
 }
 
 function register_func()

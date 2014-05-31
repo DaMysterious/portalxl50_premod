@@ -5,6 +5,7 @@
  * @param int $post_id  the current post_id
  * @param array $current_topic_info
  */
+if(!defined('IN_PHPBB') && !defined("IN_MOBIQUO")) exit;
 function tapatalk_push_reply($data)
 {
 	global $db, $user, $config,$table_prefix,$phpbb_root_path,$phpEx;

@@ -67,6 +67,7 @@ if ($_POST['method_name'] == 'upload_attach')
     $message_parser->get_submitted_attachment_data();
     $message_parser->parse_attachments('fileupload', 'post', $forum_id, false, false, true);
     $attachment_id = isset($message_parser->attachment_data[$new_attach_position]) ? $message_parser->attachment_data[0]['attach_id'] : '';
+    
     $group_id = base64_encode(serialize($message_parser->attachment_data));
     $warn_msg = join("\n", $message_parser->warn_msg);
 } elseif ($_POST['method_name'] == 'upload_avatar')
