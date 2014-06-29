@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_admin_files.php 37 2014/04/30 OXPUS
+* @file				dl_admin_files.php 38 2014/06/14 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -560,7 +560,7 @@ else if($action == 'save')
 				}
 
 				$i = 0;
-				while(@file_exists($phpbb_root_path . $config['dl_download_dir'] . $file_path_old . $new_real_file))
+				while(@file_exists($phpbb_root_path . $config['dl_download_dir'] . $file_path_new . $new_real_file))
 				{
 					$new_real_file = md5($i . $file_name);
 					$i++;
@@ -577,6 +577,13 @@ else if($action == 'save')
 				if ($dl_file['file_name'] == $dl_file['real_file'])
 				{
 					$new_real_file = md5($dl_file['real_file']);
+
+					$i = 0;
+					while(@file_exists($phpbb_root_path . $config['dl_download_dir'] . $file_path_old . $new_real_file))
+					{
+						$new_real_file = md5($i . $dl_file['real_file']);
+						$i++;
+					}
 
 					@copy($phpbb_root_path . $config['dl_download_dir'] . $file_path_old . $real_file_old, $phpbb_root_path . $config['dl_download_dir'] . $file_path_old . $new_real_file);
 					@chmod($phpbb_root_path . $config['dl_download_dir'] . $file_path_old . $new_real_file, 0777);
@@ -624,6 +631,13 @@ else if($action == 'save')
 		else if (!$file_extern && $file_name)
 		{
 			$new_real_file = md5($file_name);
+
+			$i = 0;
+			while(@file_exists($phpbb_root_path . $config['dl_download_dir'] . $file_path . $new_real_file))
+			{
+				$new_real_file = md5($i . $file_name);
+				$i++;
+			}
 
 			@copy($phpbb_root_path . $config['dl_download_dir'] . $file_path . $file_name, $phpbb_root_path . $config['dl_download_dir'] . $file_path . $new_real_file);
 			@chmod($phpbb_root_path . $config['dl_download_dir'] . $file_path . $new_real_file, 0777);

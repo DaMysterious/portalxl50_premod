@@ -2,7 +2,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_search.php 16 2013/12/19 OXPUS
+* @file				dl_search.php 17 2014/06/18 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -30,6 +30,7 @@ $search_author		= utf8_normalize_nfc(request_var('search_author', '', true));
 
 $search_fnames		= array($user->lang['DL_ALL'], $user->lang['DL_FILE_NAME'], $user->lang['DL_FILE_DESCRIPTION'], $user->lang['DL_DETAIL']);
 $search_fields		= array('all', 'file_name', 'description', 'long_desc');
+$search_type		= request_var('search_type', 0);
 
 $submit = request_var('submit', '');
 
@@ -72,7 +73,7 @@ if ($search_keywords != '' && !$search_author)
 			trigger_error($user->lang['DL_NO_PERMISSION']);
 	}
 
-	$search_words = explode(' ', $search_keywords);
+	$search_words = array_unique(explode(' ', $search_keywords));
 
 	$sql = "SELECT d.id, $sql_fields FROM " . DOWNLOADS_TABLE . ' d
 		WHERE d.approve = ' . true . "
@@ -97,13 +98,28 @@ if ($search_keywords != '' && !$search_author)
 				$search_result = $row[$search_in_fields];
 			}
 
+			$counter = 0;
 			for ($i = 0; $i < sizeof($search_words); $i++)
 			{
 				if (preg_match_all('/' . preg_quote($search_words[$i], '/') . '/iu', $search_result))
 				{
+					$counter++;
+				}
+			}
+
+			switch ($search_type)
+			{
+				case 0:
+					if ($counter == sizeof($search_words))
+					{
+						$search_ids[] = $row['id'];
+						$search_counter++;
+					}
+				break;
+
+				default:
 					$search_ids[] = $row['id'];
 					$search_counter++;
-				}
 			}
 		}
 	}
