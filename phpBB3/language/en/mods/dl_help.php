@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_help.php 21 2013/06/11 OXPUS
+* @file				dl_help.php 24 2014/10/08 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -32,7 +32,7 @@ $lang = array_merge($lang, array(
 
 	'DL_NO_HELP_AVIABLE' => 'There is no help aviable for this option',
 
-	'HELP_DL_ACTIVE_EXPLAIN'	=> 'Turns the Downloads accourding to the following options on or off.',
+	'HELP_DL_ACTIVE'			=> 'Turns the Downloads accourding to the following options on or off.',
 	'HELP_DL_ANTISPAM'			=> 'This option blocks downloads for which the user must have beside the required amount of traffic the required number of posted and the user posted the number of posts in the last hours.<br /><br />Example:<br />The settings contains 25 posts in 24 hours.<br />Based on this settings the downloads will blocked for the user if he/she will post 25 or more new posts in the last 24 hours.<br />This option shall prevent spamming for downloads, specially for new users, before a team member will get knowledge about this to take actions.<br />The download will still be shown as aviable to seduce the user. The user will only get a message about missing permissions.<br /><br />To disable this check just set one or both values to 0.',
 	'HELP_DL_APPROVE'			=> 'This will approve the download immediately if you will send this form.<br />On the other hand this download will be hidden for users.',
 	'HELP_DL_APPROVE_COMMENTS'	=> 'If you disable this option, each new comment must be approved by an download moderator or administrator before other user can see them.',
@@ -67,7 +67,7 @@ $lang = array_merge($lang, array(
 	'HELP_DL_ENABLE_RATE'			=> 'With this option you can enable/disable the rating system.<br />If there are still exists rating points they will not be deleted and the mod shown them immediatly if you enable the rating system again.',
 	'HELP_DL_ENABLE_TOPIC'			=> 'Allowes to create a topic for each new download which will be uploaded or added within the administration panel into the following forum and with the given text. For download which must be approved before be displayed the topic will be created over the moderation panel.',
 	'HELP_DL_EXT_NEW_WINDOW'		=> 'Open external downloads in a new browser window or load them into the current window.',
-	'HELP_DL_EXTERN'				=> 'Activate this function for an external files which you will enter in the field above (http://www.example.com/media.mp3).<br />The function "free" becomes insignificant.',
+	'HELP_DL_EXTERN'				=> 'Activate this function for an external files which you will enter in the field above (http://www.example.com/media.mp3).<br />The function "free" becomes insignificant.<br />Optional you can enter the file size for the external download. This size will be displayed in all pages.<br />Regard that here you will see the file size of internal downloads, too. In this case changes of this value will be ignored and replaces with the real file size of the download.',
 	'HELP_DL_EXTERN_UP'				=> 'Activate this function for an external files which you will enter in the right field (http://www.example.com/media.mp3).insignificantThe function "free" becomes insignificant.',
 
 	'HELP_DL_FILE_DESCRIPTION'	=> 'A short description for this download.<br />This will be displayed in the download category, too.<br />BBCodes are off for this text.<br />Please enter only a short text to reduces heavy data loads while open the category.',
@@ -109,10 +109,11 @@ $lang = array_merge($lang, array(
 	'HELP_DL_NEWTOPIC_TRAFFIC'		=> 'For each new posted topic the author will get the here entered traffic on top of its traffic amount.',
 	'HELP_DL_NO_CHANGE_EDIT_TIME'	=> 'Check this option to suppress to update the latest edit time for this download.<br />This will not affected the email and popup notification/board message.',
 
-	'HELP_DL_OFF_HIDE_EXPLAIN'			=> 'Hides the link in the board navigation.<br />Otherwise the download area will only display a message.',
-	'HELP_DL_OFF_NOW_TIME_EXPLAIN'		=> 'Turns the downloads immediately off or deactivates the downloads regularly between the following timestamps.',
-	'HELP_DL_OFF_TIME_PERIOD_EXPLAIN'	=> 'Timeperiod the download will automatically turn off.',
-	'HELP_DL_ON_ADMINS_EXPLAIN'			=> 'Allows board administrators to enter the downloads and work within while the download mod is deactivated.<br />Otherwise the adminstrators will be locked out, too.',
+	'HELP_DL_OFF_HIDE'					=> 'Hides the link in the board navigation.<br />Otherwise the download area will only display a message.',
+	'HELP_DL_OFF_NOW_TIME'				=> 'Turns the downloads immediately off or deactivates the downloads regularly between the following timestamps.',
+	'HELP_DL_OFF_PERIOD'				=> 'Timeperiod the download will automatically turn off.',
+	'HELP_DL_OFF_PERIOD_TILL'			=> 'Timeperiod the download will automatically turn off.',
+	'HELP_DL_ON_ADMINS'					=> 'Allows board administrators to enter the downloads and work within while the download mod is deactivated.<br />Otherwise the adminstrators will be locked out, too.',
 	'HELP_DL_OVERALL_TRAFFIC'			=> 'The overall limit for registered users for all downloads and, if enabled, all uploads, too, which can not be exceeded in the current month.<br />After reaching this limit, each download will similar be marked and locked and, if enabled, uploads will be impossible, too.',
 	'HELP_DL_OVERALL_GUEST_TRAFFIC'		=> 'The overall limit for guests for all downloads and, if enabled, all uploads, too, which can not be exceeded in the current month.<br />After reaching this limit, each download will similar be marked and locked and, if enabled, uploads will be impossible, too.',
 	'HELP_DL_OVERVIEW_LINK'				=> 'Display the link to the overall list or hide it.<br />Hint:<br />While the link is diabled the overall list can not be opened within a direct link!',
@@ -154,16 +155,19 @@ $lang = array_merge($lang, array(
 
 	'HELP_DL_THUMB'						=> 'This field can upload a small image (note the displayed file size and image dimensions under this field) to display it in the download details.<br />If there already exists a thumbsnail, you can upload a new one to replace it.<br />Check the existing thumbnail for "delete" you will just drop it.',
 	'HELP_DL_THUMB_CAT'					=> 'This option enable Thumbnails on downloads in this category.<br />The size of these Images will base on the settings in the main configuration of this MOD.',
-	'HELP_DL_THUMB_MAX_DIM'				=> 'This values will limit the possible image size of uploaded files for thumbnails.<br />The thumbnails itselfs are at max 150 x 100 pixel and you can view the uploaded images in a popup if you click on a thumbnail.<br /><br />Enter 0 here to disable thumbnails (not recommended, if the thumbnail filesize will be set).<br />Existing thumbnails will be displayed until the thumbs filesize was not changed to 0, too.',
+	'HELP_DL_THUMB_MAX_DIM_X'			=> 'This values will limit the possible image width of uploaded files for thumbnails.<br />The thumbnails itselfs are at max 150 x 100 pixel and you can view the uploaded images in a popup if you click on a thumbnail.<br /><br />Enter 0 here to disable thumbnails (not recommended, if the thumbnail filesize will be set).<br />Existing thumbnails will be displayed until the thumbs filesize was not changed to 0, too.',
+	'HELP_DL_THUMB_MAX_DIM_Y'			=> 'This values will limit the possible image height of uploaded files for thumbnails.<br />The thumbnails itselfs are at max 150 x 100 pixel and you can view the uploaded images in a popup if you click on a thumbnail.<br /><br />Enter 0 here to disable thumbnails (not recommended, if the thumbnail filesize will be set).<br />Existing thumbnails will be displayed until the thumbs filesize was not changed to 0, too.',
 	'HELP_DL_THUMB_MAX_SIZE'			=> 'Enter 0 as filesize to disable thumbnails in all categories.<br />If you allow thumbsnails, then enter the maximim image sizes for the uploaded imagefiles to create new thumbnails from.<br />If you disable thumbnails you can not see existing thumbnails in the download details, too.',
 	'HELP_DL_TODO_LINK'					=> 'Switch the link for the todolist in the download footer on or off. >The todo entries the management about them are not affected while changing this option.',
 	'HELP_DL_USE_TODOLIST'				=> 'Acticate or disable the todo list.',
 	'HELP_DL_TOPIC_DETAILS'				=> 'Shows the download description, the filename, file size or on external downloads the url in the forum topic.<br />The text can be placed over or after the previous entered text.<br />If the topic will be created over the download categories the option in the general configuration will be ignored.',
 	'HELP_DL_TOPIC_FORUM'				=> 'The forum which will display the new topics about the downloads.<br />If you select instead a forum the option "Category select" the topic will be inserted in the forum you select in the categories.',
 	'HELP_DL_TOPIC_FORUM_C'				=> 'The forum which will display the new topics about the downloads from this category.',
+	'HELP_DL_TOPIC_POST_CATNAME'		=> 'Adds the category name into the topic post which will be generated for downloads. The category name will be inserted after the download title.<br />Regard:<br />Existing topics will not be updated until the download will be updated, too.',
 	'HELP_DL_TOPIC_TEXT'				=> 'Free text for creating the topics about the downloads. BBCodes, HTML and smileys are not allowed here because the text shall only be used to introduce the topic.',
+	'HELP_DL_TOPIC_TITLE_CATNAME'		=> 'Adds the category name to the topic title which will be generated for downloads. The category name will be separeted by - from the download name.<br />Regard:<br />Existing topics will not be updated until the download will be updated, too.',
 	'HELP_DL_TOPIC_USER'				=> 'Select here, which user shall be autor of the download topics.<br />If the current user should be the topic author, then select the option current user. The Option selected by category allows to chooce for each category a seperately topic user. This can still be the current user or over ID selected user which is entered in the fields on the rightside of the drop down field. This is recommended for the option "Select user over ID".<br /><br /><strong>Hint:</strong><br />The user id will not be checked by the download mod itself, so a not existing ID can disrupt the functions!',
-	'HELP_DL_TRAFFIC'					=> 'The maximum of traffic a file will be allowed to produce.<br />A value of 0 deactivates the traffic control',
+	'HELP_DL_TRAFFIC'					=> 'The maximum of traffic a file will be allowed to produce.<br />A value of 0 deactivates the traffic control.<br />Regard that the file traffic will be set to 0, even the download is marked as external.',
 	'HELP_DL_TRAFFIC_OFF'				=> 'Turns the entire traffic management in the download area off and deactivated all following options about the traffic, too.<br />Enabling this option will hidden all the texts about the download traffic in the forum and does not consider other traffic limits. Similarly during the download and upload traffic data are not changed any more.<br />Changes to the user traffic while writing or deleting posts are not taken on user accounts as well.<br />Automatically assigned traffic will not longer allocate to users if this option is turned off. However users or group members can still get traffic with the ACP traffic management module.<br />Also in the admin area all modules, texts and functions for traffic management will be still unchanged.',
 	'HELP_DL_TRAFFICS_FOUNDER'			=> 'While the traffic management is disabled for founders, these users can unlimited download and upload files against the traffic options.<br />These users will also not get automatically traffic amounts and will not get traffic points on add a topic or post, even this option is enabled, too.<br />This option will freeze the current traffic amount for founders until this option will be disabled.',
 	'HELP_DL_TRAFFICS_OVERALL'			=> 'This option will set a limit for the overall traffic for registered users.<br />The overall traffic can be enabled or disabled for all registered users or can be set only for members of the user groups which can be selected in the next option.<br />If the overall traffic was disabled all affected users can unlimit download and upload files.',

@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				class_dl_format.php 1 2012/03/20 OXPUS
+* @file				class_dl_format.php 2 2012/10/08 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -121,6 +121,33 @@ class dl_format extends dl_mod
 		}
 
 		return $rate_image;
+	}
+
+	public static function resize_value($config_name, $config_value)
+	{
+		switch ($config_name)
+		{
+			case 'dl_thumb_fsize':				$quote = 'dl_f_quote';	break;
+			case 'dl_physical_quota':			$quote = 'dl_x_quota';	break;
+			case 'dl_overall_traffic':			$quote = 'dl_x_over';	break;
+			case 'dl_overall_guest_traffic':	$quote = 'dl_x_g_over';	break;
+			case 'dl_newtopic_traffic':			$quote = 'dl_x_new';	break;
+			case 'dl_reply_traffic':			$quote = 'dl_x_reply';	break;
+			case 'dl_method_quota':				$quote = 'dl_m_quote';	break;
+			case 'dl_extern_size':				$quote = 'dl_e_quote';	break;
+			case 'dl_file_traffic':				$quote = 'dl_t_quote';	break;
+		}
+	
+		$x = request_var($quote, '');
+	
+		switch($x)
+		{
+			case 'kb': $config_value = floor($config_value * 1024);			break;
+			case 'mb': $config_value = floor($config_value * 1048576);		break;
+			case 'gb': $config_value = floor($config_value * 1073741824);	break;
+		}
+	
+		return $config_value;
 	}
 }
 

@@ -2,7 +2,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_cat.php 7 2013/05/23 OXPUS
+* @file				dl_cat.php 9 2014/10/08 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -137,7 +137,7 @@ if (sizeof($index) > 0)
 
 		$temp_config_pages = $config['posts_per_page'];
 		$config['posts_per_page'] = $config['dl_links_per_page'];
-		$cat_pages = (isset($index[$cat_id]['total'])) ? topic_generate_pagination($index[$cat_id]['total'], append_sid("{$phpbb_root_path}downloads.$phpEx", "cat=$cat_id")) : '';
+		$cat_pages = (isset($index[$cat_id]['total'])) ? topic_generate_pagination($index[$cat_id]['total'] - 1, append_sid("{$phpbb_root_path}downloads.$phpEx", "cat=$cat_id")) : '';
 		$config['posts_per_page'] = $temp_config_pages;
 
 		$last_dl_time = dl_main::find_latest_dl($last_dl, $cat_id, $cat_id, array());
@@ -381,13 +381,13 @@ if ($cat && $total_downloads)
 		$dl_status = dl_status::status($file_id);
 		$status = $dl_status['status'];
 
-		if ($dl_files[$i]['extern'])
+		if ($dl_files[$i]['file_size'])
 		{
-			$file_size = $user->lang['DL_NOT_AVAILIBLE'];
+			$file_size = dl_format::dl_size($dl_files[$i]['file_size'], 2);
 		}
 		else
 		{
-			$file_size = dl_format::dl_size($dl_files[$i]['file_size'], 2);
+			$file_size = $user->lang['DL_NOT_AVAILIBLE'];
 		}
 
 		$file_klicks = $dl_files[$i]['klicks'];

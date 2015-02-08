@@ -2,7 +2,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_overview.php 4 2012/04/11 OXPUS
+* @file				dl_overview.php 5 2014/10/08 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -113,13 +113,13 @@ if (sizeof($dl_files))
 			$dl_status = dl_status::status($file_id);
 			$status = $dl_status['status'];
 
-			if ($dl_files[$i]['extern'])
+			if ($dl_files[$i]['file_size'])
 			{
-				$file_size = $user->lang['DL_NOT_AVAILIBLE'];
+				$file_size = dl_format::dl_size($dl_files[$i]['file_size'], 2);
 			}
 			else
 			{
-				$file_size = dl_format::dl_size($dl_files[$i]['file_size'], 2);
+				$file_size = $user->lang['DL_NOT_AVAILIBLE'];
 			}
 
 			$file_klicks = $dl_files[$i]['klicks'];

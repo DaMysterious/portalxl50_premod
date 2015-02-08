@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				class_dl_topic.php 4 2012/07/19 OXPUS
+* @file				class_dl_topic.php 5 2014/09/01 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -30,7 +30,7 @@ class dl_topic extends dl_mod
 		return;
 	}
 
-	public static function gen_dl_topic($dl_id)
+	public static function gen_dl_topic($dl_id, $force = false)
 	{
 		static $dl_index;
 
@@ -49,7 +49,7 @@ class dl_topic extends dl_mod
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if ($row['dl_topic'])
+		if ($row['dl_topic'] && !$force)
 		{
 			return;
 		}
@@ -73,8 +73,16 @@ class dl_topic extends dl_mod
 
 		$cat_id		= $row['cat'];
 		$dl_title	= $description;
+		if ($config['dl_topic_title_catname'])
+		{
+			$dl_title .= ' - ' . $dl_index[$cat_id]['cat_name_nav'];
+		}
 
 		$topic_text_add = "\n[b]" . $user->lang['DL_NAME'] . ":[/b] " . $description;
+		if ($config['dl_topic_post_catname'])
+		{
+			$topic_text_add .= "\n[b]" . $user->lang['DL_CAT_NAME'] . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
+		}
 
 		if ($config['dl_diff_topic_user'] == 1)
 		{
@@ -218,7 +226,15 @@ class dl_topic extends dl_mod
 			$perms = self::_change_auth($dl_topic_user_id);
 		}
 
-		$topic_title = utf8_normalize_nfc(sprintf($user->lang['DL_TOPIC_SUBJECT'], $dl_title));
+		if ($config['dl_topic_title_catname'])
+		{
+			$topic_title = utf8_normalize_nfc($dl_title);
+		}
+		else
+		{
+			$topic_title = utf8_normalize_nfc(sprintf($user->lang['DL_TOPIC_SUBJECT'], $dl_title));
+		}
+
 		$topic_text .= "\n\n[b]" . $user->lang['DL_VIEW_LINK'] . ':[/b] <!-- l --><a class="postlink-local" href="' . generate_board_url() . '/downloads' . dl_init::phpEx() . '?view=detail&amp;df_id=' . $dl_id . '">' . $dl_title . '</a><!-- l -->';
 
 		$poll			= array();
@@ -334,6 +350,17 @@ class dl_topic extends dl_mod
 			return;
 		}
 
+		$sql = 'SELECT topic_id FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . (int) $topic_id;
+		$result = $db->sql_query($sql);
+		$topic_exists = $db->sql_affectedrows($result);
+		$db->sql_freeresult($result);
+
+		if (!$topic_exists && $config['dl_enable_dl_topic'])
+		{
+			self::gen_dl_topic($dl_id, true);
+			return;
+		}
+
 		$sql = 'SELECT id, description, dl_topic, long_desc, file_name, extern, file_size, cat, hack_version, add_user, long_desc_uid, long_desc_flags, desc_uid, desc_flags, dl_topic
 			FROM ' . DOWNLOADS_TABLE . '
 			WHERE id = ' . (int) $dl_id;
@@ -360,8 +387,16 @@ class dl_topic extends dl_mod
 
 		$cat_id		= $row['cat'];
 		$dl_title	= $description;
+		if ($config['dl_topic_title_catname'])
+		{
+			$dl_title .= ' - ' . $dl_index[$cat_id]['cat_name_nav'];
+		}
 
 		$topic_text_add = "\n[b]" . $user->lang['DL_NAME'] . ":[/b] " . $description;
+		if ($config['dl_topic_post_catname'])
+		{
+			$topic_text_add .= "\n[b]" . $user->lang['DL_CAT_NAME'] . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
+		}
 
 		if ($config['dl_diff_topic_user'] == 1)
 		{
@@ -505,7 +540,14 @@ class dl_topic extends dl_mod
 			$perms = self::_change_auth($dl_topic_user_id);
 		}
 
-		$topic_title = utf8_normalize_nfc(sprintf($user->lang['DL_TOPIC_SUBJECT'], $dl_title));
+		if ($config['dl_topic_title_catname'])
+		{
+			$topic_title = utf8_normalize_nfc($dl_title);
+		}
+		else
+		{
+			$topic_title = utf8_normalize_nfc(sprintf($user->lang['DL_TOPIC_SUBJECT'], $dl_title));
+		}
 		$topic_text .= "\n\n[b]" . $user->lang['DL_VIEW_LINK'] . ':[/b] <!-- l --><a class="postlink-local" href="' . generate_board_url() . '/downloads' . dl_init::phpEx() . '?view=detail&amp;df_id=' . $dl_id . '">' . $dl_title . '</a><!-- l -->';
 
 		$poll = $forum_data = $post_data = array();

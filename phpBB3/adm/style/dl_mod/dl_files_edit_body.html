@@ -24,7 +24,10 @@
 	</dl>
 	<dl>
 		<dt><label>{L_DL_EXTERN}</label></dt>
-		<dd>&nbsp;(<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_EXTERN_EXPLAIN}')">?</a>)&nbsp;<input type="checkbox" class="permissions-checkbox" name="file_extern" {CHECKEXTERN} value="1" /></dd>
+		<dd>
+			&nbsp;(<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_EXTERN_EXPLAIN}')">?</a>)&nbsp;<input type="checkbox" class="permissions-checkbox" name="file_extern" {CHECKEXTERN} value="1" />
+			&nbsp;<input type="text" size="10" maxlength="20" name="file_extern_size" value="{FILE_EXT_SIZE}" />&nbsp;{S_FILE_EXT_SIZE_RANGE}
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{L_DL_HACK_VERSION}</label></dt>

@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				dl_admin_files.php 38 2014/06/14 OXPUS
+* @file				dl_admin_files.php 41 2014/11/12 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -51,10 +51,10 @@ if($action == 'edit' || $action == 'add')
 	$s_file_free_select .= '<option value="2">' . $user->lang['DL_IS_FREE_REG'] . '</option>';
 	$s_file_free_select .= '</select>';
 
-	$s_select_datasize = '<select name="file_traffic_range">';
-	$s_select_datasize .= '<option value="KB">' . $user->lang['DL_KB'] . '</option>';
-	$s_select_datasize .= '<option value="MB">' . $user->lang['DL_MB'] . '</option>';
-	$s_select_datasize .= '<option value="GB">' . $user->lang['DL_GB'] . '</option>';
+	$s_select_datasize = '<option value="byte">' . $user->lang['DL_BYTES'] . '</option>';
+	$s_select_datasize .= '<option value="kb">' . $user->lang['DL_KB'] . '</option>';
+	$s_select_datasize .= '<option value="mb">' . $user->lang['DL_MB'] . '</option>';
+	$s_select_datasize .= '<option value="gb">' . $user->lang['DL_GB'] . '</option>';
 	$s_select_datasize .= '</select>';
 
 	$s_hacklist_select = '<select name="hacklist">';
@@ -66,8 +66,9 @@ if($action == 'edit' || $action == 'add')
 	if($action == 'edit')
 	{
 		$description			= (isset($dl_file['description'])) ? $dl_file['description'] : '';
-		$file_traffic			= (isset($dl_file['file_traffic'])) ? $dl_file['file_traffic'] : '';
+		$file_traffic			= (isset($dl_file['file_traffic'])) ? $dl_file['file_traffic'] : 0;
 		$dl_extern				= (isset($dl_file['extern'])) ? $dl_file['extern'] : 0;
+		$dl_extern_size			= (isset($dl_file['file_size'])) ? $dl_file['file_size'] : 0;
 		$file_name				= (isset($dl_file['file_name']) && $dl_extern) ? $dl_file['file_name'] : '';
 		$cat_id					= (isset($dl_file['cat'])) ? $dl_file['cat'] : 0;
 		$hacklist				= (isset($dl_file['hacklist'])) ? $dl_file['hacklist'] : 0;
@@ -107,24 +108,18 @@ if($action == 'edit' || $action == 'add')
 		$text_ary		= generate_text_for_edit($warning, $warn_uid, $warn_flags);
 		$warning		= $text_ary['text'];
 
-		$data_range_select = 'KB';
-		$file_traffic_out = $file_traffic;
-		if ($file_traffic > 1023)
-		{
-			$file_traffic_out = number_format($file_traffic / 1024, 2);
-		}
-		if ($file_traffic > 1048575)
-		{
-			$file_traffic_out = number_format($file_traffic / 1048576, 2);
-			$data_range_select = 'MB';
-		}
-		if ($file_traffic > 1073741823)
-		{
-			$file_traffic_out = number_format($file_traffic / 1073741824, 2);
-			$data_range_select = 'GB';
-		}
+		$tmp_ary				= dl_format::dl_size($file_traffic, 2, 'select');
+		$file_traffic_out		= $tmp_ary['size_out'];
+		$data_range_select		= $tmp_ary['range'];
+
+		$tmp_ary				= dl_format::dl_size($dl_extern_size, 2, 'select');
+		$file_extern_size_out	= $tmp_ary['size_out'];
+		$file_extern_size_range	= $tmp_ary['range'];
+
+		unset($tmp_ary);
 
 		$s_file_traffic_range	= str_replace('value="' . $data_range_select . '">', 'value="' . $data_range_select . '" selected="selected">', $s_select_datasize);
+		$s_file_extsize_select	= str_replace('value="' . $file_extern_size_range . '">', 'value="' . $file_extern_size_range . '" selected="selected">', $s_select_datasize);
 		$s_hacklist_select		= str_replace('value="' . $hacklist . '">', 'value="' . $hacklist . '" selected="selected">', $s_hacklist_select);
 		$s_file_free_select		= str_replace('value="' . $dl_free . '">', 'value="' . $dl_free . '" selected="selected">', $s_file_free_select);
 
@@ -196,9 +191,14 @@ if($action == 'edit' || $action == 'add')
 		$file_traffic_out		= 0;
 		$checkextern			= '';
 		$thumbnail				= '';
+		$file_extern_size_out	= 0;
 
-		$s_file_traffic_range	= str_replace('value="KB">', 'value="KB" selected="selected">', $s_select_datasize);
+		$s_file_traffic_range	= str_replace('value="kb">', 'value="kb" selected="selected">', $s_select_datasize);
+		$s_file_extsize_select	= str_replace('value="byte">', 'value="byte" selected="selected">', $s_select_datasize);
 	}
+
+	$s_file_traffic_range = '<select name="dl_t_quote">' . $s_file_traffic_range;
+	$s_file_extsize_select = '<select name="dl_e_quote">' . $s_file_extsize_select;
 
 	if (isset($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $config['dl_thumb_fsize'])
 	{
@@ -330,6 +330,7 @@ if($action == 'edit' || $action == 'add')
 		'SELECT_CAT'			=> $select_code,
 		'ENCTYPE'				=> $enctype,
 		'THUMBNAIL'				=> $phpbb_root_path . 'dl_mod/thumbs/' . $thumbnail,
+		'FILE_EXT_SIZE'			=> $file_extern_size_out,
 
 		'S_TODO_LINK_ONOFF'		=> ($config['dl_todo_onoff']) ? true : false,
 		'S_SELECT_VERSION'		=> $s_select_version,
@@ -337,6 +338,7 @@ if($action == 'edit' || $action == 'add')
 		'S_HACKLIST_SELECT'		=> $s_hacklist_select,
 		'S_FILE_FREE_SELECT'	=> $s_file_free_select,
 		'S_FILE_TRAFFIC_RANGE'	=> $s_file_traffic_range,
+		'S_FILE_EXT_SIZE_RANGE'	=> $s_file_extsize_select,
 		'S_DOWNLOADS_ACTION'	=> $basic_link,
 		'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 
@@ -454,8 +456,6 @@ else if($action == 'save')
 
 		$description			= utf8_normalize_nfc(request_var('description', '', true));
 		$file_traffic			= request_var('file_traffic', 0);
-		$file_traffic_range		= request_var('file_traffic_range', 'KB');
-
 		$approve				= request_var('approve', 0);
 
 		$hacklist				= request_var('hacklist', 0);
@@ -475,6 +475,7 @@ else if($action == 'save')
 		$file_name				= utf8_normalize_nfc(request_var('file_name', '', true));
 		$file_free				= request_var('file_free', 0);
 		$file_extern			= request_var('file_extern', 0);
+		$file_extern_size		= request_var('file_extern_size', '');
 
 		$allow_bbcode			= ($config['allow_bbcode']) ? true : false;
 		$allow_urls				= true;
@@ -486,6 +487,11 @@ else if($action == 'save')
 		generate_text_for_storage($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags, $allow_bbcode, true, $allow_smilies);
 		generate_text_for_storage($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags, $allow_bbcode, true, $allow_smilies);
 		generate_text_for_storage($warning, $warn_uid, $warn_bitfield, $warn_flags, $allow_bbcode, true, $allow_smilies);
+
+		if (!$description)
+		{
+			trigger_error($user->lang['NO_SUBJECT'], E_USER_WARNING);
+		}		
 
 		$send_notify			= request_var('send_notify', 0);
 		$change_time			= request_var('change_time', 0);
@@ -505,17 +511,13 @@ else if($action == 'save')
 			}
 		}
 
-		if ($file_traffic_range == 'KB')
+		if ($file_extern)
 		{
-			$file_traffic = $file_traffic * 1024;
+			$file_traffic = 0;
 		}
-		else if ($file_traffic_range == 'MB')
+		else
 		{
-			$file_traffic = $file_traffic * 1048576;
-		}
-		else if ($file_traffic_range == 'GB')
-		{
-			$file_traffic = $file_traffic * 1073741824;
+			$file_traffic = dl_format::resize_value('dl_file_traffic', $file_traffic);
 		}
 
 		$file_path = $index[$cat_id]['cat_path'];
@@ -656,7 +658,7 @@ else if($action == 'save')
 		else
 		{
 			$new_real_file = '';
-			$file_size = 0;
+			$file_size = dl_format::resize_value('dl_extern_size', $file_extern_size);
 		}
 
 		$current_time = time();
@@ -1263,10 +1265,9 @@ if ($action == '')
 			$file_traffic = $user->lang['DL_NOT_AVAILIBLE'];
 		}
 
-		if (!$file_extern)
+		if ($row['file_size'])
 		{
-			$file_size		= $row['file_size'];
-			$file_size_kb	= number_format($file_size / 1024, 2);
+			$file_size_kb	= dl_format::dl_size($row['file_size']);
 		}
 		else
 		{
@@ -1313,7 +1314,7 @@ if ($action == '')
 	);
 
 	$template->assign_vars(array(
-		'DL_FILE_SIZE'			=> $user->lang['DL_FILE_SIZE'] . '<br />' . $user->lang['DL_KB'],
+		'DL_FILE_SIZE'			=> $user->lang['DL_FILE_SIZE'],
 		'SORT'					=> $user->lang['SORT_BY'] . ' ' . $user->lang['DL_NAME'] . ' / ' . $user->lang['DL_FILE_NAME'],
 
 		'CAT'					=> $cat_id,

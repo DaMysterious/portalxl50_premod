@@ -43,10 +43,14 @@
 	</tr>
 	<tr>
 		<td class="row1" style="width: 30%"><span class="gen">{L_DL_EXTERN}:</span></td>
-		<td class="row1" style="width: 2%">&nbsp;[<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_EXTERN_EXPLAIN}')" class="nav">?</a>]&nbsp;</td>
+		<td class="row1" style="width: 2%">
+				&nbsp;[<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_EXTERN_EXPLAIN}')" class="nav">?</a>]&nbsp;
+		</td>
 		<td class="row2" style="width: 68%">
 				<input type="checkbox" class="post" name="file_extern" {CHECKEXTERN} value="1" />
-				&nbsp;&nbsp;<input type="text" class="post" name="file_name" size="40" value="{URL}" /></td>
+				&nbsp;&nbsp;<input type="text" class="post" name="file_name" size="40" value="{URL}" />
+				&nbsp;<input type="text" class="post" size="10" maxlength="20" name="file_extern_size" value="{FILE_EXT_SIZE}" />&nbsp;{S_FILE_EXT_SIZE_RANGE}
+		</td>
 	</tr>
 	<tr>
 		<td class="row1" style="width: 30%"><span class="gen">{L_DL_HACK_VERSION}:</span></td>
