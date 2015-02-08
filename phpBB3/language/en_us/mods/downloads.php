@@ -3,7 +3,7 @@
 /**
 *
 * @mod package		Download Mod 6
-* @file				downloads.php 64 2014/06/18 OXPUS
+* @file				downloads.php 67 2014/09/12 OXPUS
 * @copyright		(c) 2005 oxpus (Karsten Ude) <webmaster@oxpus.de> http://www.oxpus.de
 * @copyright mod	(c) hotschi / demolition fabi / oxpus
 * @license			http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -165,7 +165,7 @@ $lang = array_merge($lang, array(
 	'DL_CAT_EDIT_LINK_1'				=> 'Only administrators',
 	'DL_CAT_EDIT_LINK_2'				=> 'Administrators and Download Moderators',
 	'DL_CAT_EDIT_LINK_3'				=> 'Administrators, Download Moderators and own downloads',
-	'DL_CAT_FILES'						=> 'Files',
+	'DL_CAT_FILES'						=> 'File(s)',
 	'DL_CAT_ICON'						=> 'Category Icon',
 	'DL_CAT_INDEX'						=> 'Highest Level',
 	'DL_CAT_NAME'						=> 'Category',
@@ -465,7 +465,8 @@ $lang = array_merge($lang, array(
 	'DL_OFF_NOW_TIME'			=> 'Deactivate now or for a timespan',
 	'DL_OFF_TIME'				=> 'timespan',
 	'DL_ON_ADMINS'				=> 'Still allow administrators',
-	'DL_OFF_PERIOD'				=> 'Timespan for deactivation',
+	'DL_OFF_PERIOD'				=> 'Deactivate from',
+	'DL_OFF_PERIOD_TILL'		=> 'Deactivate until',
 	'DL_ORDER'					=> 'Sort',
 	'DL_OVERALL_GUEST_TRAFFIC'	=> 'Traffic for guests for all files per month',
 	'DL_OVERALL_KLICKS'			=> 'Overall clicks',
@@ -584,7 +585,8 @@ $lang = array_merge($lang, array(
 	'DL_THUMB_DEL'					=> 'Thumbnail deleted successfully',
 	'DL_THUMB_DIM_SIZE'				=> 'The thumbnail can have a maximum dimension of %s x %s pixels and the filesize must be smaller than %s.',
 	'DL_THUMB_HINTS'				=> '<strong>Please regard:</strong><br />The following images contains not the thumbnail which is be managed by the download itself. Please edit this thumbnail on edit the download.<br />On deleting an image within this management you will not get an agreement message about this! With deleting an image, the data will be deleted from the download and the image file will be unlinked, too.',
-	'DL_THUMB_MAX_DIM'				=> 'Maximum dimension in pixels X * Y',
+	'DL_THUMB_MAX_DIM_X'			=> 'Maximum thumbnail width in pixels',
+	'DL_THUMB_MAX_DIM_Y'			=> 'Maximum thumbnail height in pixels',
 	'DL_THUMB_MAX_SIZE'				=> 'Maximum thumbnail filesize',
 	'DL_THUMB_TO_BIG'				=> 'The thumbnail is too large!<br />Please use a smaller file or an image with smaller dimensions.<br />Use the back button of your browser to retry the upload.',
 	'DL_THUMB_UPLOAD'				=> 'Thumbnail uploaded successfully',
@@ -597,10 +599,12 @@ $lang = array_merge($lang, array(
 	'DL_TOPIC_MORE_DETAILS_OVER'	=> 'Show details on topic over the default text',
 	'DL_TOPIC_MORE_DETAILS_UNDER'	=> 'Show details on topic after the default text',
 	'DL_TOPIC_NO_MORE_DETAILS'		=> 'Show only default text on topic',
+	'DL_TOPIC_POST_CATNAME'			=> 'Insert category name in post text',
 	'DL_TOPIC_SUBJECT'				=> 'Topic about download %s',
 	'DL_TOPIC_TEXT'					=> 'Text for the topic',
+	'DL_TOPIC_TITLE_CATNAME'		=> 'Add category name to topic title',
 	'DL_TOPIC_USER_CAT'				=> 'Select in categories',
-	'DL_TOPIC_USER_OTHER'			=> 'Select user over ID: ',
+	'DL_TOPIC_USER_OTHER'			=> 'Select user over ID',
 	'DL_TOPIC_USER_SELF'			=> 'The current user',
 	'DL_TOPIC_USER'					=> 'User of the topic',
 	'DL_TOTAL_ENTRIES'				=> 'Found Entries',
