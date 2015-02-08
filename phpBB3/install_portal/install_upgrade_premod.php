@@ -2208,6 +2208,10 @@ class install_upgrade_premod extends module
 
 				// -- New on 6.5.18
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " (config_name, config_value, is_dynamic) VALUES ('dl_todo_onoff', '1', 0)";
+
+				// -- New on 6.5.29
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " (config_name, config_value, is_dynamic) VALUES ('dl_topic_title_catname', '0', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " (config_name, config_value, is_dynamic) VALUES ('dl_topic_post_catname', '0', 0)";
 				
 				
 				

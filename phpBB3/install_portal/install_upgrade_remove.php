@@ -1064,6 +1064,9 @@ class install_upgrade_remove extends module
 				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'dl_similar_limit'";
 				// -- New on 6.5.18
 				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'dl_todo_onoff'";
+				// -- New on 6.5.29
+				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'dl_topic_title_catname'";
+				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'dl_topic_post_catname'";
 				
 				
 				/**
