@@ -5,7 +5,7 @@
 * @package phpBB3 Portal XL
 * @version $Id: syndicate_arcade.php,v 1.0 2009/11/04 portalxl group Exp $
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
 */

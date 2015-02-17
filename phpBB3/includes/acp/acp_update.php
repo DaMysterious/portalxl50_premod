@@ -34,10 +34,7 @@ class acp_update
 		$this->page_title = 'ACP_VERSION_CHECK';
 
 		// Get current and latest version
-		$errstr = '';
-		$errno = 0;
-
-		$info = obtain_latest_version_info(request_var('versioncheck_force', false));
+		$info = htmlspecialchars(obtain_latest_version_info(request_var('versioncheck_force', false)));
 
 		if (empty($info))
 		{
@@ -50,7 +47,6 @@ class acp_update
 		$announcement_url = trim($info[1]);
 		$announcement_url = (strpos($announcement_url, '&amp;') === false) ? str_replace('&', '&amp;', $announcement_url) : $announcement_url;
 		$update_link = append_sid($phpbb_root_path . 'install/index.' . $phpEx, 'mode=update');
-		
 		// www.phpBB-SEO.com SEO TOOLKIT BEGIN
 		// moved a little bellow
 		// next feature release
@@ -95,7 +91,6 @@ class acp_update
 			$next_feature_announcement_url = trim($info[4]);
 		}
 		// www.phpBB-SEO.com SEO TOOLKIT END
-		
 		$template->assign_vars(array(
 			'S_UP_TO_DATE'		=> phpbb_version_compare($latest_version, $config['version'], '<='),
 			'S_UP_TO_DATE_AUTO'	=> phpbb_version_compare($latest_version, $current_version, '<='),

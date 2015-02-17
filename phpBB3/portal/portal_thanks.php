@@ -5,7 +5,7 @@
 * @package phpBB3 Portal XL Premod
 * @version $Id: portal_thanks.php,v 1.2 2009/05/15 22:32:09 portalxl group Exp $
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-2.0.php The GNU General Public License (GPL)
 * @some code borrowed from thanks.php,v 0.2.0 2007/04/21 23:56:31 geoffreak Exp $
 *

@@ -466,6 +466,9 @@ class fileupload
 	var $max_height = 0;
 	var $error_prefix = '';
 
+	/** @var int Timeout for remote upload */
+	var $upload_timeout = 6;
+
 	/**
 	* Init file upload class.
 	*

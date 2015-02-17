@@ -5,7 +5,7 @@
 * @package phpBB3 Portal XL
 * @version $Id: center_announcements_index.php,v 1.4 2011/10/10 portalxl group Exp $
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
 */

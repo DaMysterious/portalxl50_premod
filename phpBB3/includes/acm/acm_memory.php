@@ -292,7 +292,7 @@ class acm_memory
 		// determine which tables this query belongs to
 		// Some queries use backticks, namely the get_database_size() query
 		// don't check for conformity, the SQL would error and not reach here.
-		if (!preg_match('/FROM \\(?(`?\\w+`?(?: \\w+)?(?:, ?`?\\w+`?(?: \\w+)?)*)\\)?/', $query, $regs))
+		if (!preg_match_all('/(?:FROM \\(?(`?\\w+`?(?: \\w+)?(?:, ?`?\\w+`?(?: \\w+)?)*)\\)?)|(?:JOIN (`?\\w+`?(?: \\w+)?))/', $query, $regs, PREG_SET_ORDER))
 		{
 			// Bail out if the match fails.
 			return;

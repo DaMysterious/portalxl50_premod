@@ -5,7 +5,7 @@
 * @package phpBB3 Portal XL Premod
 * @version $Id: signature_arcade.php,v 1.2 2009/05/15 22:32:09 portalxl group Exp $
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-2.0.php The GNU General Public License (GPL)
 *
 */

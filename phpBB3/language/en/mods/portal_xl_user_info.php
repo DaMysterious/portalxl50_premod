@@ -7,7 +7,7 @@
 *
 * Language definitions portal_xl_user_info.php contributed by black_terror
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
 */

@@ -2365,7 +2365,6 @@ function on_page($num_items, $per_page, $start)
 function append_sid($url, $params = false, $is_amp = true, $session_id = false)
 {
 	global $_SID, $_EXTRA_URL, $phpbb_hook;
-	
 	// www.phpBB-SEO.com SEO TOOLKIT BEGIN
 	// We bypass the hook function here, the same effect as a standalone hook, which we want, but faster ;-)
 	global $phpbb_seo;
@@ -2373,7 +2372,6 @@ function append_sid($url, $params = false, $is_amp = true, $session_id = false)
 		return $phpbb_seo->url_rewrite($url, $params, $is_amp, $session_id);
 	} else
 	// www.phpBB-SEO.com SEO TOOLKIT END
-	
 	if ($params === '' || (is_array($params) && empty($params)))
 	{
 		// Do not append the ? if the param-list is empty anyway.
@@ -3524,7 +3522,7 @@ function parse_cfg_file($filename, $lines = false)
 		}
 
 		// Determine first occurrence, since in values the equal sign is allowed
-		$key = strtolower(trim(substr($line, 0, $delim_pos)));
+		$key = htmlspecialchars(strtolower(trim(substr($line, 0, $delim_pos))));
 		$value = trim(substr($line, $delim_pos + 1));
 
 		if (in_array($value, array('off', 'false', '0')))
@@ -3541,7 +3539,11 @@ function parse_cfg_file($filename, $lines = false)
 		}
 		else if (($value[0] == "'" && $value[sizeof($value) - 1] == "'") || ($value[0] == '"' && $value[sizeof($value) - 1] == '"'))
 		{
-			$value = substr($value, 1, sizeof($value)-2);
+			$value = htmlspecialchars(substr($value, 1, sizeof($value)-2));
+		}
+		else
+		{
+			$value = htmlspecialchars($value);
 		}
 
 		$parsed_items[$key] = $value;
@@ -5207,19 +5209,40 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 	$user->add_lang('mods/shout');
 	// End Breizh Shoutbox
 	
-// Users and Bots on Seperate Lines 1.0.0
-	global $online_botlist, $bots_online;
-	$in_index = (defined('IN_FORUM_INDEX')) ? true : false;
-	
-	if($in_index)
+	// Users and Bots on Seperate Lines 1.0.0
+		global $online_botlist, $bots_online;
+		$in_index = (defined('IN_FORUM_INDEX')) ? true : false;
+		
+		if($in_index)
+		{
+		  $online_botlist = (($bots_online > 0) ? $user->lang['BOTS_ONLINE'] . $online_botlist : $user->lang['BOTS_ONLINE'] . $user->lang['BOTS_ZERO_ONLINE']);
+		}
+		else
+		{
+		  $online_botlist = '';
+		}
+	// Users and Bots on Seperate Lines 1.0.0
+
+	// MOD start: Mobile/SEO style
+	if(defined('MOBILE_DEVICE'))
 	{
-	  $online_botlist = (($bots_online > 0) ? $user->lang['BOTS_ONLINE'] . $online_botlist : $user->lang['BOTS_ONLINE'] . $user->lang['BOTS_ZERO_ONLINE']);
+		$full_style = defined('MOBILE_DEVICE_OFF');
+		if($full_style)
+		{
+			$s_search_hidden_fields['nomobile'] = 1;
+			$mobile_text = isset($user->lang['MOBILE_ON']) ? $user->lang['MOBILE_ON'] : 'Mobile Version';
+			$mobile_link = str_replace('nomobile=1&amp;', '', append_sid("{$phpbb_root_path}index.$phpEx", 'nomobile=0'));
+		}
+		else
+		{
+			$mobile_text = isset($user->lang['MOBILE_OFF']) ? $user->lang['MOBILE_OFF'] : 'Full Version';
+			$mobile_link = append_sid("{$phpbb_root_path}index.$phpEx", 'nomobile=1');
+		}
+		$mobile_html = '<a href="' . $mobile_link . '">' . $mobile_text . '</a>';
+		$user->lang['TRANSLATION_INFO'] = (isset($user->lang['TRANSLATION_INFO']) ? $user->lang['TRANSLATION_INFO'] . ' ' : '') . $mobile_html;
+		$template->assign_var('MOBILE_LINK', $mobile_html);
 	}
-	else
-	{
-	  $online_botlist = '';
-	}
-// Users and Bots on Seperate Lines 1.0.0
+	// MOD end: Mobile/SEO style
 	
 	// The following assigns all _common_ variables that may be used at any point in a template.
 	$template->assign_vars(array(

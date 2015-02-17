@@ -5,7 +5,7 @@
 * @package phpBB3 Portal XL 5.0
 * @version $Id: portal_smiles.php,v 1.0 2009/10/25 portalxl group Exp $
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
 */

@@ -5,7 +5,7 @@
 * @package phpBB3 Portal XL 5.0
 * @version $Id: arcade_game_jackpot.php,v 1.0 2009/11/15 portalxl group Exp $
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
 */

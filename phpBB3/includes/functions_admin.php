@@ -3241,8 +3241,24 @@ function get_database_size()
 		case 'mssql':
 		case 'mssql_odbc':
 		case 'mssqlnative':
+			$sql = 'SELECT @@VERSION AS mssql_version';
+			$result = $db->sql_query($sql);
+			$row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+			
 			$sql = 'SELECT ((SUM(size) * 8.0) * 1024.0) as dbsize
 				FROM sysfiles';
+
+			if ($row)
+			{
+				// Azure stats are stored elsewhere
+				if (strpos($row['mssql_version'], 'SQL Azure') !== false)
+				{
+					$sql = 'SELECT ((SUM(reserved_page_count) * 8.0) * 1024.0) as dbsize 
+					FROM sys.dm_db_partition_stats';
+				}
+			}
+
 			$result = $db->sql_query($sql, 7200);
 			$database_size = ($row = $db->sql_fetchrow($result)) ? $row['dbsize'] : false;
 			$db->sql_freeresult($result);
@@ -3499,7 +3515,6 @@ function obtain_latest_version_info($force_update = false, $warn_fail = false, $
 	{
 		$errstr = '';
 		$errno = 0;
-		
 		// www.phpBB-SEO.com SEO TOOLKIT BEGIN
 		global $config;
 		$url = 'www.phpbb-seo.com';
@@ -3508,7 +3523,6 @@ function obtain_latest_version_info($force_update = false, $warn_fail = false, $
 		//$info = get_remote_file('version.phpbb.com', '/phpbb',
 		//		((defined('PHPBB_QA')) ? '30x_qa.txt' : '30x.txt'), $errstr, $errno);
 		// www.phpBB-SEO.com SEO TOOLKIT END
-		
 		if (empty($info))
 		{
 			$cache->destroy('versioncheck');

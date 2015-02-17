@@ -25,10 +25,10 @@ if (!defined('IN_PHPBB'))
 */
 
 // phpBB Version
-define('PHPBB_VERSION', '3.0.12');
+define('PHPBB_VERSION', '3.0.13-PL1');
 
 // QA-related
-// define('PHPBB_SEO_QA', 1);
+// define('PHPBB_QA', 1);
 
 // User related
 define('ANONYMOUS', 1);
@@ -459,5 +459,8 @@ define('TAPATALK_USERS_TABLE',		$table_prefix . 'tapatalk_users');
 // phpBB Arcade Start
 include($phpbb_root_path . 'arcade/includes/constants.' . $phpEx);
 // phpBB Arcade End
+
+// Styles Demo MOD
+define('STYLES_DEMO_TABLE', $table_prefix . 'styles_demo');
 
 ?>

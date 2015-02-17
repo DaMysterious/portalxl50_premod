@@ -579,7 +579,12 @@ class session
 		$method = 'autologin_' . $method;
 		if (function_exists($method))
 		{
-			$this->data = $method();
+			$user_data = $method();
+
+			if ($user_id === false || (isset($user_data['user_id']) && $user_id == $user_data['user_id']))
+			{
+				$this->data = $user_data;
+			}
 
 			if (sizeof($this->data))
 			{
@@ -599,11 +604,18 @@ class session
 					AND k.user_id = u.user_id
 					AND k.key_id = '" . $db->sql_escape(md5($this->cookie_data['k'])) . "'";
 			$result = $db->sql_query($sql);
-			$this->data = $db->sql_fetchrow($result);
+			$user_data = $db->sql_fetchrow($result);
+
+			if ($user_id === false || (isset($user_data['user_id']) && $user_id == $user_data['user_id']))
+			{
+				$this->data = $user_data;
+				$bot = false;
+			}
+
 			$db->sql_freeresult($result);
-			$bot = false;
 		}
-		else if ($user_id !== false && !sizeof($this->data))
+
+		if ($user_id !== false && !sizeof($this->data))
 		{
 			$this->cookie_data['k'] = '';
 			$this->cookie_data['u'] = $user_id;
@@ -1112,7 +1124,7 @@ class session
 
 		$name_data = rawurlencode($config['cookie_name'] . '_' . $name) . '=' . rawurlencode($cookiedata);
 		$expire = gmdate('D, d-M-Y H:i:s \\G\\M\\T', $cookietime);
-		$domain = (!$config['cookie_domain'] || $config['cookie_domain'] == 'localhost' || $config['cookie_domain'] == '127.0.0.1') ? '' : '; domain=' . $config['cookie_domain'];
+		$domain = (!$config['cookie_domain'] || $config['cookie_domain'] == '127.0.0.1' || strpos($config['cookie_domain'], '.') === false) ? '' : '; domain=' . $config['cookie_domain'];
 
 		header('Set-Cookie: ' . $name_data . (($cookietime) ? '; expires=' . $expire : '') . '; path=' . $config['cookie_path'] . $domain . ((!$config['cookie_secure']) ? '' : '; secure') . '; HttpOnly', false);
 	}
@@ -1815,6 +1827,48 @@ class user extends session
 			// Set up style
 			$style = ($style) ? $style : ((!$config['override_user_style']) ? $this->data['user_style'] : $config['default_style']);
 		}
+		
+		// BEGIN Styles_Demo MOD
+		$style_value = '';
+		if (isset($_GET['style']))
+		{
+			$style_value = $_GET['style'];
+			if (intval($style_value) == 0)
+			{
+				$sql = 'SELECT style_id, style_name
+						FROM ' . STYLES_TABLE . '
+					WHERE style_active = 1 AND style_name = ' . $style_value;
+				if(($result = $db->sql_query($sql)) && ($row = $db->sql_fetchrow($result)))
+				{
+					$style_value = $row['style_id'];
+				}
+				else
+				{
+					die('Could not find style name '. $style_value . '!');
+				}
+			}
+			else
+			{
+				$sql = 'SELECT style_id
+						FROM ' . STYLES_TABLE . '
+						WHERE style_active = 1 AND style_id = ' . $style_value;
+				if(!(($result = $db->sql_query($sql)) && ($row = $db->sql_fetchrow($result))))
+				{
+					die ('style_id ' . $style_value . ' not found');
+				}
+			}
+			// $cookie_expire = time() + (($config['max_autologin_time']) ? 86400 * (int) $config['max_autologin_time'] : 31536000);
+			// $this->set_cookie('change_style', $style_value, $cookie_expire);
+		}
+		elseif (isset($_COOKIE[$config['cookie_name'] . '_sdstyle']))
+		{
+			$style_value = $_COOKIE[$config['cookie_name'] . '_sdstyle'];
+		}
+		if (!Empty($style_value))
+		{
+			$style = $style_value;
+		}
+		// END Styles_Demo MOD
 
 		// Language selection for guests
 		if (!empty($lang_exists) && file_exists($phpbb_root_path . 'language/' . basename($lang_name) . "/common.$phpEx"))
@@ -1833,6 +1887,12 @@ class user extends session
 				AND t.template_id = s.template_id
 				AND c.theme_id = s.theme_id
 				AND i.imageset_id = s.imageset_id";
+				
+		// MOD start: Mobile/SEO style
+		if($this->check_mobile($sql, $style))
+		{
+		// MOD end: Mobile/SEO style
+				
 		$result = $db->sql_query($sql, 3600);
 		$this->theme = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -1857,6 +1917,16 @@ class user extends session
 			$this->theme = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
 		}
+
+		// MOD start: Mobile/SEO style
+		}
+		if(defined('MOBILE_DEVICE_OFF'))
+		{
+			global $SID, $_EXTRA_URL;
+			$SID .= '&amp;nomobile=1';
+			$_EXTRA_URL[] = 'nomobile=1';
+		}
+		// MOD end: Mobile/SEO style
 
 		if (!$this->theme)
 		{
@@ -2122,6 +2192,70 @@ class user extends session
 
 		return;
 	}
+
+	// MOD start: Mobile/SEO style
+	/**
+	* Check for mobile/seo, get style
+	*/
+	function check_mobile($sql, $style)
+	{
+		$browser = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+		if (empty($this->data['is_bot']) && strpos($browser, 'Mobile') === false && strpos($browser, 'Symbian') === false && strpos($browser, 'Opera M') === false && strpos($browser, 'Android') === false && stripos($browser, 'HTC_') === false && strpos($browser, 'Fennec/') === false && stripos($browser, 'Blackberry') === false && strpos($browser, 'Windows Phone') === false && strpos($browser, 'WP7') === false && strpos($browser, 'WP8') === false)
+		{
+				return true;
+		}
+		define('MOBILE_DEVICE', true);
+		if(!empty($_REQUEST['nomobile']))
+		{
+			define('MOBILE_DEVICE_OFF', true);
+			return true;
+		}
+		global $db;
+		// Important: change number 0 below to ID of Artodia:Mobile style.
+		// If it is set to 0, script will automatically find style, but it will use extra time and resources.
+		$mobile_style_id = 16;
+		if($mobile_style_id)
+		{
+			$sql2 = str_replace('s.style_id = ' . $style, 's.style_id = ' . $mobile_style_id, $sql);
+			$result = $db->sql_query($sql2, 3600);
+			$this->theme = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+			if($this->theme !== false)
+			{
+				define('MOBILE_STYLE', true);
+				return false;
+			}
+		}
+		// try to find style
+		global $phpbb_root_path;
+		$files = scandir($phpbb_root_path . 'styles');
+		$base = $phpbb_root_path . 'styles/';
+		for($i=0; $i<count($files); $i++)
+		{
+			if($files[$i] != '.' && $files[$i] != '..' && is_dir($base . $files[$i]) && @file_exists($base . $files[$i] . '/style.cfg'))
+			{
+				// found directory with style
+				$data = file_get_contents($base . $files[$i] . '/style.cfg');
+				if(strpos($data, 'mobile = 1') !== false && ($pos = strpos($data, 'name = ')) !== false)
+				{
+					$list = explode("\n", substr($data, $pos + 7), 2);
+					$name = trim($list[0]);
+					// found style
+					$sql2 = str_replace('s.style_id = ' . $style, 's.style_name = \'' . $db->sql_escape($name) . '\'', $sql);
+					$result = $db->sql_query($sql2, 3600);
+					$this->theme = $db->sql_fetchrow($result);
+					$db->sql_freeresult($result);
+					if($this->theme !== false)
+					{
+						define('MOBILE_STYLE', true);
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	// MOD end: Mobile/SEO style
 
 	/**
 	* More advanced language substitution

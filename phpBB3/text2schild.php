@@ -4,7 +4,7 @@
 * @package smilie_creator
 * $LastChangedDate: 2008-10-18 22:15:51 +0200 (Sa, 18 Okt 2008) $
 * $LastChangedBy: stoffel04 $
-* $Id: text2schild.php,v 1.1.1.1 2009/05/15 05:12:42 portalxl group Exp $
+* $Id: text2schild.php,v 1.1.1.1 2015/05/15 05:12:42 portalxl group Exp $
 * $Revision: 1.1.1.1 $
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License*
 *

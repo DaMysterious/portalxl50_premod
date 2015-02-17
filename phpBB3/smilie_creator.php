@@ -4,7 +4,7 @@
 * @package smilie_creator
 * $LastChangedDate: 2008-09-07 13:06:44 +0200 (So, 07 Sep 2008) $
 * $LastChangedBy: stoffel04 $
-* $Id: smilie_creator.php,v 1.1.1.1 2009/05/15 05:12:41 portalxl group Exp $
+* $Id: smilie_creator.php,v 1.1.1.1 2015/05/15 05:12:41 portalxl group Exp $
 * $Revision: 1.1.1.1 $
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License*
 *

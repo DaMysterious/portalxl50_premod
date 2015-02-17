@@ -4,7 +4,7 @@
 * @author Tobi Schäfer http://www.phpbb-seo.de/
 *
 * @package phpBB3
-* @version $Id: impressum.php,v 1.2 2009/05/26 15:28:04 portalxl group Exp $
+* @version $Id: impressum.php,v 1.2 2015/05/26 15:28:04 portalxl group Exp $
 * @copyright (c) 2008 SEO phpBB phpbb-seo.de
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *

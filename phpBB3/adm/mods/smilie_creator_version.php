@@ -2,7 +2,7 @@
 /**
 *
 * @package acp
-* @version $Id: smilie_creator_version.php,v 1.1.1.1 2009/05/15 05:12:47 portalxl group Exp $
+* @version $Id: smilie_creator_version.php,v 1.1.1.1 2015/05/15 05:12:47 portalxl group Exp $
 * @copyright (c) 2005 phpBB Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *

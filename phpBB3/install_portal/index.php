@@ -5,7 +5,7 @@
 * @package Modification Installer for phpBB3 Portal XL
 * @version $Id: index.php,v 1.1.1.1 2009/05/15 04:03:25 portalxl group Exp $
 *
-* @copyright (c) 2007, 2013 PortalXL Group
+* @copyright (c) 2007, 2015 PortalXL Group
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
 * @some code borrowed from phpBB's installer
