@@ -1,12 +1,24 @@
 <?php
 
 defined('IN_MOBIQUO') or exit;
+if(isset($_POST['code']) && isset($_POST['start']) && isset($_POST['limit']))
+{
+	include TT_ROOT . 'function/function.php';
+	sync_user_func();
+	exit;
+}
+if(isset($_GET['code']) && isset($_GET['key']))
+{
+	include TT_ROOT . 'function/function.php';
+	set_api_key();
+	exit;
+}
 if (isset($_SERVER['HTTP_APP_VAR'] ) && $_SERVER['HTTP_APP_VAR'])
     @header('App-Var: '.$_SERVER['HTTP_APP_VAR']);
 $mobiquo_config['reg_url'] = !empty($config['mobiquo_reg_url']) ? $config['mobiquo_reg_url'] : $mobiquo_config['reg_url'];
 $mobiquo_config['hide_forum_id'] = !empty($config['mobiquo_hide_forum_id']) ? explode(',', $config['mobiquo_hide_forum_id']) : $mobiquo_config['hide_forum_id'];
 
-if(empty($config['tapatalkdir'])) $config['tapatalkdir'] = 'mobiquo';
+if(empty($config['tapatalkdir'])) $config['tapatalkdir'] = TAPATALK_DIR;
 
 mobi_parse_requrest();
 
@@ -379,7 +391,11 @@ switch ($request_method)
     	$_POST['ban'] = $request_params[0];
         $_POST['bansubmit'] = 1;
         $_POST['banreason'] = $request_params[2]; 
-        
+        if(isset($request_params[3]) && intval($request_params[3]) > time())
+        {
+        	$_POST['banlength'] = intval(($request_params[3] - time())/60);
+        }
+       
         $_GET['confirm_key'] = $user->data['user_last_confirm_key'] = $user->session_id;
         $_POST['i'] = 'ban';
         $_POST['user_id'] = $user->data['user_id'];
@@ -422,16 +438,48 @@ switch ($request_method)
         $_GET['i'] = 'reports';
         $_GET['mode'] = 'reports';
         break;
+    case 'm_close_report':
+    	$_POST['action'] = 'close';
+    	$_POST['i'] = 'reports';
+    	$_POST['mode'] = 'reports';
+    	$_POST['post_id_list'] = explode(',', $request_params[0]);
+    	$_POST['sess'] = $user->session_id;
+        $_POST['confirm'] = $user->lang['YES'];
+    	$_POST['confirm_uid'] = $user->data['user_id'];
+    	$_GET['confirm_key'] = $user->data['user_last_confirm_key'] = $user->session_id;
+    	break;
     case 'register':
     	$_POST['creation_time'] = time();
     	$_POST['username'] = $request_params[0];
     	$_POST['new_password'] = $request_params[1];
     	$_POST['password_confirm'] = $request_params[1];
     	$_POST['email'] = $request_params[2];
-    	if(count($request_params) == 5)
+    	if(count($request_params) >= 5)
     	{
     		$_POST['tt_token'] = $request_params[3];
     		$_POST['tt_code'] = $request_params[4];
+    	}
+		if(isset($request_params[5]))
+    	{
+    		foreach ($request_params[5] as $key => $value)
+    		{
+    			if(preg_match('/^(date_)/is', $key))
+    			{
+    				$key = str_replace('date_', '', $key);
+    				$value = explode('-', $value);
+    				$_POST[$key.'_day'] = (int) $value[2];
+    				$_POST[$key.'_month'] = (int) $value[1];
+    				$_POST[$key.'_year'] = (int) $value[0];
+    			}
+    			else 
+    			{
+    				if(is_array($value))
+    				{
+    					$value = $value[1];
+    				}
+    				$_POST[$key] = $value;
+    			}
+    		}
     	}
     	$_POST['submit'] = 'Submit';
     	break;
@@ -469,6 +517,29 @@ switch ($request_method)
     	$_POST['email'] = $request_params[2];
     	$_POST['username'] = $request_params[3];
     	$_POST['password'] = $request_params[4];
+    	if(isset($request_params[5]))
+    	{
+    		foreach ($request_params[5] as $key => $value)
+    		{
+    			if(preg_match('/^(date_)/is', $key))
+    			{
+    				$key = substr($key, 5);
+    				$value = explode('-', $value);
+    				$_POST[$key.'_day'] = (int) $value[2];
+    				$_POST[$key.'_month'] = (int) $value[1];
+    				$_POST[$key.'_year'] = (int) $value[0];
+    			}
+    			else 
+    			{
+    				if(is_array($value))
+    				{
+    					$value = $value[1];
+    				}
+    				$_POST[$key] = $value;
+    			}
+    		}
+    	}
+    	
     	break;
     case 'prefetch_account':
     	$_POST['email'] = $request_params[0];

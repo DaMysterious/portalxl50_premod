@@ -91,8 +91,24 @@ else if ($topic_id)
     if ($request_method == 'm_approve_topic') $_REQUEST['post_id_list'] = array($row['topic_first_post_id']);
 }
 
+if($request_method == 'm_close_report')
+{
+	if(!empty($_POST['post_id_list']))
+	{
+		$sql = "SELECT report_id
+		FROM " . REPORTS_TABLE . ' r
+		WHERE ' . $db->sql_in_set('r.post_id', $_POST['post_id_list']);
+		$result = $db->sql_query($sql);
+	
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$_REQUEST['report_id_list'][] = $row['report_id'];
+		}
+		$_REQUEST['report_id_list'] = array_unique($_REQUEST['report_id_list']);
+	}
+}
 // transform username to ban id and delete the users's posts 
-if ($request_method == 'm_ban_user' && $request_params[1] == 2) {
+if ($request_method == 'm_ban_user' && $request_params[1] == 2 && $auth->acl_get('m_ban')) {
 	$ban_userid = get_user_id_by_name($request_params[0]);
 	//judge the user post num is or not > 50
 	$sql = "SELECT COUNT(*) AS tp_count FROM " . POSTS_TABLE . " p WHERE p.poster_id = '".$ban_userid."'";
@@ -126,7 +142,7 @@ if ($request_method == 'm_ban_user' && $request_params[1] == 2) {
 }
 
 // If the user doesn't have any moderator powers (globally or locally) he can't access the mcp
-if (!$auth->acl_getf_global('m_'))
+if (!$auth->acl_getf_global('m_') && $request_method != 'm_rename_topic')
 {
     // Except he is using one of the quickmod tools for users
     $user_quickmod_actions = array(
@@ -240,13 +256,13 @@ function m_get_moderate_topic_func()
     foreach($template->_tpldata['postrow'] as $postinfo)
     {
         $post = $posts[$postinfo['POST_ID']];
-        
+
         if (empty($post['forum_id']))
         {
             $post['forum_id'] = 0;
             $post['forum_name'] = $user->lang['ANNOUNCEMENTS'];
         }
-        
+              
         $post_list[] = new xmlrpcval(array(
             'forum_id'          => new xmlrpcval($post['forum_id']),
             'forum_name'        => new xmlrpcval(basic_clean($post['forum_name']), 'base64'),
@@ -258,7 +274,12 @@ function m_get_moderate_topic_func()
             'icon_url'          => new xmlrpcval(get_user_avatar_url($post['user_avatar'], $post['user_avatar_type'])),
             'post_time'         => new xmlrpcval(mobiquo_iso8601_encode($post['post_time']), 'dateTime.iso8601'),
             'short_content'     => new xmlrpcval(process_short_content($post['post_text']), 'base64'),
+            'can_approve'       => new xmlrpcval($auth->acl_get('m_approve', $post['forum_id']) && !$post['topic_approved'], 'boolean'),
+        	'is_approved'       => new xmlrpcval($post['topic_approved'], 'boolean'),
             'can_delete'        => new xmlrpcval($auth->acl_get('m_delete', $post['forum_id']), 'boolean'),
+        	'is_deleted'        => new xmlrpcval(false, 'boolean'),
+        	'can_ban'           => new xmlrpcval($auth->acl_get('m_ban') && $post['topic_poster'] != $user->data['user_id'], 'boolean'),
+        	'is_ban'            => new xmlrpcval($user->check_ban($post['topic_poster'],false,false,true),'boolean'),
         ), 'struct');
     }
     
@@ -418,7 +439,12 @@ function m_get_moderate_post_func()
             'icon_url'          => new xmlrpcval(get_user_avatar_url($post['user_avatar'], $post['user_avatar_type'])),
             'post_time'         => new xmlrpcval(mobiquo_iso8601_encode($post['post_time']), 'dateTime.iso8601'),
             'short_content'     => new xmlrpcval(process_short_content($post['post_text']), 'base64'),
-            'can_delete'        => new xmlrpcval($auth->acl_get('m_delete', $forum_id), 'boolean'),
+            'can_approve'       => new xmlrpcval($auth->acl_get('m_approve', $post['forum_id']) && !$post['post_approved'], 'boolean'),
+        	'is_approved'       => new xmlrpcval($post['post_approved'], 'boolean'),
+            'can_delete'        => new xmlrpcval($auth->acl_get('m_delete', $post['forum_id']), 'boolean'),
+        	'is_deleted'        => new xmlrpcval(false, 'boolean'),
+        	'can_ban'           => new xmlrpcval($auth->acl_get('m_ban') && $post['poster_id'] != $user->data['user_id'], 'boolean'),
+        	'is_ban'            => new xmlrpcval($user->check_ban($post['poster_id'],false,false,true),'boolean'),
         ), 'struct');
     }
     
@@ -436,7 +462,7 @@ function m_get_moderate_post_func()
 
 function m_get_report_post_func()
 {
-    global $template, $auth, $user, $db;
+    global $template, $auth, $user, $db,$forum_id;
     
     $posts = array();
     foreach($template->_tpldata['postrow'] as $postinfo) {
@@ -450,7 +476,7 @@ function m_get_report_post_func()
     {
         $post = $posts[$postinfo['POST_ID']];
         
-        if(preg_match('/r=(\d)/is', $postinfo['U_VIEW_DETAILS'], $matches))
+        if(preg_match('/r=(\d+)/is', $postinfo['U_VIEW_DETAILS'], $matches))
         {
 	        $report_id = intval($matches[1]);
 	        $sql = 'SELECT r.report_text, rr.reason_title, rr.reason_description
@@ -481,10 +507,15 @@ function m_get_report_post_func()
             'icon_url'          => new xmlrpcval(get_user_avatar_url($post['user_avatar'], $post['user_avatar_type'])),
             'post_time'         => new xmlrpcval(mobiquo_iso8601_encode($post['post_time']), 'dateTime.iso8601'),
             'short_content'     => new xmlrpcval(process_short_content($post['post_text']), 'base64'),
-            'can_delete'        => new xmlrpcval($auth->acl_get('m_delete', $forum_id), 'boolean'),
+        	'can_approve'       => new xmlrpcval($auth->acl_get('m_approve', $post['forum_id']) && !$post['post_approved'], 'boolean'),
+        	'is_approved'       => new xmlrpcval($post['post_approved'], 'boolean'),
+            'can_delete'        => new xmlrpcval($auth->acl_get('m_delete', $post['forum_id']), 'boolean'),
+        	'is_deleted'        => new xmlrpcval(false, 'boolean'),
         	'reported_by_id'    => new xmlrpcval($postinfo['REPORT_ID']),
         	'reported_by_name'  => new xmlrpcval($postinfo['REPORTER'], 'base64'),
-        	'report_reason'     => isset($report['reason_description']) ? new xmlrpcval($report['reason_description'], 'base64') : '',
+        	'report_reason'     => isset($report['reason_description']) ? new xmlrpcval($report['reason_description'], 'base64') : new xmlrpcval('',  'base64'),
+        	'can_ban'           => new xmlrpcval($auth->acl_get('m_ban') && $post['poster_id'] != $user->data['user_id'], 'boolean'),
+        	'is_ban'            => new xmlrpcval($user->check_ban($post['poster_id'],false,false,true),'boolean'),
         ), 'struct');
     }
     

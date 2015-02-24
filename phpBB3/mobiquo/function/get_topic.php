@@ -304,9 +304,9 @@ function get_topic_func($xmlrpc_params)
         
         $xmlrpc_topic = new xmlrpcval(array(
             'forum_id'          => new xmlrpcval($forum_id),
-            'topic_id'          => new xmlrpcval($row['topic_moved_id'] ? $row['topic_moved_id'] : $row['topic_id']),
+            'topic_id'          => new xmlrpcval($row['topic_id']),
             'topic_title'       => new xmlrpcval(html_entity_decode(strip_tags(censor_text($row['topic_title'])), ENT_QUOTES, 'UTF-8'), 'base64'),
-            'topic_author_id'   => new xmlrpcval($row['topic_first_post_id'],'string'),
+            'topic_author_id'   => new xmlrpcval($row['topic_poster'],'string'),
             'topic_author_name' => new xmlrpcval(html_entity_decode($row['topic_first_poster_name']), 'base64'),
             'last_reply_time'   => new xmlrpcval(mobiquo_iso8601_encode($row['topic_last_post_time']),'dateTime.iso8601'),
             'timestamp'         => new xmlrpcval($row['topic_last_post_time'], 'string'),
@@ -330,6 +330,8 @@ function get_topic_func($xmlrpc_params)
             'is_approved'       => new xmlrpcval($row['topic_approved'] ? true : false, 'boolean'),
         	'can_rename'        => new xmlrpcval($can_rename, 'boolean'),
 			'can_merge'         => new xmlrpcval($auth->acl_get('m_merge', $forum_id),'boolean'),
+        	'is_moved'          => new xmlrpcval(!empty($row['topic_moved_id']) ? true : false,'boolean'),
+        	'real_topic_id'     => new xmlrpcval($row['topic_moved_id'] ? $row['topic_moved_id'] : $row['topic_id']),
         ), 'struct');
         
         $topic_list[] = $xmlrpc_topic;

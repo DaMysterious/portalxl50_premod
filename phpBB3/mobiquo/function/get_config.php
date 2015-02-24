@@ -7,21 +7,30 @@
 */
 
 defined('IN_MOBIQUO') or exit;
-
+include_once $phpbb_root_path . 'includes/functions_convert.' . $phpEx;
 function get_config_func()
 {    
-    global $mobiquo_config, $config, $auth;
+    global $mobiquo_config, $config, $auth, $user, $db;
     
     $config_list = array(
         'sys_version'=> new xmlrpcval($config['version'], 'string'),
     	'is_open'    => new xmlrpcval($mobiquo_config['is_open'] ? true : false, 'boolean'),
-        'guest_okay' => new xmlrpcval( true , 'boolean'),
+        'guest_okay' => new xmlrpcval(false, 'boolean'),
     );
-    if($config['require_activation'] == USER_ACTIVATION_ADMIN)
-    {	    
-	    $mobiquo_config['sso_signin'] = 0;
-	    $mobiquo_config['sso_register'] = 0;
+    
+    $sql = 'SELECT f.*  FROM ' . FORUMS_TABLE . ' f ORDER BY f.left_id ASC';
+    $result = $db->sql_query($sql, 600);
+    while ($row = $db->sql_fetchrow($result))
+    {
+    	$forum_id = $row['forum_id'];
+    	if($auth->acl_get('f_list', $forum_id))
+    	{
+    		$config_list['guest_okay'] = new xmlrpcval(true, 'boolean');
+    		break;
+    	}
     }
+    $db->sql_freeresult($result);
+    
     if($config['require_activation'] == USER_ACTIVATION_DISABLE)
     {
     	$mobiquo_config['sign_in'] = 0;
@@ -118,6 +127,11 @@ function get_config_func()
     {
     	$config_list['api_key'] = new xmlrpcval(md5($config['tapatalk_push_key']), 'string');
     }
+    if(isset($config['tapatalk_ad_filter']))
+    {
+    	$config_list['ads_disabled_group'] = new xmlrpcval($config['tapatalk_ad_filter'], 'string');
+    }
+    $config_list['guest_group_id'] = new xmlrpcval(get_group_id('GUESTS'), 'string');
     $config_list['stats'] = new xmlrpcval(array(
         'topic'    => new xmlrpcval($config['num_topics'], 'int'),
         'user'     => new xmlrpcval($config['num_users'], 'int'),

@@ -52,6 +52,14 @@ class mobi_ucp_register
 			'lang'				=> basename(request_var('lang', $user->lang_name)),
 			'tz'				=> request_var('tz', (float) $timezone),
 		);
+		//check eve api
+		if(!empty($config['eveapi_version']))
+		{
+			$data['eveapi_keyid'] = 0;
+			$data['eveapi_vcode'] = '';
+			$data['eveapi_ts'] = '';
+			$config['eveapi_validation'] = 0;
+		}
 		$error = validate_data($data, array(
 			'username'			=> array(
 				array('string', false, $config['min_name_chars'], $config['max_name_chars']),

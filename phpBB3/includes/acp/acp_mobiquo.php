@@ -41,9 +41,12 @@ class acp_mobiquo
 					'mobiquo_hide_forum_id'	    => array('lang' => 'MOBIQUO_HIDE_FORUM_ID', 'validate' => 'string',	'type' => 'custom',	'explain' => true,	'method' => 'select_box'),
 					'tapatalkdir'			    => array('lang' => 'MOBIQUO_NAME', 'validate' => 'string', 'type' => 'text:10:12', 'explain' => true),
 				    'tapatalk_push_key'		    => array('lang' => 'TAPATALK_PUSH_KEY', 'validate' => 'string','type' => 'text:40:60','explain' => true),
-					'tapatalk_forum_read_only'	=> array('lang' => 'TAPATALK_FORUM_READ_ONLY', 'validate' => 'string',	'type' => 'custom',	'explain' => true,	'method' => 'select_box'),
-					'tapatalk_custom_replace'   => array('lang' => 'TAPATALK_CUSTOM_REPLACE', 'validate' => 'string', 'type' => 'textarea:4:250', 'explain' => true),
-					'tapatalk_app_ads_enable'   => array('lang' => 'TAPATALK_ALLOW_APP_ADS', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
+					'tapatalk_push_type'	    => array('lang' => 'TAPATALK_PUSH_TYPE', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
+				    'tapatalk_forum_read_only'	=> array('lang' => 'TAPATALK_FORUM_READ_ONLY', 'validate' => 'string',	'type' => 'custom',	'explain' => true,	'method' => 'select_box'),
+					'tapatalk_ad_filter'        => array('lang' => 'TAPATALK_AD_FILTER', 'validate' => 'string',	'type' => 'custom',	'explain' => true,	'method' => 'select_mutil_group_box'),
+					'tapatalk_custom_replace'   => array('lang' => 'TAPATALK_CUSTOM_REPLACE', 'validate' => 'string', 'type' => 'textarea:4:250', 'explain' => true),					
+					//'tapatalk_app_ads_enable'   => array('lang' => 'TAPATALK_ALLOW_APP_ADS', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
+					//'tapatalk_app_banner_enable'=> array('lang' => 'TAPATALK_ALLOW_APP_BANNER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),							
 					)
 				);
 				break;
@@ -68,6 +71,7 @@ class acp_mobiquo
 					'mobiquo_reg_url'		=> array('lang' => 'MOBIQUO_REG_URL', 'validate' => 'string', 'type' => 'text:30:40', 'explain' => true),	
 					'tapatalk_register_group'	=> array('lang' => 'TAPATALK_REGISTER_GROUP', 'validate' => 'string',	'type' => 'custom',	'explain' => true,	'method' => 'select_register_group'),
 					'tapatalk_spam_status'	=> array('lang' => 'TAPATALK_SPAM_STATUS', 'validate' => 'string',	'type' => 'custom',	'explain' => true,	'method' => 'select_spam_status'),
+					'tapatalk_auto_approve' => array('lang' => 'TAPATALK_AUTO_APPROVE', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => false),
 					)
 				);
 				break;
@@ -118,6 +122,15 @@ class acp_mobiquo
 				elseif ($submit && empty($_REQUEST['config']['tapatalk_forum_read_only']))
 				{
 					$cfg_array['tapatalk_forum_read_only'] = '';
+				}
+				if(isset($_REQUEST['config']['tapatalk_ad_filter']))
+				{
+					$tapatalk_ad_filter = implode(',',$_REQUEST['config']['tapatalk_ad_filter']);			
+					$cfg_array['tapatalk_ad_filter'] = $tapatalk_ad_filter;
+				}
+				elseif ($submit && empty($_REQUEST['config']['tapatalk_ad_filter']))
+				{
+					$cfg_array['tapatalk_ad_filter'] = '';
 				}
 			}
 			
@@ -278,6 +291,27 @@ class acp_mobiquo
 		return $s_group_options.'</select>';
 	}
 	
+	function select_mutil_group_box($value,$key)
+	{
+		global $db, $user, $config;
+		$selected_arr = explode(',', $config[$key]);
+		
+		$sql = 'SELECT group_id, group_name, group_type
+			FROM ' . GROUPS_TABLE . "
+			ORDER BY group_type DESC, group_name ASC";
+		$result = $db->sql_query($sql);
+		
+		$s_group_options = '<select id="' . $key . '" name="config[' . $key . '][]"  multiple="multiple" size="8">';
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$selected = in_array($row['group_id'], $selected_arr) ? ' selected="selected"' : '';
+			$s_group_options .= '<option value="' . $row['group_id'] . '"' . $selected . '>' . (($row['group_type'] == GROUP_SPECIAL) ? $user->lang['G_' . $row['group_name']] : $row['group_name']) . '</option>';
+		}
+		$db->sql_freeresult($result);
+
+		return $s_group_options.'</select>';
+	}
+	
 	function select_register_status($value,$key)
 	{
 		global $user;
@@ -289,15 +323,14 @@ class acp_mobiquo
 			{
 				$name = $user->lang['TAPATALK_REGISTER_STATUS_SSO'];
 			}
-			elseif($i == 1)
-			{
-				$name = $user->lang['TAPATALK_REGISTER_STATUS_NATIVE'];
-			}
-			else 
+			else if($i == 0)
 			{
 				$name = $user->lang['TAPATALK_REGISTER_STATUS_URL'];
 			}
-			$s_group_options .= '<option value="' . $i . '"' . $selected . '>'.$name.'</option>';
+			if($i == 0 || $i == 2)
+			{
+			    $s_group_options .= '<option value="' . $i . '"' . $selected . '>'.$name.'</option>';
+			}
 		}
 		return $s_group_options.'</select>';
 	}

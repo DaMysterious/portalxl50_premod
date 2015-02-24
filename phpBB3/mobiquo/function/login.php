@@ -19,7 +19,6 @@ function login_func($xmlrpc_params)
     $username = $username_orgin = $params[0];
     $password = $params[1];
     $viewonline = isset($params[2]) ? !$params[2] : 1;
-    $push = isset($params[3]) ? intval($params[3]) : 1;
 
     set_var($username, $username, 'string', true);
     set_var($password, $password, 'string', true);
@@ -39,6 +38,7 @@ function login_func($xmlrpc_params)
     }
     $config['max_login_attempts'] = 20;
     $config['ip_login_limit_max'] = 50;
+    $user->session_kill();
     $login_result = $auth->login($username, $password, true, $viewonline);
     
     $usergroup_id = array();
@@ -69,19 +69,6 @@ function login_func($xmlrpc_params)
 	        	$sql = 'INSERT INTO ' . $table_prefix . "tapatalk_users" . ' ' .
 				$db->sql_build_array('INSERT', $sql_data[$table_prefix . "tapatalk_users"]['sql']);
 				$db->sql_query($sql);    	
-	        }
-	        
-	        if($push == 1)
-	        {
-	        	$sql = 'UPDATE '. $table_prefix . "tapatalk_users SET announcement = '1',pm='1',
-				subscribe = '1',quote = '1',tag = '1',newtopic='1' ,updated= '".time()."'
-				WHERE userid = '".$user->data['user_id']."'";
-	        }
-	        else 
-	        {
-	        	$sql = 'UPDATE '. $table_prefix . "tapatalk_users SET announcement = '0',pm='0',
-				subscribe = '0',quote = '0',tag = '0',newtopic='0' ,updated= '".time()."'
-				WHERE userid = '".$user->data['user_id']."'";
 	        }
         }
         
@@ -116,7 +103,6 @@ function login_func($xmlrpc_params)
     
     $userPushType = array('pm' => 1,'newtopic' => 1,'sub' => 1,'tag' => 1,'quote' => 1);
     $push_type = array();
-    
  	foreach ($userPushType as $name=>$value)
     {
     	$push_type[] = new xmlrpcval(array(
@@ -125,11 +111,17 @@ function login_func($xmlrpc_params)
             ), 'struct');
     }   
     
+    $flood_interval = 0;
+    if ($config['flood_interval'] && !$auth->acl_get('u_ignoreflood'))
+    {
+    	$flood_interval = intval($config['flood_interval']);
+    }
+    
     $response = new xmlrpcval(array(
         'result'        => new xmlrpcval(true, 'boolean'),
         'user_id'       => new xmlrpcval($user->data['user_id'], 'string'),
         'username'      => new xmlrpcval(basic_clean($user->data['username']), 'base64'),
-        'login_name'    => new xmlrpcval(basic_clean($user->data['user_name']), 'base64'),
+        'login_name'    => new xmlrpcval(basic_clean($user->data['username']), 'base64'),
     	'email'         => new xmlrpcval($user->data['user_email'], 'base64'),
 		'user_type' 	=> check_return_user_type($user->data['user_id']),
 		//'tapatalk'      => new xmlrpcval(is_tapatalk_user($user->data['user_id']), 'string'),
@@ -147,7 +139,10 @@ function login_func($xmlrpc_params)
         'can_whosonline'    => new xmlrpcval($can_whosonline, 'boolean'),
         'can_upload_avatar' => new xmlrpcval($can_upload, 'boolean'),
     	'push_type'         => new xmlrpcval($push_type, 'array'),  
-    	
+    	'post_countdown'    => new xmlrpcval($flood_interval,'int'),
+    	'max_avatar_size'   => new xmlrpcval($config['avatar_filesize'],'int'),
+    	'max_avatar_width'  => new xmlrpcval($config['avatar_max_width'],'int'),
+    	'max_avatar_height'  => new xmlrpcval($config['avatar_max_height'],'int'),
     ), 'struct');
     
     return new xmlrpcresp($response);

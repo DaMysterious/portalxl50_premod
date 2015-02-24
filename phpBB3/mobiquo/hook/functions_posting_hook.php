@@ -1,6 +1,7 @@
 <?php
 if(!defined('IN_PHPBB') && !defined("IN_MOBIQUO")) exit;
 if(!isset($tapatalk_push_run)) $tapatalk_push_run = true;
+if(!isset($post_approval)) $post_approval = true;
 if ($url && $post_approval && $tapatalk_push_run)
 {
 	$config['tapatalkdir'] = !empty($config['tapatalkdir']) ? $config['tapatalkdir'] : 'mobiquo';

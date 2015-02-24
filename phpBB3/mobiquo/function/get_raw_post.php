@@ -168,6 +168,7 @@ function get_raw_post_func($xmlrpc_params)
 			unset($xmlrpc_attachment);
 		}    
 	}
+	
 	$group_id = base64_encode(serialize($message_parser->attachment_data));
     return new xmlrpcresp(
         new xmlrpcval(array(
@@ -175,6 +176,8 @@ function get_raw_post_func($xmlrpc_params)
                 'post_title'    => new xmlrpcval(html_entity_decode(strip_tags($post_data['post_subject'])), 'base64'),
                 'post_content'  => new xmlrpcval(html_entity_decode($post_data['post_text']), 'base64'),
             	'attachments'   => new xmlrpcval($attachments_arr, 'array'),
+        		'show_reason'   => new xmlrpcval(($auth->acl_get('m_edit', $forum_id) ? true : false),'boolean'),
+        		'edit_reason'   => new xmlrpcval($post_data['post_edit_reason'], 'base64'),
         		'group_id'      => new xmlrpcval($group_id),
         	),
             'struct'

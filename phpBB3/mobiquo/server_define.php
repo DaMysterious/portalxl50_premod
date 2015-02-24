@@ -66,6 +66,7 @@ $server_param = array(
         'signature' => array(array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64),
                              array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcBoolean),
                              array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcBoolean, $xmlrpcArray,$xmlrpcString),
+                             array($xmlrpcStruct, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcBoolean, $xmlrpcArray,$xmlrpcString, $xmlrpcBase64),
                        ),
         'docstring' => 'parameter should be array(string, base64, base64)',
     ),
@@ -140,7 +141,12 @@ $server_param = array(
                              array($xmlrpcStruct, $xmlrpcBase64),
                              array($xmlrpcStruct, $xmlrpcBase64, $xmlrpcString)),
     ),
-
+	
+    'get_contact'   => array(
+    	'function' => 'get_contact_func',
+        'signature' => array(array($xmlrpcStruct,$xmlrpcString),array($xmlrpcStruct,$xmlrpcString,$xmlrpcString)),
+    ),
+    
     'get_config' => array(
         'function'  => 'get_config_func',
         'signature' => array(array($xmlrpcArray)),
@@ -412,7 +418,10 @@ $server_param = array(
     ),
     'm_ban_user' => array(
         'function'  => 'xmlresptrue',
-        'signature' => array(array($xmlrpcArray, $xmlrpcBase64, $xmlrpcInt, $xmlrpcBase64)),
+        'signature' => array(
+    		array($xmlrpcArray, $xmlrpcBase64, $xmlrpcInt, $xmlrpcBase64),
+    		array($xmlrpcArray, $xmlrpcBase64, $xmlrpcInt, $xmlrpcBase64, $xmlrpcInt),
+    	),
         'docstring' => '',
     ),
     'm_rename_topic' => array(
@@ -423,6 +432,11 @@ $server_param = array(
     						),
         'docstring' => '',
     ),
+    'm_close_report' => array(
+    	'function'  => 'm_close_report_func',
+        'signature' => array(array($xmlrpcArray, $xmlrpcString))
+    ),
+    
     'update_push_status' => array(
         'function' => 'update_push_status_func',
         'signature' => array(array($xmlrpcStruct,$xmlrpcStruct),
@@ -440,6 +454,7 @@ $server_param = array(
     	'signature' => array(array($xmlrpcStruct),
                              array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcBase64,$xmlrpcBase64),
     						 array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcBase64,$xmlrpcBase64,$xmlrpcString,$xmlrpcString),
+    						 array($xmlrpcStruct, $xmlrpcBase64,$xmlrpcBase64,$xmlrpcBase64,$xmlrpcString,$xmlrpcString, $xmlrpcStruct),
     						 ),
     ),
     
@@ -473,6 +488,7 @@ $server_param = array(
     						 array($xmlrpcStruct, $xmlrpcString,$xmlrpcString,$xmlrpcBase64),
     						 array($xmlrpcStruct, $xmlrpcString,$xmlrpcString,$xmlrpcBase64,$xmlrpcBase64),
     						 array($xmlrpcStruct, $xmlrpcString,$xmlrpcString,$xmlrpcBase64,$xmlrpcBase64,$xmlrpcBase64),
+    						 array($xmlrpcStruct, $xmlrpcString, $xmlrpcString, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcBase64, $xmlrpcStruct),
     						 ),
     ), 
     
@@ -485,6 +501,13 @@ $server_param = array(
     
     'mark_pm_unread' => array(
         'function'  => 'mark_pm_unread_func',
+        'signature' => array(array($xmlrpcArray),
+                             array($xmlrpcStruct, $xmlrpcString)),
+        'docstring' => 'message id',
+    ),
+    
+    'mark_pm_read' => array(
+        'function'  => 'mark_pm_read_func',
         'signature' => array(array($xmlrpcArray),
                              array($xmlrpcStruct, $xmlrpcString)),
         'docstring' => 'message id',
@@ -512,4 +535,14 @@ $server_param = array(
     						 array($xmlrpcStruct,$xmlrpcString ,$xmlrpcInt),
     						 ),
     ),
+    
+    'activate_account'   => array(
+    	'function' => 'activate_account_func',
+        'signature' => array(array($xmlrpcStruct,$xmlrpcBase64,$xmlrpcString,$xmlrpcString)),
+    ),
+    
+    /*'get_topic_participants'   => array(
+        'function' => 'get_topic_participants_func',
+        'signature' => array(array($xmlrpcStruct,$xmlrpcString),array($xmlrpcStruct, $xmlrpcString, $xmlrpcInt)),
+    ),*/
 );

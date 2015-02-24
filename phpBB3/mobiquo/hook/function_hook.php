@@ -1,8 +1,37 @@
 <?php
 if (!defined('IN_PHPBB')) exit;
-function get_tapatlk_location()
+if (!function_exists('http_build_query')) 
 {
-	global $user,$phpbb_root_path;
+    function http_build_query($data, $prefix = null, $sep = '', $key = '')
+    {
+        $ret = array();
+        foreach ((array )$data as $k => $v) {
+            $k = urlencode($k);
+            if (is_int($k) && $prefix != null) {
+                $k = $prefix . $k;
+            }
+ 
+            if (!empty($key)) {
+                $k = $key . "[" . $k . "]";
+            }
+ 
+            if (is_array($v) || is_object($v)) {
+                array_push($ret, http_build_query($v, "", $sep, $k));
+            } else {
+                array_push($ret, $k . "=" . urlencode($v));
+            }
+        }
+ 
+        if (empty($sep)) {
+            $sep = ini_get("arg_separator.output");
+        }
+ 
+        return implode($sep, $ret);
+    }
+}
+function get_tapatalk_location()
+{
+	global $user,$phpbb_root_path,$config;
 	$location = $user->extract_current_page($phpbb_root_path);
 	$param_arr = array();
 	switch ($location['page_name'])
@@ -11,6 +40,16 @@ function get_tapatlk_location()
         	if(!empty($_GET['f']))
         	{
         		$param_arr['fid'] = $_GET['f'];
+        		if(isset($_GET['start']))
+        		{
+        			$param_arr['page'] = intval($_GET['start']/$config['topics_per_page']) + 1;
+        			$param_arr['perpage'] = intval($config['topics_per_page']);
+        		}
+        		else 
+        		{
+        			$param_arr['page'] =  1;
+        			$param_arr['perpage'] = intval($config['topics_per_page']);
+        		}
         	} 
             $param_arr['location'] = 'forum';
             break;
@@ -39,6 +78,16 @@ function get_tapatlk_location()
                 //$param_arr['fid'] = $parameters['fid'];
                 $param_arr['location'] = 'topic';
                 $param_arr['tid'] = $_GET['t'];
+            	if(isset($_GET['start']))
+        		{
+        			$param_arr['page'] = intval($_GET['start']/$config['posts_per_page']) + 1;
+        			$param_arr['perpage'] = intval($config['posts_per_page']);
+        		}
+        		else 
+        		{
+        			$param_arr['page'] =  1;
+        			$param_arr['perpage'] = intval($config['posts_per_page']);
+        		}
             }
             break;
         case "memberlist.php":
@@ -58,7 +107,7 @@ function get_tapatlk_location()
     }
     $queryString = http_build_query($param_arr);
     $url = generate_board_url() . '/?' .$queryString;
-    $url = preg_replace('/^(http|https)/isU', 'tapatalk', $url);
+    $url = preg_replace('/^(https|http)/isU', 'tapatalk', $url);
     return $url;
 }
 

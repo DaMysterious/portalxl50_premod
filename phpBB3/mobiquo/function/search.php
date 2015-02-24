@@ -211,7 +211,7 @@ if ($keywords || $author || $author_id || $search_id || $submit)
 	}
 
     // add for tapatalk
-    if (isset($mobiquo_config['hide_forum_id']))
+    if (isset($mobiquo_config['hide_forum_id']) && is_array($mobiquo_config['hide_forum_id']))
     {
         $ex_fid_ary = array_unique(array_merge($ex_fid_ary, $mobiquo_config['hide_forum_id']));
     }

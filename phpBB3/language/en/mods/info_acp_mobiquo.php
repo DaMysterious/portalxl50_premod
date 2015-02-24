@@ -20,7 +20,7 @@ $lang = array_merge($lang, array(
     'ACP_MOBIQUO_SETTINGS'          => 'Tapatalk General',
 	'ACP_MOBIQUO_SETTINGS_EXPLAIN'  => 'Default Tapatalk general settings can be changed here.',
 	'ACP_MOBIQUO_MOD_VER'           => 'MOD version',
-	'LOG_CONFIG_MOBIQUO'            => 'Update tpatalk settings',
+	'LOG_CONFIG_MOBIQUO'            => 'Update tapatalk settings',
 	'acl_a_mobiquo'                 => array('lang' => 'Can manage Tapatalk settings', 'cat' => 'misc'),
 
 	'TP_PUSHENABLED'                => 'push enabled',
@@ -45,7 +45,7 @@ $lang = array_merge($lang, array(
 	'TAPATALK_KINDLE_URL_EXPLAIN'           => 'Enter your BYO App URL from Amazon App Store, to be used on Kindle Fire device.',
 	
 	'TAPATALK_ALLOW_APP_ADS'               => 'Mobile Welcome Screen',
-	'TAPATALK_ALLOW_APP_ADS_EXPLAIN'       => 'Tapatalk will show a one time welcoming screen to mobile users to download the free app, the screen will contain your forum logo and branding only, with a button to get the free app.',
+	'TAPATALK_ALLOW_APP_ADS_EXPLAIN'       => 'Tapatalk will show a one time welcoming screen to mobile users to download the free app, with a button to get the free app.',
 	
 	'TAPATALK_CUSTOM_REPLACE'               => 'Thread Content Replacement (Advanced)',
 	'TAPATALK_CUSTOM_REPLACE_EXPLAIN'       => 'Ability to match and replace thread content using PHP preg_replace function(http://www.php.net/manual/en/function.preg-replace.php). E.g. "\'pattern\',\'replacement\'" . You can define more than one replace rule on each line.',
@@ -61,13 +61,12 @@ $lang = array_merge($lang, array(
 	'TAPATALK_REGISTER_GROUP' => 'User Group Assignment', 
 	'TAPATALK_REGISTER_GROUP_EXPLAIN' => 'You can assign users registered with Tapatalk to specific user groups. If you do not assign them to a specific group, they will be assigned a default group.', 
 	'TAPATALK_REGISTER_STATUS' => 'Registration Options',
-	'TAPATALK_REGISTER_STATUS_EXPLAIN' => 'Native Registration and Social Sign On (Recommended) - Facebook users can register for your forum using their Facebook credentials, and those not connected to Facebook can register for your forum via an in-app form.<br/>
-Native Registration Only - No SSO available for Facebook users. All users must register for the forum via an in-app form.<br/>
+	'TAPATALK_REGISTER_STATUS_EXPLAIN' => 'In-App Registration - Allows Tapatalk users to register your forum easily with in-app registration, Tapatalk supports all custom and required fields such as birthday control and any extra fields you requires new members to enter.
+	<br/>
 Redirect to External Registration URL - All users registering for your forum will be redirected to a web browser outside of the app to continue registration. ',
 	
 
-	'TAPATALK_REGISTER_STATUS_SSO' => 'Native Registration and Social Sign On (Recommended)',
-	'TAPATALK_REGISTER_STATUS_NATIVE' => 'Native Registration Only',
+	'TAPATALK_REGISTER_STATUS_SSO' => 'In-App Registration',
 	'TAPATALK_REGISTER_STATUS_URL' => 'Redirect to External Registration URL',
 
 	'TAPATALK_SPAM_STATUS' => 'Spam Prevention',
@@ -76,6 +75,16 @@ Redirect to External Registration URL - All users registering for your forum wil
 	'TAPATALK_SPAM_STATUS_1' => 'Enable StopForumSpam in Tapatalk in-app registration',
 	'TAPATALK_SPAM_STATUS_2' => 'Enable StopForumSpam in web registration',
 	'TAPATALK_SPAM_STATUS_3' => 'Enable both',
-)
+	'LOG_CONFIG_REBRANDING' => 'Update Tapatalk rebranding settings',
+	'LOG_CONFIG_REGISTER' => 'Update Tapatalk register settings',
+	'TAPATALK_ALLOW_APP_BANNER' => 'Mobile Smart Banner',
+	'TAPATALK_ALLOW_APP_BANNER_EXPLAIN' => 'Tapatalk will show a smart banner to mobile users, when your forum is viewed by a mobile web browser. The smart banner will contain two buttons: "Open in app" and "Install".',
+	'TAPATALK_AD_FILTER' => 'Disable Ads for Group',
+	'TAPATALK_AD_FILTER_EXPLAIN' => 'This option will prevent Tapatalk from displaying advertisements. Users in the selected groups will not be served ads when using the Tapatalk app.',
+	
+	'TAPATALK_PUSH_TYPE' => 'Rich Push Notifications',
+	'TAPATALK_PUSH_TYPE_EXPLAIN' => 'If choose "Yes" - "Includes post content and images preview in Push Notifications", If choose "No" - "Do not include post content and images preview in Push Notifications"',
+	'TAPATALK_AUTO_APPROVE' => 'Automatically Approve Verified Tapatalk Members',
+	)
 );
 ?>

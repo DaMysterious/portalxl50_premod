@@ -349,7 +349,7 @@ if ($post_id)
 	}
 }
 
-$topic_id = (int) $topic_data['topic_id'];
+$topic_id = (int) (!empty($topic_data['topic_moved_id']) ? $topic_data['topic_moved_id'] : $topic_data['topic_id']);
 //
 $topic_replies = ($auth->acl_get('m_approve', $forum_id)) ? $topic_data['topic_replies_real'] : $topic_data['topic_replies'];
 // Check sticky/announcement time limit
@@ -527,7 +527,7 @@ $s_watching_topic = array(
 if (($config['email_enable'] || $config['jab_enable']) && $config['allow_topic_notify'])
 {
 	$notify_status = (isset($topic_data['notify_status'])) ? $topic_data['notify_status'] : null;
-	if(version_compare($config['version'], '3.0.5', '<')) 
+	if(version_compare($config['version'], '3.0.2', '<')) 
 	{
 		$s_watching_topic_img = array();
 		watch_topic_forum('topic', $s_watching_topic, $s_watching_topic_img, $user->data['user_id'], $forum_id, $topic_id, $topic_data['notify_status'], $start);
@@ -1411,7 +1411,7 @@ $template->assign_vars(array(
 
 // tapatalk add for thanks support
 $support_post_thanks = false;
-if (file_exists($phpbb_root_path . 'includes/functions_thanks.' . $phpEx))
+if (file_exists($phpbb_root_path . 'includes/functions_thanks.' . $phpEx) && isset($config['remove_thanks']))
 {
     if (!function_exists('array_all_thanks'))
     {
@@ -1435,7 +1435,7 @@ if (file_exists($phpbb_root_path . 'includes/functions_thanks.' . $phpEx))
         }
     }
 
-    if (function_exists('array_all_thanks') && isset($config['remove_thanks']))
+    if (function_exists('array_all_thanks'))
     {
         array_all_thanks($post_list);
         $support_post_thanks = true;
@@ -1639,6 +1639,11 @@ for ($i = 0, $end = sizeof($post_list); $i < $end; ++$i)
 		'SIGNATURE'			=> ($row['enable_sig']) ? $user_cache[$poster_id]['sig'] : '',
 		'EDITED_MESSAGE'	=> $l_edited_by,
 		'EDIT_REASON'		=> $row['post_edit_reason'],
+		//Tapatalk add
+		'EDITER_UID'        => $row['post_edit_user'],
+		'EDITER_USERNAME'   => isset($display_username) ? strip_tags($display_username) : $row['username'],
+		'EDIT_TIME'         => $row['post_edit_time'],
+	
 		'BUMPED_MESSAGE'	=> $l_bumped_by,
 
 		'MINI_POST_IMG'			=> ($post_unread) ? $user->img('icon_post_target_unread', 'UNREAD_POST') : $user->img('icon_post_target', 'POST'),

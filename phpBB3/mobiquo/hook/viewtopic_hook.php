@@ -1,7 +1,7 @@
 <?php
 if(!defined('IN_PHPBB')) exit;
 //add tapatalk thumbnail
-$message = preg_replace_callback('/(\[img(.*?)\])(http&#58;\/\/img&#46;tapatalk&#46;com\/d\/[0-9]{2}\/[0-9]{2}\/[0-9]{2})(.*?)(\[\/img\2\])/i',
+/*$message = preg_replace_callback('/(\[img(.*?)\])(http&#58;\/\/img&#46;tapatalk&#46;com\/d\/[0-9]{2}\/[0-9]{2}\/[0-9]{2})(.*?)(\[\/img\2\])/i',
     create_function(
 	'$matches',
 	'
@@ -15,8 +15,9 @@ $message = preg_replace_callback('/(\[img(.*?)\])(http&#58;\/\/img&#46;tapatalk&
 		}
 	'
     ),
-$message);
-
+$message);*/
+$message = preg_replace('#<a [^>]*?href="https?://(www\.)?vimeo\.com/(\d+)"[^>]*?>[^>]*?</a>#si', 
+'<iframe src="https://player.vimeo.com/video/$2" width="500" height="300" frameborder="0"></iframe>', $message);
 // display emoji from app
 $protocol = ($config['cookie_secure'])  ? 'https' : 'http';
 $message = preg_replace('/\[emoji(\d+)\]/i', '<img src="'.$protocol.'://s3.amazonaws.com/tapatalk-emoji/emoji\1.png" />', $message);

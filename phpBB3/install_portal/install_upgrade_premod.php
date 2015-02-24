@@ -1478,7 +1478,7 @@ class install_upgrade_premod extends module
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (101, 'Default Random No Avatar', '1.0.4', 'a', 'Random Avatars are displayed by default for users who have not selected an Avatar.', 'http://www.boardtalk.net/', 'Boardtalk.net', 'http://www.boardtalk.net/')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (102, 'Post links', '1.0.1', '', 'This MOD will add links to all your posts. You can choose to display link, bb code and html format of post. Those links are hidden by default and user can show them by single click, so they do not make posts huge showing each 3 links after each post on page.', 'http://phpbb3hacks.com/', 'Senky', 'http://phpbb3hacks.com/')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (103, 'Collapse categories', '1.1.1', '', 'This MOD allows users to collapse categories on index.', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=doktornotor', 'doktornotor', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=doktornotor')";
-				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (104, 'Tapatalk', '4.4.1', '', 'Tapatalk for the forum index and seperate page.', 'http://www.tapatalk.com', 'tapatalk', 'http://www.tapatalk.com')";
+				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (104, 'Tapatalk', '4.8.1', '', 'Tapatalk for the forum index and seperate page.', 'http://www.tapatalk.com', 'tapatalk', 'http://www.tapatalk.com')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (105, 'Database Optimize and Repair Tool', '1.0.2', '', 'This MOD will allow you to check, optimize and repair phpBB''s database tables from a phpMyAdmin-like interface in the ACP. Requirements: Your phpBB database must be using MySQL with MyISAM, InnoDB or Archive table types. Note: InnoDB table types do not support Repair.', 'http://www.phpbb.com/customise/db/mod/database_optimize_repair_tool/', 'VSE', 'http://www.phpbb.com/customise/db/mod/database_optimize_repair_tool/')";
 				$sql[] = "INSERT INTO " . PORTAL_MODS_TABLE . " (mod_id, mod_title, mod_version, mod_version_type, mod_desc, mod_url, mod_author, mod_download) VALUES (106, 'Auto Backup', '1.0.3', '', 'Automatically backup your database using the phpBB3 Cron.', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=Pico88', 'Pico88', 'http://www.phpbb.com/community/memberlist.php?mode=viewprofile&un=Pico88')";
 
@@ -1996,6 +1996,12 @@ class install_upgrade_premod extends module
 
 				// Tapatalk 4.4.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_spam_status', '', 1)";
+				
+				// Tapatalk 4.6.0
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_push_type', '', 1)";
+				
+				// Tapatalk 4.8.0
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_auto_approve', '', 1)";
 				
 				$sql[] = "INSERT INTO " . ACL_OPTIONS_TABLE . " (auth_option_id, auth_option, is_global, is_local, founder_only) VALUES (NULL, 'a_mobiquo', 1, 0, 0)";
 				

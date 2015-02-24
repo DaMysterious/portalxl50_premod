@@ -30,7 +30,11 @@ function save_raw_post_func($xmlrpc_params)
     $GLOBALS['return_html'] = isset($params[3]) ? $params[3] : false;
     $attach_list = isset($params[4]) ? $params[4] : array();
     $_POST['attachment_data'] = (isset($params[5]) && $params[5]) ? unserialize(base64_decode($params[5])) : array();
-
+	
+	if(!empty($params[6]))
+	{
+		$_POST['edit_reason'] = $params[6];
+	}
     $post_data = array();
 
     $sql = 'SELECT p.*, t.*, f.*, u.username
@@ -45,7 +49,10 @@ function save_raw_post_func($xmlrpc_params)
     $db->sql_freeresult($result);
 
     if (!$post_data) trigger_error('NO_POST');
-    
+    if(empty($post_title))
+    {
+    	$post_title = $post_data['post_subject'];
+    }
     // Use post_row values in favor of submitted ones...
     $forum_id = (int) $post_data['forum_id'];
     $topic_id = (int) $post_data['topic_id'];
@@ -217,7 +224,7 @@ function save_raw_post_func($xmlrpc_params)
     $message_parser->message        = utf8_normalize_nfc(htmlspecialchars($post_content));
 
     $post_data['username']            = utf8_normalize_nfc(request_var('username', $post_data['username'], true));
-    $post_data['post_edit_reason']    = (!empty($_POST['edit_reason']) && $mode == 'edit' && $auth->acl_get('m_edit', $forum_id)) ? utf8_normalize_nfc(request_var('edit_reason', '', true)) : '';
+    $post_data['post_edit_reason']    = (!empty($_POST['edit_reason']) && $mode == 'edit' && $auth->acl_get('m_edit', $forum_id)) ? utf8_normalize_nfc($_POST['edit_reason']) : '';
 
     $post_data['orig_topic_type']    = $post_data['topic_type'];
     $post_data['topic_type']        = request_var('topic_type', (($mode != 'post') ? (int) $post_data['topic_type'] : POST_NORMAL));

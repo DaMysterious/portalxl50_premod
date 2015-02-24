@@ -12,19 +12,19 @@ if(empty($config['tapatalk_push_key']))
 {
 	$return_status = 'Please set Tapatalk API Key at forum option/setting';
 }
-$server_ip = tt_do_post_request(array('ip' => 1),true);
+//$server_ip = tt_do_post_request(array('ip' => 1),true);
 $board_url = generate_board_url();
 $table_exist = push_table_exists();
 if(isset($_GET['checkcode']))
 {
 	$string = file_get_contents($phpbb_root_path . 'includes/functions_posting.php');
-	echo 'push code have been added in phpbb : ' . (strstr($string , 'tapatalk_push_reply($data);') ? 'yes' : 'no' ). '<br/>';
+	echo 'push code have been added in phpbb : ' . (strstr($string , 'tapatalkdir') ? 'yes' : 'no' ). '<br/>';
 	exit;
 }
 
 echo '<b>Tapatalk Push Notification Status Monitor</b><br/>';
 echo '<br/>Push notification test: ' . (($return_status === '1') ? '<b>Success</b>' : 'Failed('.$return_status.')');
-echo '<br/>Current server IP: ' . $server_ip;
+//echo '<br/>Current server IP: ' . $server_ip;
 echo '<br/>Current forum url: ' . $board_url;
 echo '<br/>Tapatalk user table existence: ' . ($table_exist ? 'Yes' : 'No');
 echo '<br/><br/><a href="http://tapatalk.com/api/api.php" target="_blank">Tapatalk API for Universal Forum Access</a> | <a href="http://tapatalk.com/mobile.php" target="_blank">Tapatalk Mobile Applications</a><br>

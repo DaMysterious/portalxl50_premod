@@ -170,7 +170,7 @@ function get_user_info_func($xmlrpc_params)
         $member['user_sig'] = bbcode_nl2br($member['user_sig']);
         $member['user_sig'] = smiley_text($member['user_sig']);
     }
-    
+  
     $poster_avatar = get_user_avatar($member['user_avatar'], $member['user_avatar_type'], $member['user_avatar_width'], $member['user_avatar_height']);
     
     // We need to check if the modules 'zebra' ('friends' & 'foes' mode),  'notes' ('user_notes' mode) and  'warn' ('warn_user' mode) are accessible to decide if we can display appropriate links
@@ -476,9 +476,9 @@ function get_user_info_func($xmlrpc_params)
         'display_text'       => new xmlrpcval('', 'base64'),
         'icon_url'           => new xmlrpcval($user_avatar_url),
         'current_activity'   => new xmlrpcval($location, 'base64'),
-        'custom_fields_list' => new xmlrpcval($custom_fields_list, 'array'),
-        
-        //'can_ban'            => new xmlrpcval($auth->acl_get('m_ban') && $user_id != $user->data['user_id'] ? true : false, 'boolean'),
+        'custom_fields_list' => new xmlrpcval($custom_fields_list, 'array'),       
+        'can_ban'            => new xmlrpcval($auth->acl_get('m_ban') && $user_id != $user->data['user_id'] ? true : false, 'boolean'),
+    	'is_ban'             => new xmlrpcval($user->check_ban($user_id,false,false,true),'boolean'),
     );
     
     $xmlrpc_user_info = new xmlrpcval($user_info, 'struct');

@@ -10,7 +10,7 @@ defined('IN_MOBIQUO') or exit;
 
 function get_message_func($xmlrpc_params)
 {
-    global $db, $auth, $user, $config, $template, $phpbb_root_path, $phpEx;
+    global $db, $auth, $user, $config, $template, $phpbb_root_path, $phpEx,$phpbb_home;
     if(file_exists($phpbb_root_path . 'includes/functions_profile_control.' . $phpEx))
     {
     	require_once ($phpbb_root_path . 'includes/functions_profile_control.' . $phpEx);
@@ -71,6 +71,45 @@ function get_message_func($xmlrpc_params)
     $msg_subject = html_entity_decode(strip_tags(censor_text($message_row['message_subject'])));
     $msg_body = post_html_clean(parse_quote($template->_rootref['MESSAGE']));
     
+    if(!empty($template->_rootref['S_HAS_ATTACHMENTS']))
+    {
+    	foreach($template->_tpldata['attachment'] as $attachment)
+    	{   		
+			if(preg_match('/<img src=\".*?\/(download\/file\.php\?id=(\d+).*?)\"/is', $attachment['DISPLAY_ATTACHMENT'], $matches))
+			{			
+				$attach_id = $matches[2];
+				$file_url = basic_clean($phpbb_home.$matches[1]);
+				$thumbnail_url = '';
+				
+				if ($config['img_create_thumbnail'] && preg_match('/\&t=1/is', $file_url))
+				{
+					$thumbnail_url = $file_url;
+					$file_url = preg_replace('/\&t=1/is', '', $thumbnail_url);
+				}
+				else 
+				{
+					$thumbnail_url = preg_replace('/file\.php\?/is', 'file.php?t=1&', $file_url);
+				}
+				unset($matches);
+				$sql = 'SELECT * FROM ' . ATTACHMENTS_TABLE . " WHERE attach_id = $attach_id	";
+				$result = $db->sql_query($sql);
+			    $attachment_by_id = $db->sql_fetchrow($result);
+				if (strpos($attachment_by_id['mimetype'], 'image') === 0)
+					$content_type = 'image';
+				else
+					$content_type = $attachment_by_id['extension'];
+
+				$xmlrpc_attachment = new xmlrpcval(array(
+					'filename'      => new xmlrpcval($attachment_by_id['real_filename'], 'base64'),
+					'filesize'      => new xmlrpcval($attachment_by_id['filesize'], 'int'),
+					'content_type'  => new xmlrpcval($content_type),
+					'thumbnail_url' => new xmlrpcval($thumbnail_url),
+					'url'           => new xmlrpcval($file_url)
+				), 'struct');
+				$attachments[] = $xmlrpc_attachment;
+			}
+		}    
+    }
     if ($config['load_onlinetrack']) {
         $sql = 'SELECT session_user_id, MAX(session_time) as online_time, MIN(session_viewonline) AS viewonline
                 FROM ' . SESSIONS_TABLE . '
@@ -96,6 +135,7 @@ function get_message_func($xmlrpc_params)
         'text_body'     => new xmlrpcval($msg_body, 'base64'),
         'is_online'     => new xmlrpcval($is_online, 'boolean'),
         'allow_smilies' => new xmlrpcval($message_row['enable_smilies'] ? true : false, 'boolean'),
+    	'attachments'   => new xmlrpcval($attachments, 'array'),
     ), 'struct');
     
     return new xmlrpcresp($result);

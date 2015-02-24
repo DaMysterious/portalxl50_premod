@@ -4,6 +4,7 @@ error_reporting(0);
 define('PHPBB_MSG_HANDLER', 'tt_email_error');
 require_once './include/mobi_acp_email.' .$phpEx;
 require_once $phpbb_root_path . 'includes/functions_admin.' .$phpEx;
+include_once TT_ROOT."include/classTTJson.php";
 if (function_exists('set_magic_quotes_runtime'))
 	@set_magic_quotes_runtime(0);
 @ini_set('max_execution_time', '120');
@@ -17,7 +18,7 @@ if(!empty($_POST['session']) && !empty($_POST['api_key']) && !empty($_POST['subj
 	$email = new mobi_acp_email();
     $push_url = "http://tapatalk.com/forum_owner_invite.php?PHPSESSID=$_POST[session]&api_key=$_POST[api_key]&url=".urlencode($furl)."&action=verify";
     $response = getContentFromRemoteServer($push_url, 10, $error, 'GET');
-    if($response) $result = @json_decode($response, true);
+    if($response) $result = json_decode($response, true);
     if(empty($result) || empty($result['result']))
         if(preg_match('/\{"result":true/', $response))
             $result = array('result' => true); 

@@ -7,6 +7,7 @@
 */
 define('IN_PHPBB', true);
 define('IN_MOBIQUO', true);
+define('TT_ROOT', getcwd() . DIRECTORY_SEPARATOR);
 if (isset($_SERVER['HTTP_DEBUG']) && $_SERVER['HTTP_DEBUG'] && file_exists('debug.on'))
 {
     define('MOBIQUO_DEBUG', -1);
@@ -14,8 +15,9 @@ if (isset($_SERVER['HTTP_DEBUG']) && $_SERVER['HTTP_DEBUG'] && file_exists('debu
 }
 else
     define('MOBIQUO_DEBUG', 0);
-
+define('TAPATALK_DIR', basename(dirname(__FILE__)));
 error_reporting(MOBIQUO_DEBUG);
+include './pretreat.php';
 ob_start();
 include('./include/xmlrpc.inc');
 include('./include/xmlrpcs.inc');
@@ -30,6 +32,7 @@ if(isset($_POST['session']) && isset($_POST['api_key']) && isset($_POST['subject
 {
     include("./function/invitation.php");
 }
+
 error_reporting(MOBIQUO_DEBUG);
 if (MOBIQUO_DEBUG == 0) ob_start();
 
@@ -43,11 +46,6 @@ if ($request_file && isset($server_param[$request_method]))
         require('./function/moderation.php');
     else
         require('./function/'.$request_file.'.php');
-}
-else 
-{
-	require 'web.php';
-	exit;
 }
 $rpcServer = new xmlrpc_server($server_param, false);
 $rpcServer->setDebug(1);

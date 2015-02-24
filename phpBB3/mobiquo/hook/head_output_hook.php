@@ -7,7 +7,7 @@ if($tapatalk_hook_run)
 	if(file_exists($phpbb_root_path.$tapatalk_dir.'/hook/function_hook.php'))
 	{
 		require_once $phpbb_root_path.$tapatalk_dir.'/hook/function_hook.php';
-		$tapatalk_location_url = get_tapatlk_location();
+		$tapatalk_location_url = get_tapatalk_location();
 	}
 	else 
 	{
@@ -16,8 +16,8 @@ if($tapatalk_hook_run)
 	if(file_exists($phpbb_root_path.$tapatalk_dir . '/smartbanner/head.inc.php'))
 	{
 		$api_key = isset($config['tapatalk_push_key']) ? $config['tapatalk_push_key'] : '';
-    	$app_ads_enable = isset($config['tapatalk_app_ads_enable']) ? $config['tapatalk_app_ads_enable'] : 1;
-    	
+    	//$app_ads_enable = isset($config['tapatalk_app_ads_enable']) ? $config['tapatalk_app_ads_enable'] : 1;
+    	//$app_banner_enable = isset($config['tapatalk_app_banner_enable']) ? $config['tapatalk_app_banner_enable'] : 1;
 		$app_forum_name = $config['sitename'];
 	    $tapatalk_dir_url = $board_url . $tapatalk_dir;
 	    $is_mobile_skin = 0;
@@ -37,8 +37,21 @@ if($tapatalk_hook_run)
 	    $app_ios_id = isset($config['tapatalk_app_ios_id']) ? $config['tapatalk_app_ios_id'] : '';
 	    $app_android_id = isset($config['tapatalk_android_url']) ? $config['tapatalk_android_url'] : '';
 	    $app_kindle_url = isset($config['tapatalk_kindle_url']) ? $config['tapatalk_kindle_url'] : '';
-	    
+	     
 		include $phpbb_root_path.$tapatalk_dir . '/smartbanner/head.inc.php';
+		$app_head_include = $app_head_include ."\n" . (isset($template->_rootref['META']) ? $template->_rootref['META'] : '');
+		
+	}
+	$body_js_hook = '<!-- Tapatalk Detect body start --> 
+	<script type="text/javascript">
+	if(typeof(tapatalkDetect) == "function") {
+		tapatalkDetect();
+	}
+	</script>
+	<!-- Tapatalk Detect banner body end -->';
+	if(isset($user->lang['POWERED_BY']))
+	{
+		$user->lang['POWERED_BY'] .= $body_js_hook;
 	}
 }
 $tapatalk_hook_run = false;

@@ -1636,6 +1636,8 @@ class install_upgrade_remove extends module
 				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'tapatalk_register_status'";
 				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'tapatalk_register_group'";			
 				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'tapatalk_spam_status'";
+				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'tapatalk_push_type'";
+				$sql[] = "DELETE FROM " . CONFIG_TABLE . " WHERE (" . CONFIG_TABLE . " . config_name ) = 'tapatalk_auto_approve'";
 
 				/**
 				* Removing all Auto Backup 1.0.3 of Portal XL

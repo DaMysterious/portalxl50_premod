@@ -52,14 +52,16 @@ function create_message_func($xmlrpc_params)
         {
             $action = 'reply';
             $msg_id = intval($params[4]);
+            if (!$msg_id) trigger_error('NO_MESSAGE');
         }
         else if ($params[3] == 2)
         {
             $action = 'forword';
             $msg_id = intval($params[4]);
+            if (!$msg_id) trigger_error('NO_MESSAGE');
         }
         
-        if (!$msg_id) trigger_error('NO_MESSAGE');
+      
     }
     
     if (($action == 'post' || $action == 'reply')  && (!$auth->acl_get('u_sendpm')))

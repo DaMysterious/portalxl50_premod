@@ -101,9 +101,26 @@ function get_thread_func()
             'is_approved'       => new xmlrpcval($row['post_approved'] ? true : false, 'boolean'),
             'can_move'          => new xmlrpcval($auth->acl_get('m_split', $forum_id), 'boolean'),
             'can_ban'           => new xmlrpcval($can_ban_user, 'boolean'),
+        	'is_ban'            => new xmlrpcval($user->check_ban($row['POSTER_ID'],false,false,true),'boolean'),
             'allow_smilies'     => new xmlrpcval($row['enable_smilies'] ? true : false, 'boolean'),
         );
 		
+        if(!empty($row['EDITER_UID']) && $config['display_last_edited'])
+        {
+        	//add edit info
+	        $edit_info = array(
+	        	'editor_id'   => new xmlrpcval($row['EDITER_UID'],'string'),
+	        	'editor_name' => new xmlrpcval($row['EDITER_USERNAME'],'base64'),
+	        	'edit_time'   => new xmlrpcval($row['EDIT_TIME'],'string'),
+	        );
+	        if(!empty($row['EDIT_REASON']))
+	        {
+	        	$edit_info['edit_reason'] = new xmlrpcval($row['EDIT_REASON'],'base64');
+	        }
+	        $xmlrpc_post = array_merge($xmlrpc_post,$edit_info);
+        }
+
+        
         if ($support_post_thanks)
         {
             if (
@@ -182,11 +199,18 @@ function get_thread_func()
                 ($topic_data['topic_time'] > time() - ($config['edit_time'] * 60) || !$config['edit_time'])
             )));
     $is_poll = !empty($topic_data['poll_title']) ? true : false;
+    
+    //topic author avatar
+    $topic_author_info    = tt_get_user_by_id($topic_data['topic_poster']);
+    $topic_author_avatar  = get_user_avatar_url($topic_author_info['user_avatar'], $topic_author_info['user_avatar_type']);
     $result = array(
         'total_post_num' => new xmlrpcval($total_posts, 'int'),
         'forum_id'       => new xmlrpcval($forum_id),
         'forum_name'     => new xmlrpcval(basic_clean($topic_data['forum_name']), 'base64'),
         'topic_id'       => new xmlrpcval($topic_id),
+    	'topic_author_id'     => new xmlrpcval($topic_data['topic_poster']),
+    	'topic_author_name'   => new xmlrpcval($topic_data['topic_first_poster_name'],'base64'),
+    	'topic_author_avatar' => new xmlrpcval($topic_author_avatar),
         'topic_title'    => new xmlrpcval(basic_clean(censor_text($topic_data['topic_title'])), 'base64'),
         'position'       => new xmlrpcval($topic_data['prev_posts'] + 1, 'int'),
 
@@ -205,15 +229,17 @@ function get_thread_func()
         'is_closed'      => new xmlrpcval($topic_data['topic_status'] == ITEM_LOCKED, 'boolean'),
         'can_approve'    => new xmlrpcval($auth->acl_get('m_approve', $forum_id) && !$topic_data['topic_approved'], 'boolean'),
         'is_approved'    => new xmlrpcval($topic_data['topic_approved'] ? true : false, 'boolean'),
-		'is_poll'    => new xmlrpcval($is_poll, 'boolean'),
-    
+		'is_poll'        => new xmlrpcval($is_poll, 'boolean'),
+    	'can_ban'        => new xmlrpcval(($auth->acl_get('m_ban') && $topic_data['topic_poster'] != $user->data['user_id']) ? true : false, 'boolean'),
+    	'is_ban'         => new xmlrpcval($user->check_ban($topic_data['topic_poster'],false,false,true),'boolean'),
         'max_attachment' => new xmlrpcval($max_attachment, 'int'),
         'max_png_size'   => new xmlrpcval($max_png_size, 'int'),
         'max_jpg_size'   => new xmlrpcval($max_jpg_size, 'int'),
-    	
+    	'view_number'    => new xmlrpcval($topic_data['topic_views'], 'int'),
 
         'posts'          => new xmlrpcval($post_list, 'array'),
     );
+
 	if (!empty($breadcrumb))
     {
     	$result['breadcrumb'] = new xmlrpcval($breadcrumb, 'array');
@@ -263,7 +289,7 @@ function search_func()
                 'post_time'             => new xmlrpcval($item['LAST_POST_TIME'], 'dateTime.iso8601'),
                 'timestamp'             => new xmlrpcval($item['LAST_POST_TIMESTAMP'], 'string'),
                 'icon_url'              => new xmlrpcval($item['LAST_POSTER_AVATAR'], 'string'),
-                'short_content'         => new xmlrpcval(basic_clean($item['LAST_POST_PREV']), 'base64'),
+                'short_content'         => new xmlrpcval(basic_clean(get_short_content($item['LAST_POST_ID'])), 'base64'),
                 
                 // compatibility data
                 'last_reply_author_id'  => new xmlrpcval($item['LAST_POSTER_ID'], 'string'),

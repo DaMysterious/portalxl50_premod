@@ -8,6 +8,36 @@
 
 defined('IN_MOBIQUO') or exit;
 
+if (!function_exists('http_build_query')) {
+
+    function http_build_query($data, $prefix = null, $sep = '', $key = '')
+    {
+        $ret = array();
+        foreach ((array )$data as $k => $v) {
+            $k = urlencode($k);
+            if (is_int($k) && $prefix != null) {
+                $k = $prefix . $k;
+            }
+ 
+            if (!empty($key)) {
+                $k = $key . "[" . $k . "]";
+            }
+ 
+            if (is_array($v) || is_object($v)) {
+                array_push($ret, http_build_query($v, "", $sep, $k));
+            } else {
+                array_push($ret, $k . "=" . urlencode($v));
+            }
+        }
+ 
+        if (empty($sep)) {
+            $sep = ini_get("arg_separator.output");
+        }
+ 
+        return implode($sep, $ret);
+    }
+}
+
 function process_page($start_num, $end)
 {
     global $start, $limit, $page;
@@ -75,7 +105,17 @@ function xmlrpc_error_handler($errno, $msg_text, $errfile, $errline)
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$response->serialize('UTF-8');
         exit;
     }
-
+	
+    if(strstr(strip_tags($msg_text),$user->lang['REPORTS_CLOSED_SUCCESS']) || strstr(strip_tags($msg_text),$user->lang['REPORT_CLOSED_SUCCESS']))
+    {
+    	 $response = new xmlrpcresp(new xmlrpcval(array(
+            'result'        => new xmlrpcval(true, 'boolean'),
+            'result_text'   => new xmlrpcval(basic_clean($user->lang['REPORTS_CLOSED_SUCCESS']), 'base64'),
+        ),'struct'));
+        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$response->serialize('UTF-8');
+        exit;
+    }
+    
     // Message handler is stripping text. In case we need it, we are possible to define long text...
     if (isset($msg_long_text) && $msg_long_text && !$msg_text)
     {
@@ -166,6 +206,7 @@ function xmlrpc_error_handler($errno, $msg_text, $errfile, $errline)
         exit;
     }
     
+    
     // If we notice an error not handled here we pass this back to PHP by returning false
     // This may not work for all php versions
     return false;
@@ -249,14 +290,17 @@ function process_short_content($post_text, $length = 200)
     $post_text = censor_text($post_text);
     $array_reg = array(
         array('reg' => '/\[quote(.*?)\](.*?)\[\/quote(.*?)\]/si','replace' => '[quote]'),
-        array('reg' => '/\[code(.*?)\](.*?)\[\/code(.*?)\]/si','replace' => ''),
-        array('reg' => '/\[url=(.*?):(.*?)\](.*?)\[\/url(.*?)\]/sei','replace' => "mobi_url_convert('$1','$3')"),
+        array('reg' => '/\[code(.*?)\](.*?)\[\/code(.*?)\]/si','replace' => '[code]'),
+        //array('reg' => '/\[url=(.*?):(.*?)\](.*?)\[\/url(.*?)\]/sei','replace' => '[url]'),
         array('reg' => '/\[video(.*?)\](.*?)\[\/video(.*?)\]/si','replace' => '[V]'),
         array('reg' => '/\[attachment(.*?)\](.*?)\[\/attachment(.*?)\]/si','replace' => '[attach]'),
         array('reg' => '/\[url.*?\].*?\[\/url.*?\]/','replace' => '[url]'),
+        array('reg' => '/(https?|ftp|mms):\/\/([A-z0-9]+[_\-]?[A-z0-9]+\.)*[A-z0-9]+\-?[A-z0-9]+\.[A-z]{2,}(\/.*)*\/?/is','replace' => '[url]'),
         array('reg' => '/\[img.*?\].*?\[\/img.*?\]/','replace' => '[img]'),
         array('reg' => '/[\n\r\t]+/','replace' => ' '),
         array('reg' => '/\[flash(.*?)\](.*?)\[\/flash(.*?)\]/si','replace' => '[V]'),
+        array('reg' => '/\[spoiler(.*?)\](.*?)\[\/spoiler(.*?)\]/si','replace' => '[spoiler]'),
+        array('reg' => '/\[spoil(.*?)\](.*?)\[\/spoil(.*?)\]/si','replace' => '[spoiler]'),
     );
     //echo $post_text;die();
     foreach ($array_reg as $arr)
@@ -1205,29 +1249,17 @@ function check_return_user_type($user_id)
 function tt_register_verify($tt_token,$tt_code)
 {
     global $config;
+    
     $key = isset($config['tapatalk_push_key']) ? $config['tapatalk_push_key'] : '';
     $board_url = generate_board_url();
 
-    $url = "http://directory.tapatalk.com/au_reg_verify.php";
-    $data = array(
-        'token' => $tt_token,
-        'code' => $tt_code,
-        'key' => $key,
-        'url' => $board_url
-    );
-    $error_msg = '';
-    $response = getContentFromRemoteServer($url, 10, $error_msg, 'POST', $data);
-    
-    if(!empty($error_msg))
-    {
-        $response = '{"result":false,"result_text":"' . $error_msg . '"}';
-    }
-    if(empty($response))
-    {
-        $response = '{"result":false,"result_text":"Contect timeout , please try again"}';
-    }
-    $result = json_decode($response);
-    return $result;
+    require_once TT_ROOT."include/classTTJson.php";
+	require_once TT_ROOT."include/classTTConnection.php";
+    $connection = new classTTConnection();
+	$result = $connection->signinVerify($tt_token,$tt_code,$board_url,$key);
+	$result = json_encode($result);
+	$result = json_decode($result);
+	return $result;
 }
 
 /**
@@ -1242,130 +1274,23 @@ function tt_register_verify($tt_token,$tt_code)
  * @exmaple: getContentFromRemoteServer('http://push.tapatalk.com/push.php', 0, $error_msg, 'POST', $ttp_post_data)
  * @return string when get content successfully|false when the parameter is invalid or connection failed.
 */
-function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 'GET', $data = array())
+function getContentFromRemoteServer($url, $holdTime = 0, &$error_msg, $method = 'GET', $data = array(), $retry = true)
 {
     //Validate input.
-    $vurl = parse_url($url);
-    if ($vurl['scheme'] != 'http' && $vurl['scheme'] != 'https')
+    global $config, $phpbb_root_path;
+    if(!defined("TT_ROOT"))
+	{
+		if(!defined('IN_MOBIQUO')) define('IN_MOBIQUO', true);
+		if(empty($config['tapatalkdir'])) $config['tapatalkdir'] = 'mobiquo';
+		define('TT_ROOT',$phpbb_root_path . $config['tapatalkdir'] . '/');
+	}			
+	include_once TT_ROOT."include/classTTConnection.php";
+	$connection = new classTTConnection();
+	$connection->timeout = $holdTime;
+    $response = $connection->getContentFromSever($url,$data,$method,$retry);
+    if(!empty($connection->errors))
     {
-        $error_msg = 'Error: invalid url given: '.$url;
-        return false;
-    }
-    if($method != 'GET' && $method != 'POST')
-    {
-        $error_msg = 'Error: invalid method: '.$method;
-        return false;//Only POST/GET supported.
-    }
-    if($method == 'POST' && empty($data))
-    {
-        $error_msg = 'Error: data could not be empty when method is POST';
-        return false;//POST info not enough.
-    }
-
-    if(!empty($holdTime) && function_exists('file_get_contents') && $method == 'GET')
-    {
-        $opts = array(
-            $vurl['scheme'] => array(
-                'method' => "GET",
-                'timeout' => $holdTime,
-            )
-        );
-
-        $context = stream_context_create($opts);
-        $response = file_get_contents($url,false,$context);
-    }
-    else if (@ini_get('allow_url_fopen'))
-    {
-        if(empty($holdTime))
-        {
-            // extract host and path:
-            $host = $vurl['host'];
-            $path = $vurl['path'];
-
-            if($method == 'POST')
-            {
-                $fp = @fsockopen($host, 80, $errno, $errstr, 5);
-
-                if(!$fp)
-                {
-                    $error_msg = 'Error: socket open time out or cannot connet.';
-                    return false;
-                }
-
-                $data =  http_build_query($data);
-
-                fputs($fp, "POST $path HTTP/1.1\r\n");
-                fputs($fp, "Host: $host\r\n");
-                fputs($fp, "Content-type: application/x-www-form-urlencoded\r\n");
-                fputs($fp, "Content-length: ". strlen($data) ."\r\n");
-                fputs($fp, "Connection: close\r\n\r\n");
-                fputs($fp, $data);
-                fclose($fp);
-                return 1;
-            }
-            else
-            {
-                $error_msg = 'Error: 0 hold time for get method not supported.';
-                return false;
-            }
-        }
-        else
-        {
-            if($method == 'POST')
-            {
-                $params = array(
-                    $vurl['scheme'] => array(
-                        'method' => 'POST',
-                        'content' => http_build_query($data, '', '&'),
-                    )
-                );
-               
-                $ctx = stream_context_create($params);
-                $old = ini_set('default_socket_timeout', $holdTime);
-                $fp = @fopen($url, 'rb', false, $ctx);
-            }
-            else
-            {
-                $fp = @fopen($url, 'rb', false);
-            }
-            if (!$fp)
-            {
-                $error_msg = 'Error: fopen failed.';
-                return false;
-            }
-            ini_set('default_socket_timeout', $old);
-            stream_set_timeout($fp, $holdTime);
-            stream_set_blocking($fp, 0);
-
-            $response = @stream_get_contents($fp);
-        }
-    }
-    elseif (function_exists('curl_init'))
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        if($method == 'POST')
-        {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        }
-        if(empty($holdTime))
-        {
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT,1);
-        }
-        $response = curl_exec($ch);
-        curl_close($ch);
-    }
-    else
-    {
-        $error_msg = 'CURL is disabled and PHP option "allow_url_fopen" is OFF. You can enable CURL or turn on "allow_url_fopen" in php.ini to fix this problem.';
-        return false;
-    }
-    if(!empty($error_msg))
-    {
-        return $error_msg;
+    	$error_msg = $connection->errors[0];
     }
     return $response;
 }
@@ -1376,6 +1301,18 @@ function tt_get_user_by_email($email)
     $sql = 'SELECT *
         FROM ' . USERS_TABLE . "
         WHERE user_email = '" . $db->sql_escape($email) . "'";
+    $result = $db->sql_query($sql);
+    $row = $db->sql_fetchrow($result);
+    $db->sql_freeresult($result);
+    return $row;
+}
+
+function tt_get_user_by_username($username)
+{
+	global $db;
+    $sql = 'SELECT *
+        FROM ' . USERS_TABLE . "
+        WHERE username = '" . $db->sql_escape($username) . "'";
     $result = $db->sql_query($sql);
     $row = $db->sql_fetchrow($result);
     $db->sql_freeresult($result);
@@ -1433,25 +1370,18 @@ function is_tapatalk_user($user_id)
 
 function tt_is_spam($email,$ip='')
 {
+	global $config,$phpbb_root_path;
     if($email || $ip)
-    {
-        $email = @urlencode($email);
-        $params = '';
-        if($email)
-        {         
-            $params = "&email=$email";
-        }
-        if($ip)
-        {
-        	$params .= "&ip=$ip";
-        }
-        $resp = @getContentFromRemoteServer("http://www.stopforumspam.com/api?f=serial".$params, 10);
-        $resp = @unserialize($resp);
-        if((isset($resp['email']['confidence']) && $resp['email']['confidence'] > 50) ||
-           (isset($resp['ip']['confidence']) && $resp['ip']['confidence'] > 60))
-        {
-            return true;
-        }
+    {     
+        if(!defined("TT_ROOT"))
+		{
+			if(!defined('IN_MOBIQUO')) define('IN_MOBIQUO', true);
+			if(empty($config['tapatalkdir'])) $config['tapatalkdir'] = 'mobiquo';
+			define('TT_ROOT',$phpbb_root_path . $config['tapatalkdir'] . '/');
+		}						
+		require_once TT_ROOT."include/classTTConnection.php";
+		$connection = new classTTConnection();     
+        return $connection->checkSpam($email,$ip);     
     }
-    return false;
+    return true;
 }
