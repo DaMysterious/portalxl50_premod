@@ -1983,7 +1983,7 @@ class install_upgrade_premod extends module
 				// Tapatalk 3.8.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_banner_msg', '', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_ios_id', '', 0)";
-				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_url', '', 0)";
+				//$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_url', '', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_url', '', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_push_slug'', '', 0)";
 
