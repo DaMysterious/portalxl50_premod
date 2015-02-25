@@ -107,6 +107,8 @@ $lang = array_merge($lang, array(
 		<li>Portal XL 5.0 Plain 0.2 (12-07-2011) update to pbpBB 3.0.9</li>
 		<li>Portal XL 5.0 Plain 0.2 (05-01-2012) update to pbpBB 3.0.10</li>
 		<li>Portal XL 5.0 Plain 0.2 (27-08-2012) update to pbpBB 3.0.11</li>
+		<li>Portal XL 5.0 Plain 0.2 (06-04-2014) update to pbpBB 3.0.12</li>
+		<li>Portal XL 5.0 Plain 0.2 (19-02-2015) update to pbpBB 3.0.13-PL1</li>	
 	</ul>
 	<ul>
 		<li>Portal XL 5.0 Premod 0.2 (05-06-2009) update to pbpBB 3.0.5</li>
@@ -116,6 +118,9 @@ $lang = array_merge($lang, array(
 		<li>Portal XL 5.0 Premod 0.4 (01-08-2011) update to pbpBB 3.0.9</li>
 		<li>Portal XL 5.0 Premod 0.4 (08-01-2012) update to pbpBB 3.0.10</li>
 		<li>Portal XL 5.0 Premod 0.4 (27-08-2012) update to pbpBB 3.0.11</li>
+		<li>Portal XL 5.0 Premod 0.4 (06-04-2014) update to pbpBB 3.0.12</li>
+		<li>Portal XL 5.0 Premod 0.4 (19-02-2015) update to pbpBB 3.0.13-PL1</li>		
+		
 	</ul>
 	</p><br />Please choose from the available tabs what you want to do.',
 	
