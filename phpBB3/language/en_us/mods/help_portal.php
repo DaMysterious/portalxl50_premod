@@ -67,11 +67,11 @@ With this release, there are two packages available.<br /><br />
 </ul>
 
 Select whichever package is most suitable for you. Do not mix up both of this versions as you can expect really strange errors!<br />
-Please ensure you read the <a href="http://www.portalxl.nl/forum/docs/PORTAL_XL_INSTALL.html">Portal XL 5.0</a> installation document before proceeding with installation or updates!</p>'
+Please ensure you read the <a href="http://84.29.121.198/forum/docs/PORTAL_XL_INSTALL.html">Portal XL 5.0</a> installation document before proceeding with installation or updates!</p>'
 	),
 	array(
 		0 => '<img src="data:image/gif;base64,R0lGODlhCwALAIABAP8AAP///yH5BAEAAAEALAAAAAALAAsAAAIRjI+pB7DW2oox0cquxfv5bxQAOw==" width="10" height="10" alt="" border="0" /> Who wrote this Portal?',
-		1 => '<p>This software (in its unmodified form) is produced, released and is copyright <a href="http://www.portalxl.nl/forum/">Portal XL Group</a>. It is made available under the GNU General Public License and may be freely distributed.</p>'
+		1 => '<p>This software (in its unmodified form) is produced, released and is copyright <a href="http://84.29.121.198/forum/">Portal XL Group</a>. It is made available under the GNU General Public License and may be freely distributed.</p>'
 	),
 	array(
 		0 => '--',

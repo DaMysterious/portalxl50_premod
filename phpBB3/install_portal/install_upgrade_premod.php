@@ -1959,14 +1959,12 @@ class install_upgrade_premod extends module
 				
 				// Tapatalk 3.6.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_msg', 'This forum has an app for Android! Click OK to learn more about Tapatalk.', 0)";
-				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_url', 'market://details?id=com.quoord.tapatalkpro.activity', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_iphone_msg', 'This forum has an app for iPhone! Click OK to learn more about Tapatalk.', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_iphone_url', 'http://itunes.apple.com/us/app/tapatalk-forum-app/id307880732?mt=8', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_ipad_msg', 'This forum has an app for iPad! Click OK to learn more about Tapatalk.', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_ipad_url', 'http://itunes.apple.com/us/app/tapatalk-hd-for-ipad/id481579541?mt=8', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_msg', 'This forum has an app for Kindle Fire! Click OK to learn more about Tapatalk.', 0)";
-				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_url', 'http://www.amazon.com/gp/mas/dl/android?p=com.quoord.tapatalkpro.activity', 0)";
-				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_forum_read_only', '', 0)";
+  				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_forum_read_only', '', 0)";
 				
 				// Tapatalk 3.7.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_allow_register', '', 1)";
@@ -1983,16 +1981,16 @@ class install_upgrade_premod extends module
 				// Tapatalk 3.8.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_banner_msg', '', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_ios_id', '', 0)";
-				//$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_url', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_android_url', '', 0)";
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_kindle_url', '', 0)";
-				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_push_slug'', '', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_push_slug', '', 0)";
 
 				// Tapatalk 4.1.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_app_ads_enable', '', 1)";
 
 				// Tapatalk 4.3.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_register_status', '', 2)";
-				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_register_group', 'get_group_id('REGISTERED')', 0)";
+				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_register_group', '2', 0)";
 
 				// Tapatalk 4.4.0
 				$sql[] = "INSERT INTO " . CONFIG_TABLE . " VALUES ('tapatalk_spam_status', '', 1)";
