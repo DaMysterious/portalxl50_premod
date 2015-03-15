@@ -81,7 +81,7 @@ hr.dashed {
 }
 
 .bg1	{ background-color: #ECF3F7; }
-.bg2	{ background-color: #e1ebf2;  }
+.bg2	{ background-color: #e1ebf2; }
 .bg3	{ background-color: #cadceb; }
 
 .ucprowbg {
@@ -234,7 +234,7 @@ p.rules {
 	background-image: none;
 }
 
-/*  	
+/*
 --------------------------------------------------------------
 Colours and backgrounds for links.css
 -------------------------------------------------------------- */
@@ -327,7 +327,7 @@ a.topictitle:active {
 	color: #105289;
 }
 
-/* Profile searchresults */	
+/* Profile searchresults */
 .search .postprofile a {
 	color: #105289;
 }
@@ -364,7 +364,7 @@ a.right:hover {
 }
 
 
-/*  	
+/*
 --------------------------------------------------------------
 Colours and backgrounds for content.css
 -------------------------------------------------------------- */

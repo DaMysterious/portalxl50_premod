@@ -1,0 +1,209 @@
+<script type="text/javascript">
+// <![CDATA[
+var persistclose = 1 //set to 0 or 1. 1 means once the bar is manually closed, it will remain closed for browser session
+var startX = 30 //set x offset of bar in pixels
+var startY = 5 //set y offset of bar in pixels
+var verticalpos = "fromtop" //enter "fromtop" or "frombottom"
+
+function redirect (link) {
+  alert (link.id);
+  location = link.href;
+  return false;
+}
+
+function iecompattest(){
+return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
+}
+
+function get_cookie(Name) {
+var search = Name + "="
+var returnvalue = "";
+if (document.cookie.length > 0) {
+offset = document.cookie.indexOf(search)
+if (offset != -1) {
+offset += search.length
+end = document.cookie.indexOf(";", offset);
+if (end == -1) end = document.cookie.length;
+returnvalue=unescape(document.cookie.substring(offset, end))
+}
+}
+return returnvalue;
+}
+
+function closebar(){
+  if (persistclose)
+  document.cookie="accept_xl_cookie=1"
+  document.getElementById("floating_bar").style.visibility="hidden"
+}
+
+function staticbar(){
+ barheight=document.getElementById("floating_bar").offsetHeight
+ var ns = (navigator.appName.indexOf("Netscape") != -1) || window.opera;
+ var d = document;
+ function ml(id){
+  var el=d.getElementById(id);
+  if (!persistclose || persistclose && get_cookie("accept_xl_cookie")=="")
+  el.style.visibility="visible"
+  if(d.layers)el.style=el;
+  el.sP=function(x,y){this.style.left=x+"px";this.style.top=y+"px";};
+  el.x = startX;
+  if (verticalpos=="fromtop")
+  el.y = startY;
+  else{
+  el.y = ns ? pageYOffset + innerHeight : iecompattest().scrollTop + iecompattest().clientHeight;
+  el.y -= startY;
+  }
+  return el;
+ }
+ 
+ window.stayTopLeft=function(){
+  if (verticalpos=="fromtop"){
+  var pY = ns ? pageYOffset : iecompattest().scrollTop;
+  ftlObj.y += (pY + startY - ftlObj.y)/8;
+  }
+  else{
+  var pY = ns ? pageYOffset + innerHeight - barheight: iecompattest().scrollTop + iecompattest().clientHeight - barheight;
+  ftlObj.y += (pY - startY - ftlObj.y)/8;
+  }
+  ftlObj.sP(ftlObj.x, ftlObj.y);
+  setTimeout("stayTopLeft()", 10);
+ }
+ ftlObj = ml("floating_bar");
+ stayTopLeft();
+}
+
+if (window.addEventListener)
+  window.addEventListener("load", staticbar, false)
+else if (window.attachEvent)
+  window.attachEvent("onload", staticbar)
+else if (document.getElementById)
+  window.onload=staticbar
+// ]]>
+</script>
+
+<style type="text/css">
+.contentwrapper {
+	margin: 5px;
+	padding: 0px;
+	font-size: 12px;
+	font-weight: normal;
+	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, Sans-serif;
+	color: #000;
+	text-align: left;
+}
+.contentwrapper .head1 {
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFF;
+	padding: 0;
+	margin: 0;
+}
+.contentwrapper .head2 {
+	font-size: 16px;
+	font-weight: bold;
+	color: #333;
+	padding: 0;
+	margin: 0;
+}
+.contentwrapper .box {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+}
+.contentwrapper .button_no {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #F00;
+	padding: 5px 10px;
+	text-decoration: none;
+	background-color: #ffffff;
+	background: -moz-linear-gradient( top, #ffffff 0%, #ffffff 50%, #d6d6d6);
+	background: -webkit-gradient( linear, left top, left bottom, from(#ffffff), color-stop(0.50, #ffffff), to(#d6d6d6));
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border: 2px solid #F00;
+	-moz-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 3px rgba(255,255,255,1);
+	-webkit-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 3px rgba(255,255,255,1);
+	text-shadow: 0px -1px 0px rgba(000,000,000,0.1), 0px 1px 0px rgba(255,255,255,1);
+}
+.contentwrapper .button_yes {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #360;
+	padding: 5px 10px;
+	margin-right: 10px;
+	text-decoration: none;
+	background-color: #ffffff;
+	background: -moz-linear-gradient( top, #ffffff 0%, #ffffff 50%, #d6d6d6);
+	background: -webkit-gradient( linear, left top, left bottom, from(#ffffff), color-stop(0.50, #ffffff), to(#d6d6d6));
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border: 2px solid #360;
+	-moz-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 3px rgba(255,255,255,1);
+	-webkit-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 3px rgba(255,255,255,1);
+	text-shadow: 0px -1px 0px rgba(000,000,000,0.1), 0px 1px 0px rgba(255,255,255,1);
+}
+.contentwrapper .greencolour {
+	font-size: 12px;
+	color: #FFF;
+	background-color: #360;
+	padding: 10px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+.contentwrapper .redcolour {
+	font-size: 12px;
+	color: #FFF;
+	background-color: #F00;
+	padding: 10px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+#floating_bar {
+	font-size: 12px;
+	background-color: #CCC;
+	margin: 10px auto;
+	width: 695px;
+	padding: 10px;
+	position: absolute;
+	visibility: hidden;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	opacity: 0.85; /* Current standard in CSS */
+	-moz-opacity: 0.85; /* Old school versions like Netscape Navigator */
+	-khtml-opacity: 0.85; /* Old versions of Safari (1.x) */
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)"; /* IE8 first! */
+	filter: alpha(opacity=85); /* IE IE5-7 second! */
+	z-index: 10000;
+}
+#outerwrapper {
+	margin: 0 auto;
+	width: 800px;
+	position: relative;
+}
+</style>
+
+<div id="outerwrapper">
+  <div align="center" id="floating_bar">
+  
+    <div class="contentwrapper">
+      <div class="box">
+        <div class="redcolour">{L_EU_COOKIE_LAW}</div>
+      </div>
+      <div class="box">
+        {L_EU_COOKIE_BODY}
+      </div>
+      <div align="center"><br /><a href="#" onclick="closebar(); return false;" ><span class="button_yes">{L_EU_COOKIE_YES}</span></a> <a href="http://nocookielaw.com/" id="{L_EU_COOKIE_NO_DESCR}" onclick="return redirect(this)"><span class="button_no">{L_EU_COOKIE_NO}</span></a> </div>
+    </div>
+  
+  </div>
+</div>

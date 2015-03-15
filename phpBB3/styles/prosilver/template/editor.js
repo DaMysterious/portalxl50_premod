@@ -443,18 +443,12 @@ function getCaretPosition(txtarea)
 		
 		// calculate selection start point by moving beginning of range_all to beginning of range
 		var sel_start;
-		try
-		{
-			for (sel_start = 0; range_all.compareEndPoints('StartToStart', range) < 0; sel_start++)
-			{		
-				range_all.moveStart('character', 1);
-			}
-		
-			txtarea.sel_start = sel_start;
+		for (sel_start = 0; range_all.compareEndPoints('StartToStart', range) < 0; sel_start++)
+		{		
+			range_all.moveStart('character', 1);
 		}
-		catch(e)
-		{
-		}
+	
+		txtarea.sel_start = sel_start;
 	
 		// we ignore the end value for IE, this is already dirty enough and we don't need it
 		caretPos.start = txtarea.sel_start;
