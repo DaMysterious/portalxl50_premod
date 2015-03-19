@@ -47,7 +47,7 @@ $lang = array_merge($lang, array(
 	<h3>Author Notes</h3>
 	<p>Creating, maintaining and updating this MOD required/requires a lot of time and effort.<br />
 	   If you appreciate PortalXL and feel the desire to express your thanks through a donation this would be greatly appreciated.<br /> 
-	   PortalXL\'s Paypal ID is <strong>helmut.kicken@ziggo.nl</strong>, or visit our special PortalXL donation page <a href="http://84.29.121.198/PORTAL_XL_Paypal_Donation.html" target="_blank">here</a>.<br /><br />
+	   PortalXL\'s Paypal ID is <strong>helmut.kicken@ziggo.nl</strong>, or visit our special PortalXL donation page <a href="http://www.portalxl.info/PORTAL_XL_Paypal_Donation.html" target="_blank">here</a>.<br /><br />
 	   The suggested minimum donation amount for this MOD is Euro 25.00 (any higher amount will help more).<br />
 	   If you are a registered user of the portalxl.nl forum, please leave your forum name/alias as comment so your level can be raised up in exchange.</p>
 	</div><p>',
