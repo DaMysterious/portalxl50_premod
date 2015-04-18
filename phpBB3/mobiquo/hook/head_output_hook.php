@@ -19,7 +19,7 @@ if($tapatalk_hook_run)
     	//$app_ads_enable = isset($config['tapatalk_app_ads_enable']) ? $config['tapatalk_app_ads_enable'] : 1;
     	//$app_banner_enable = isset($config['tapatalk_app_banner_enable']) ? $config['tapatalk_app_banner_enable'] : 1;
 		$app_forum_name = $config['sitename'];
-	    $tapatalk_dir_url = $board_url . $tapatalk_dir;
+	    $tapatalk_dir_url = $phpbb_root_path . $tapatalk_dir;
 	    $is_mobile_skin = 0;
 	    $app_location_url = $tapatalk_location_url;
 	    
